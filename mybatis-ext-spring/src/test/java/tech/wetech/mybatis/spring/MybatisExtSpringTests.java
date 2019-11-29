@@ -1,0 +1,109 @@
+package tech.wetech.mybatis.spring;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import tech.wetech.mybatis.example.Example;
+import tech.wetech.mybatis.spring.entity.User;
+import tech.wetech.mybatis.spring.mapper.UserMapper;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("/beans2.xml")
+public class MybatisExtSpringTests {
+
+    private final Logger log = LoggerFactory.getLogger(MybatisSpringTests.class);
+
+    @Autowired
+    private UserMapper mapper;
+
+    @Test
+    public void testSelectAll() {
+        log.info("log: {}", mapper.selectAll());
+    }
+
+    @Test
+    public void testSelectByPrimaryKey() {
+        User user = mapper.selectByPrimaryKey(1);
+        log.info("selectByPrimaryKey result: {}", user);
+    }
+
+    @Test
+    public void testSelectById() {
+        User user = mapper.selectById(1);
+        log.info("selectById result: {}", user);
+    }
+
+    @Test
+    public void testSelectByPrimaryKeyWrap() {
+        User user = mapper.selectByPrimaryKeyWithOptional(1).orElseThrow(() -> new RuntimeException("未查到数据"));
+        log.info("selectByPrimaryKey result: {}", user);
+    }
+
+    @Test
+    public void testSelectByExample() {
+        Example<User> example = Example.of(User.class);
+
+        example.createCriteria()
+                .andEqualTo(User::getId, 1)
+                .orEqualTo(User::getUsername, "张三")
+                .orNotLike(User::getAvatar, "aaa")
+                .orIsNull(User::getBirthday)
+                .orBetween(User::getRegisterTime, new Date(), new Date())
+                .orIn(User::getMobile, Arrays.asList(111, "aaa", 222))
+                .andLike(User::getAvatar, "select * from t_user");
+
+        log.info("example:{}", example.getCriteria());
+        example.setDistinct(true);
+        example.setLimit(1);
+        example.setOffset(2);
+        List<User> users = mapper.selectByExample(example);
+        log.info("selectByExample result: {}", users);
+    }
+
+
+    @Test
+    public void testCountByExample() {
+        Example<User> example = Example.of(User.class);
+
+        example.createCriteria()
+                .andEqualTo(User::getId, 1)
+                .orEqualTo(User::getUsername, "张三")
+                .orNotLike(User::getAvatar, "aaa")
+                .orIsNull(User::getBirthday)
+                .orBetween(User::getRegisterTime, new Date(), new Date())
+                .orIn(User::getMobile, Arrays.asList(111, "aaa", 222))
+                .andLike(User::getAvatar, "select * from t_user");
+
+        log.info("example:{}", example.getCriteria());
+        Integer rows = mapper.countByExample(example);
+        log.info("countByExample result: {}", rows);
+    }
+
+    @Test
+    public void testCreateExample() {
+        User user = mapper.createExample()
+                .setDistinct(true)
+                .setColumns(User::getId, User::getBirthday, User::getRegisterTime)
+                .setOrderByClause("id asc,register_time desc")
+                .createCriteria()
+                .andEqualTo(User::getId, 1)
+                .selectOneWithOptional()
+                .orElseThrow(() -> new RuntimeException("数据不存在"));
+        log.info("createExample result: {}", user);
+    }
+
+    @Test
+    public void testCustomMapper() {
+        List<User> users = mapper.selectByUsername("张三");
+        log.info("customMapper result: {}", users);
+    }
+
+}

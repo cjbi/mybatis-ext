@@ -1,0 +1,1 @@
+已经内置Maven Jetty插件，运行命令`mvn jetty:run`

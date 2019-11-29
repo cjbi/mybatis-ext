@@ -1,0 +1,4 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+tech.wetech.mybatis.spring.boot.autoconfigure.MybatisLanguageDriverAutoConfiguration,\
+tech.wetech.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration

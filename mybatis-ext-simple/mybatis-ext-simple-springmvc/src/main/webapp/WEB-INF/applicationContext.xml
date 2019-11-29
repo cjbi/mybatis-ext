@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="dataSource" class="org.apache.ibatis.datasource.pooled.PooledDataSource">
+        <constructor-arg value="com.mysql.cj.jdbc.Driver"/>
+        <constructor-arg value="jdbc:mysql://wetech.tech/weshop?userSSL=false"/>
+        <constructor-arg value="cjbi"/>
+        <constructor-arg value="123456"/>
+    </bean>
+    <bean id="sqlSessionFactory" class="tech.wetech.mybatis.spring.ExtSqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath*:tech/wetech/mybatis/simple/mapper/*Mapper.xml"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="basePackage" value="tech.wetech.mybatis.simple.mapper"/>
+    </bean>
+</beans>
