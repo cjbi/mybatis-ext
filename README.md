@@ -498,7 +498,7 @@ public interface MyMapper<T> {
 import org.apache.ibatis.jdbc.SQL;
 import tech.wetech.mybatis.builder.EntityMapping;
 public class MyEntitySqlBuilder {
-    public String deleteByPrimaryKey(EntityMapping entityMapping) {
+    public String selectById(EntityMapping entityMapping) {
         return new SQL() {{
                     SELECT("*");
                     FROM(entityMapping.getTableName());
