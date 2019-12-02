@@ -37,7 +37,7 @@ MyBatis-Ext是MyBatis的增强扩展，简化了MyBatis对单表增删改查的�
 ```
 ### 2. 在实体类添加注解
 ```java
-//Mybatis-ext使用了Jpa的注解，目前实现了@Table、@Id、@Column，未来考虑支持更多Jpa特性
+//Mybatis-ext使用了Jpa的注解，目前实现了@Table、@Id、@Column、@Transient，未来考虑支持更多Jpa特性
 @Table(name = "weshop_user")//指定表名，必须
 public class User {
     @Id//指定Primary Key，必须
@@ -62,6 +62,12 @@ public class User {
     private String avatar;
     @Column(name = "wechat_open_id")
     private String wechatOpenId;
+    @Transient//忽略该属性
+    private String pageSize;
+    @Transient
+    private String pageNumber;
+    @LogicDelete//逻辑删除
+    private Integer delFlag;
     //此处省略getter，setter
 }
 ```
@@ -72,7 +78,7 @@ public interface UserMapper extends BaseMapper<User, Integer> {
 }
 ```
 Mybatis-ext提供了对原生Java、Springframework以及SpringBoot的支持。
-#### Ⅰ.Using in Java
+#### Ⅰ.在Java中使用
 ```java
 public class MybatisExtTests {
     private static SqlSession sqlSession;
@@ -109,7 +115,7 @@ public class MybatisExtTests {
     }
 }
 ```
-#### Ⅱ.Using in Springframework
+#### Ⅱ.在Springframework中使用
 1、在XML中申明需要的bean，也可以使用@Bean注解来配置
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -165,7 +171,7 @@ public class MybatisExtSpringTests {
     }
 }
 ```
-#### Ⅲ.Using in SpringBoot
+#### Ⅲ.在SpringBoot中使用
 1、在 application.properties配置文件里面添加数据源和mapper扫描路径的配置
 ```properties
 # 此处配置数据源
@@ -198,7 +204,7 @@ public class MybatisExtSpringBootTests {
     }
 }
 ```
-#### Ⅳ.More Examples
+#### Ⅳ.更多示例
 ```java
 public class MybatisExtTests {
     //根据主键查询
