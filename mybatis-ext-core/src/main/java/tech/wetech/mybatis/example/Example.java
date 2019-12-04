@@ -53,16 +53,26 @@ public class Example<T> implements Serializable {
         return columns;
     }
 
+    @Deprecated
     public Example<T> setColumns(Property<T, ?>... properties) {
-        String[] columns = new String[properties.length];
-        for (int i = 0; i < columns.length; i++) {
-            columns[i] = EntityMappingUtil.getColumnName(properties[i]);
-        }
-        this.columns = columns;
+        setSelects(properties);
         return this;
     }
 
+    @Deprecated
     public Example<T> setColumns(String... columns) {
+        setSelects(columns);
+        return this;
+    }
+
+    public Example<T> setSelects(Property<T, ?>... properties) {
+        this.columns = Arrays.stream(properties)
+                .map(EntityMappingUtil::getColumnName)
+                .collect(Collectors.toList()).toArray(new String[properties.length]);
+        return this;
+    }
+
+    public Example<T> setSelects(String... columns) {
         this.columns = columns;
         return this;
     }
