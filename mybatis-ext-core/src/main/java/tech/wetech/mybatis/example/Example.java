@@ -13,6 +13,7 @@ public class Example<T> implements Serializable {
 
     protected String[] columns;
     protected boolean distinct;
+    protected boolean forUpdate;
     protected String orderByClause;
     protected int limit;
     protected int offset;
@@ -84,6 +85,14 @@ public class Example<T> implements Serializable {
     public Example<T> setDistinct(boolean distinct) {
         this.distinct = distinct;
         return this;
+    }
+
+    public boolean isForUpdate() {
+        return forUpdate;
+    }
+
+    public void setForUpdate(boolean forUpdate) {
+        this.forUpdate = forUpdate;
     }
 
     public Example<T> setOrderByClause(String orderByClause) {

@@ -38,6 +38,18 @@ public class EntityMapping {
     private String logicDeleteNormalValue;
 
     private String logicDeleteDeletedValue;
+    /**
+     * 乐观锁
+     */
+    private boolean isOptimisticLock;
+    /**
+     * 乐观锁字段
+     */
+    private String optimisticLockColumn;
+    /**
+     * 乐观锁字段
+     */
+    private String optimisticLockProperty;
 
     public Class<?> getEntityClass() {
         return entityClass;
@@ -91,36 +103,56 @@ public class EntityMapping {
         return isLogicDelete;
     }
 
-    public EntityMapping setLogicDelete(boolean logicDelete) {
+    public void setLogicDelete(boolean logicDelete) {
         isLogicDelete = logicDelete;
-        return this;
     }
 
     public String getLogicDeleteColumn() {
         return logicDeleteColumn;
     }
 
-    public EntityMapping setLogicDeleteColumn(String logicDeleteColumn) {
+    public void setLogicDeleteColumn(String logicDeleteColumn) {
         this.logicDeleteColumn = logicDeleteColumn;
-        return this;
     }
 
     public String getLogicDeleteNormalValue() {
         return logicDeleteNormalValue;
     }
 
-    public EntityMapping setLogicDeleteNormalValue(String logicDeleteNormalValue) {
+    public void setLogicDeleteNormalValue(String logicDeleteNormalValue) {
         this.logicDeleteNormalValue = logicDeleteNormalValue;
-        return this;
     }
 
     public String getLogicDeleteDeletedValue() {
         return logicDeleteDeletedValue;
     }
 
-    public EntityMapping setLogicDeleteDeletedValue(String logicDeleteDeletedValue) {
+    public void setLogicDeleteDeletedValue(String logicDeleteDeletedValue) {
         this.logicDeleteDeletedValue = logicDeleteDeletedValue;
-        return this;
+    }
+
+    public boolean isOptimisticLock() {
+        return isOptimisticLock;
+    }
+
+    public void setOptimisticLock(boolean optimisticLock) {
+        isOptimisticLock = optimisticLock;
+    }
+
+    public String getOptimisticLockColumn() {
+        return optimisticLockColumn;
+    }
+
+    public void setOptimisticLockColumn(String optimisticLockColumn) {
+        this.optimisticLockColumn = optimisticLockColumn;
+    }
+
+    public String getOptimisticLockProperty() {
+        return optimisticLockProperty;
+    }
+
+    public void setOptimisticLockProperty(String optimisticLockProperty) {
+        this.optimisticLockProperty = optimisticLockProperty;
     }
 
     public static class ColumnProperty {

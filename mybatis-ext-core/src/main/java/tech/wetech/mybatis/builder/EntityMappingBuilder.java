@@ -3,10 +3,7 @@ package tech.wetech.mybatis.builder;
 import tech.wetech.mybatis.annotation.LogicDelete;
 import tech.wetech.mybatis.builder.EntityMapping.ColumnProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -102,6 +99,11 @@ public class EntityMappingBuilder {
                 entityMapping.setLogicDeleteColumn(columnProperty.getColumnName());
                 entityMapping.setLogicDeleteNormalValue(logicDelete.normalValue());
                 entityMapping.setLogicDeleteDeletedValue(logicDelete.deletedValue());
+            }
+            if (field.isAnnotationPresent(Version.class)) {
+                entityMapping.setOptimisticLock(true);
+                entityMapping.setOptimisticLockColumn(columnProperty.getColumnName());
+                entityMapping.setOptimisticLockProperty(columnProperty.getPropertyName());
             }
             columnProperties.add(columnProperty);
         }

@@ -42,10 +42,14 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
         StringBuilder builder = new StringBuilder("<script>");
         StringBuilder setBuilder = new StringBuilder("<set>");
         for (EntityMapping.ColumnProperty columnProperty : entityMapping.getColumnProperties()) {
+            if (entityMapping.isOptimisticLock() && entityMapping.getOptimisticLockProperty().equals(columnProperty.getPropertyName())) {
+                setBuilder.append(String.format("%s = %s + 1,", entityMapping.getOptimisticLockColumn(), entityMapping.getOptimisticLockColumn()));
+                continue;
+            }
             setBuilder.append(String.format("<if test='record.%s != null'>%s = #{record.%s},</if>", columnProperty.getPropertyName(), columnProperty.getColumnName(), columnProperty.getPropertyName()));
         }
-        setBuilder.append("</set>");
         builder.append("<bind name='criteria' value='example.criteria'/>");
+        setBuilder.append("</set>");
         builder.append(String.format("UPDATE %s %s %s", entityMapping.getTableName(), setBuilder, buildCriteriaXML(configuration, entityMapping)));
         builder.append("</script>");
         return builder.toString();
@@ -56,6 +60,10 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
         StringBuilder builder = new StringBuilder("<script>");
         StringBuilder setBuilder = new StringBuilder("<set>");
         for (EntityMapping.ColumnProperty columnProperty : entityMapping.getColumnProperties()) {
+            if (entityMapping.isOptimisticLock() && entityMapping.getOptimisticLockProperty().equals(columnProperty.getPropertyName())) {
+                setBuilder.append(String.format("%s = %s + 1,", entityMapping.getOptimisticLockColumn(), entityMapping.getOptimisticLockColumn()));
+                continue;
+            }
             setBuilder.append(String.format("%s = #{record.%s},", columnProperty.getColumnName(), columnProperty.getPropertyName()));
         }
         setBuilder.append("</set>");
@@ -95,6 +103,7 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
         builder.append(buildCriteriaXML(configuration, entityMapping));
         builder.append(String.format("<if test='orderByClause != null'> order by ${orderByClause}</if>"));
         builder.append("<if test='limit gt 0'> <if test='offset gt 0'> limit ${offset}, ${limit} </if> <if test='offset == 0'> limit ${limit} </if> </if>");
+        builder.append("<if test='forUpdate'> for update </if>");
         builder.append("</script>");
         return builder.toString();
     }
@@ -151,12 +160,19 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
         StringBuilder builder = new StringBuilder("<script>");
         StringBuilder setBuilder = new StringBuilder("<set>");
         for (EntityMapping.ColumnProperty columnProperty : entityMapping.getColumnProperties()) {
+            if (entityMapping.isOptimisticLock() && entityMapping.getOptimisticLockProperty().equals(columnProperty.getPropertyName())) {
+                setBuilder.append(String.format("%s = %s + 1,", columnProperty.getColumnName(), columnProperty.getColumnName()));
+                continue;
+            }
             setBuilder.append(String.format("<if test='%s != null'>%s = #{%s},</if>", columnProperty.getPropertyName(), columnProperty.getColumnName(), columnProperty.getPropertyName()));
         }
         setBuilder.append("</set>");
         builder.append(String.format("UPDATE %s %s WHERE %s = #{%s}", entityMapping.getTableName(), setBuilder, entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
         if (entityMapping.isLogicDelete()) {
             builder.append(String.format(" and %s = %s", entityMapping.getLogicDeleteColumn(), entityMapping.getLogicDeleteNormalValue()));
+        }
+        if (entityMapping.isOptimisticLock()) {
+            builder.append(String.format("<if test='%s != null'> and %s = #{%s}</if>", entityMapping.getOptimisticLockProperty(), entityMapping.getOptimisticLockColumn(), entityMapping.getOptimisticLockProperty()));
         }
         builder.append("</script>");
         return builder.toString();
@@ -167,12 +183,19 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
         StringBuilder builder = new StringBuilder("<script>");
         StringBuilder setBuilder = new StringBuilder("<set>");
         for (EntityMapping.ColumnProperty columnProperty : entityMapping.getColumnProperties()) {
+            if (entityMapping.isOptimisticLock() && entityMapping.getOptimisticLockProperty().equals(columnProperty.getPropertyName())) {
+                setBuilder.append(String.format("%s = %s + 1,", entityMapping.getOptimisticLockColumn(), entityMapping.getOptimisticLockColumn()));
+                continue;
+            }
             setBuilder.append(String.format("%s = #{%s},", columnProperty.getColumnName(), columnProperty.getPropertyName()));
         }
         setBuilder.append("</set>");
         builder.append(String.format("UPDATE %s %s WHERE %s = #{%s}", entityMapping.getTableName(), setBuilder, entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
         if (entityMapping.isLogicDelete()) {
             builder.append(String.format(" and %s = %s", entityMapping.getLogicDeleteColumn(), entityMapping.getLogicDeleteNormalValue()));
+        }
+        if (entityMapping.isOptimisticLock()) {
+            builder.append(String.format("<if test='%s != null'> and %s = #{%s}</if>", entityMapping.getOptimisticLockProperty(), entityMapping.getOptimisticLockColumn(), entityMapping.getOptimisticLockProperty()));
         }
         builder.append("</script>");
         return builder.toString();

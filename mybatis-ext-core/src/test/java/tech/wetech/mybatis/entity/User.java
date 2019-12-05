@@ -30,6 +30,7 @@ public class User {
     private String lastLoginIp;
 
     @Column(name = "user_level_id")
+//    @Version
     private Byte userLevelId;
 
     private String nickname;

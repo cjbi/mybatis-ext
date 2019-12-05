@@ -295,6 +295,7 @@ public class MybatisExtTests {
 //        example.setOffset(2);
         example.setPage(2, 2);
         example.setSort(new Sort(Sort.Direction.DESC, "mobile", "username"));
+        example.setForUpdate(true);
         List<User> users = mapper.selectByExample(example);
         log.info("selectByExample result: {}", users);
     }
