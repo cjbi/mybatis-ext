@@ -18,26 +18,26 @@ MyBatis-Ext是MyBatis的增强扩展，简化了MyBatis对单表增删改查的�
     <dependency>
         <groupId>tech.wetech.mybatis</groupId>
         <artifactId>mybatis-ext-core</artifactId>
-        <version>1.2.0</version>
+        <version>1.3.0</version>
     </dependency>
     <!-- springframework请引入此模块（已包含以上依赖） -->
     <dependency>
         <groupId>tech.wetech.mybatis</groupId>
         <artifactId>mybatis-ext-spring</artifactId>
-        <version>1.2.0</version>
+        <version>1.3.0</version>
     </dependency>
     <!-- spring-boot请引入此模块（已包含以上依赖） -->
     <!-- 请注意：引入mybatis-ext-spring-boot-starter无需再引入mybatis-spring-boot-starter -->
     <dependency>
         <groupId>tech.wetech.mybatis</groupId>
         <artifactId>mybatis-ext-spring-boot-starter</artifactId>
-        <version>1.2.0</version>
+        <version>1.3.0</version>
     </dependency>
 </dependencys>
 ```
 ### 2. 在实体类添加注解
 ```java
-//Mybatis-ext使用了Jpa的注解，目前实现了@Table、@Id、@Column、@Transient，未来考虑支持更多Jpa特性
+//Mybatis-ext使用了Jpa的注解，目前实现了@Table、@Id、@Column、@Transient、@Version，未来考虑支持更多Jpa特性
 @Table(name = "weshop_user")//指定表名，必须
 public class User {
     @Id//指定Primary Key，必须
