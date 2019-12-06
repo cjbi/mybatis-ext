@@ -68,8 +68,9 @@ public class Example<T> implements Serializable {
 
     public Example<T> setSelects(Property<T, ?>... properties) {
         this.columns = Arrays.stream(properties)
-                .map(EntityMappingUtil::getColumnName)
-                .collect(Collectors.toList()).toArray(new String[properties.length]);
+                .map(p -> EntityMappingUtil.getColumnName(entityClass.getName(), p))
+                .collect(Collectors.toList())
+                .toArray(new String[properties.length]);
         return this;
     }
 

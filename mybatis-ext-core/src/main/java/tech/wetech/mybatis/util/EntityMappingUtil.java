@@ -25,8 +25,8 @@ public class EntityMappingUtil {
         return columnProperty.getColumnName();
     }
 
-    public static <FN extends Function> String getColumnName(FN fn) {
-        return getColumnName(getFunctionClass(fn).getName(), getFunctionName(fn));
+    public static <FN extends Function> String getColumnName(String className, FN fn) {
+        return getColumnName(className, getFunctionName(fn));
     }
 
     public static Class<?> extractEntityClass(Class<?> mapperClass) {
@@ -67,19 +67,6 @@ public class EntityMappingUtil {
         } catch (ReflectiveOperationException var6) {
             throw new RuntimeException(var6);
         }
-    }
-
-    public static <FN extends Function> Class getFunctionClass(FN fn) {
-        try {
-            Method declaredMethod = fn.getClass().getDeclaredMethod("writeReplace");
-            declaredMethod.setAccessible(Boolean.TRUE);
-            SerializedLambda serializedLambda = (SerializedLambda) declaredMethod.invoke(fn);
-            String implClass = serializedLambda.getImplClass();
-            return Class.forName(implClass.replace("/", "."));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
 }
