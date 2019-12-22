@@ -32,7 +32,7 @@ public class EntityMapperAnnotationResolver {
 
     private static final Set<Class<? extends Annotation>> SQL_ENTITY_PROVIDER_ANNOTATION_TYPES = new HashSet<>();
 
-    private final Map<Class, Object> injectArgsMap = new HashMap<>();//
+    private final Map<Class, Object> injectArgsMap = new HashMap<>();
 
     static {
         SQL_ENTITY_PROVIDER_ANNOTATION_TYPES.add(SelectEntityProvider.class);

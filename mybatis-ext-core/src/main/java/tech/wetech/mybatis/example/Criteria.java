@@ -1,6 +1,6 @@
 package tech.wetech.mybatis.example;
 
-import tech.wetech.mybatis.util.EntityMappingUtil;
+import tech.wetech.mybatis.domain.Property;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,142 +18,142 @@ public class Criteria<T> implements Serializable {
     }
 
     public Criteria<T> andEqualTo(Property<T, ?> property, Object value) {
-        andEqualTo(EntityMappingUtil.getFunctionName(property), value);
+        andEqualTo(property.getPropertyName(), value);
         return this;
     }
 
     public Criteria<T> andNotEqualTo(Property<T, ?> property, Object value) {
-        andNotEqualTo(EntityMappingUtil.getFunctionName(property), value);
+        andNotEqualTo(property.getPropertyName(), value);
         return this;
     }
 
     public Criteria<T> andGreaterThan(Property<T, ?> property, Object value) {
-        andGreaterThan(EntityMappingUtil.getFunctionName(property), value);
+        andGreaterThan(property.getPropertyName(), value);
         return this;
     }
 
     public Criteria<T> andGreaterThanOrEqualTo(Property<T, ?> property, Object value) {
-        andGreaterThanOrEqualTo(EntityMappingUtil.getFunctionName(property), value);
+        andGreaterThanOrEqualTo(property.getPropertyName(), value);
         return this;
     }
 
     public Criteria<T> andLessThan(Property<T, ?> property, Object value) {
-        andLessThan(EntityMappingUtil.getFunctionName(property), value);
+        andLessThan(property.getPropertyName(), value);
         return this;
     }
 
     public Criteria<T> andLessThanOrEqualTo(Property<T, ?> property, Object value) {
-        andLessThan(EntityMappingUtil.getFunctionName(property), value);
+        andLessThan(property.getPropertyName(), value);
         return this;
     }
 
     public Criteria<T> andIn(Property<T, ?> property, Iterable<?> values) {
-        andIn(EntityMappingUtil.getFunctionName(property), values);
+        andIn(property.getPropertyName(), values);
         return this;
     }
 
     public Criteria<T> andNotIn(Property<T, ?> property, Iterable<?> values) {
-        andNotIn(EntityMappingUtil.getFunctionName(property), values);
+        andNotIn(property.getPropertyName(), values);
         return this;
     }
 
     public Criteria<T> andBetween(Property<T, ?> property, Object value1, Object value2) {
-        andBetween(EntityMappingUtil.getFunctionName(property), value1, value2);
+        andBetween(property.getPropertyName(), value1, value2);
         return this;
     }
 
     public Criteria<T> andNotBetween(Property<T, ?> property, Object value1, Object value2) {
-        andNotBetween(EntityMappingUtil.getFunctionName(property), value1, value2);
+        andNotBetween(property.getPropertyName(), value1, value2);
         return this;
     }
 
     public Criteria<T> andLike(Property<T, ?> property, String value) {
-        andLike(EntityMappingUtil.getFunctionName(property), value);
+        andLike(property.getPropertyName(), value);
         return this;
     }
 
     public Criteria<T> andNotLike(Property<T, ?> property, String value) {
-        andLike(EntityMappingUtil.getFunctionName(property), value);
+        andLike(property.getPropertyName(), value);
         return this;
     }
 
     public Criteria<T> andIsNull(Property<T, ?> property) {
-        andIsNull(EntityMappingUtil.getFunctionName(property));
+        andIsNull(property.getPropertyName());
         return this;
     }
 
     public Criteria<T> andIsNotNull(Property<T, ?> property) {
-        andIsNotNull(EntityMappingUtil.getFunctionName(property));
+        andIsNotNull(property.getPropertyName());
         return this;
     }
 
     public Criteria<T> orIsNull(Property<T, ?> property) {
-        orIsNull(EntityMappingUtil.getFunctionName(property));
+        orIsNull(property.getPropertyName());
         return this;
     }
 
     public Criteria<T> orIsNotNull(Property<T, ?> property) {
-        orIsNotNull(EntityMappingUtil.getFunctionName(property));
+        orIsNotNull(property.getPropertyName());
         return this;
     }
 
     public Criteria<T> orEqualTo(Property<T, ?> property, Object value) {
-        orEqualTo(EntityMappingUtil.getFunctionName(property), value);
+        orEqualTo(property.getPropertyName(), value);
         return this;
     }
 
     public Criteria<T> orNotEqualTo(Property<T, ?> property, Object value) {
-        orNotEqualTo(EntityMappingUtil.getFunctionName(property), value);
+        orNotEqualTo(property.getPropertyName(), value);
         return this;
     }
 
     public Criteria<T> orGreaterThan(Property<T, ?> property, Object value) {
-        orGreaterThan(EntityMappingUtil.getFunctionName(property), value);
+        orGreaterThan(property.getPropertyName(), value);
         return this;
     }
 
     public Criteria<T> orGreaterThanOrEqualTo(Property<T, ?> property, Object value) {
-        orGreaterThanOrEqualTo(EntityMappingUtil.getFunctionName(property), value);
+        orGreaterThanOrEqualTo(property.getPropertyName(), value);
         return this;
     }
 
     public Criteria<T> orLessThan(Property<T, ?> property, Object value) {
-        orGreaterThanOrEqualTo(EntityMappingUtil.getFunctionName(property), value);
+        orGreaterThanOrEqualTo(property.getPropertyName(), value);
         return this;
     }
 
     public Criteria<T> orLessThanOrEqualTo(Property<T, ?> property, Object value) {
-        orLessThanOrEqualTo(EntityMappingUtil.getFunctionName(property), value);
+        orLessThanOrEqualTo(property.getPropertyName(), value);
         return this;
     }
 
     public Criteria<T> orIn(Property<T, ?> property, Iterable<?> values) {
-        orIn(EntityMappingUtil.getFunctionName(property), values);
+        orIn(property.getPropertyName(), values);
         return this;
     }
 
     public Criteria<T> orNotIn(Property<T, ?> property, Iterable<?> values) {
-        orNotIn(EntityMappingUtil.getFunctionName(property), values);
+        orNotIn(property.getPropertyName(), values);
         return this;
     }
 
     public Criteria<T> orBetween(Property<T, ?> property, Object value1, Object value2) {
-        orBetween(EntityMappingUtil.getFunctionName(property), value1, value2);
+        orBetween(property.getPropertyName(), value1, value2);
         return this;
     }
 
     public Criteria<T> orNotBetween(Property<T, ?> property, Object value1, Object value2) {
-        orNotBetween(EntityMappingUtil.getFunctionName(property), value1, value2);
+        orNotBetween(property.getPropertyName(), value1, value2);
         return this;
     }
 
     public Criteria<T> orLike(Property<T, ?> property, String value) {
-        orLike(EntityMappingUtil.getFunctionName(property), value);
+        orLike(property.getPropertyName(), value);
         return this;
     }
 
     public Criteria<T> orNotLike(Property<T, ?> property, String value) {
-        orNotLike(EntityMappingUtil.getFunctionName(property), value);
+        orNotLike(property.getPropertyName(), value);
         return this;
     }
 

@@ -1,18 +1,16 @@
 package tech.wetech.mybatis.example;
 
+import tech.wetech.mybatis.domain.Property;
 import tech.wetech.mybatis.mapper.BaseMapper;
 import tech.wetech.mybatis.util.EntityMappingUtil;
-
-import java.io.Serializable;
-
 /**
  * @author cjbi
  */
 public final class MapperExample<T> extends Example<T> {
 
-    private final BaseMapper<T, ? extends Serializable> mapper;
+    private final BaseMapper<T> mapper;
 
-    public MapperExample(BaseMapper<T, ? extends Serializable> mapper) {
+    public MapperExample(BaseMapper<T> mapper) {
         super(EntityMappingUtil.extractEntityClass(mapper.getClass().getInterfaces()[0]));
         this.mapper = mapper;
     }

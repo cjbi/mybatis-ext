@@ -7,7 +7,7 @@ import tech.wetech.mybatis.entity.User;
 import java.util.List;
 import java.util.Map;
 
-public interface UserMapper extends BaseMapper<User, Integer> {
+public interface UserMapper extends BaseMapper<User> {
 
     //    @Select("select * from weshop_user")
     List<Map<String, Object>> selectAllUser();

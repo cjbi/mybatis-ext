@@ -73,8 +73,8 @@ public class User {
 ```
 ### 3. 继承BaseMapper接口
 ```java
-public interface UserMapper extends BaseMapper<User, Integer> {
-  // BaseMapper<User, Integer>第一个泛型为实体类，第二个为关联主键
+public interface UserMapper extends BaseMapper<User> {
+  // BaseMapper<User>第一个泛型为实体类，第二个为关联主键
 }
 ```
 Mybatis-ext提供了对原生Java、Springframework以及SpringBoot的支持。

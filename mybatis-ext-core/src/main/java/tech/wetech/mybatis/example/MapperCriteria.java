@@ -1,9 +1,9 @@
 package tech.wetech.mybatis.example;
 
 import org.apache.ibatis.exceptions.TooManyResultsException;
+import tech.wetech.mybatis.domain.Property;
 import tech.wetech.mybatis.mapper.BaseMapper;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,11 +12,11 @@ import java.util.Optional;
  */
 public class MapperCriteria<T> extends Criteria<T> {
 
-    private final BaseMapper<T, ? extends Serializable> mapper;
+    private final BaseMapper<T> mapper;
 
     private final MapperExample mapperExample;
 
-    public MapperCriteria(BaseMapper<T, ? extends Serializable> mapper) {
+    public MapperCriteria(BaseMapper<T> mapper) {
         this.mapper = mapper;
         this.mapperExample = new MapperExample(mapper);
         mapperExample.createCriteria(this);

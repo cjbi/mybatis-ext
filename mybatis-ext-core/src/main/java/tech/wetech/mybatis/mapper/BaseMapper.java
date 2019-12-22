@@ -9,33 +9,33 @@ import tech.wetech.mybatis.example.Example;
 import tech.wetech.mybatis.example.MapperCriteria;
 import tech.wetech.mybatis.example.MapperExample;
 
-import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * @author cjbi
  */
-public interface BaseMapper<T, PK extends Serializable> extends Mapper<T> {
+public interface BaseMapper<T> extends Mapper<T> {
 
     @DeleteEntityProvider(type = BaseEntitySqlBuilder.class, method = "deleteByPrimaryKey")
-    int deleteByPrimaryKey(PK id);
+    int deleteByPrimaryKey(Object id);
 
     @InsertEntityProvider(type = BaseEntitySqlBuilder.class, method = "insert")
     <S extends T> int insert(S record);
 
     @InsertEntityProvider(type = BaseEntitySqlBuilder.class, method = "insertAll")
     @Deprecated
-    <S extends T> int insertAll(Iterable<S> record);
+    <S extends T> int insertAll(Collection<S> record);
 
     @InsertEntityProvider(type = BaseEntitySqlBuilder.class, method = "insertSelective")
     <S extends T> int insertSelective(S record);
 
     @SelectEntityProvider(type = BaseEntitySqlBuilder.class, method = "selectByPrimaryKey")
-    <S extends T> S selectByPrimaryKey(PK id);
+    <S extends T> S selectByPrimaryKey(Object id);
 
     @SelectEntityProvider(type = BaseEntitySqlBuilder.class, method = "selectByPrimaryKeyWithOptional")
-    <S extends T> Optional<S> selectByPrimaryKeyWithOptional(PK id);
+    <S extends T> Optional<S> selectByPrimaryKeyWithOptional(Object id);
 
     @UpdateEntityProvider(type = BaseEntitySqlBuilder.class, method = "updateByPrimaryKey")
     <S extends T> int updateByPrimaryKey(S record);
@@ -56,7 +56,7 @@ public interface BaseMapper<T, PK extends Serializable> extends Mapper<T> {
     <S extends T> Optional<S> selectOneWithOptional(S record);
 
     @SelectEntityProvider(type = BaseEntitySqlBuilder.class, method = "existsByPrimaryKey")
-    boolean existsByPrimaryKey(PK id);
+    boolean existsByPrimaryKey(Object id);
 
     @SelectEntityProvider(type = BaseEntitySqlBuilder.class, method = "count")
     <S extends T> int count(S record);

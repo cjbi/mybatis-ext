@@ -1,5 +1,6 @@
 package tech.wetech.mybatis.example;
 
+import tech.wetech.mybatis.domain.Property;
 import tech.wetech.mybatis.util.EntityMappingUtil;
 
 import java.io.Serializable;
@@ -68,7 +69,7 @@ public class Example<T> implements Serializable {
 
     public Example<T> setSelects(Property<T, ?>... properties) {
         this.columns = Arrays.stream(properties)
-                .map(p -> EntityMappingUtil.getColumnName(entityClass.getName(), p))
+                .map(p -> p.getColumnName(entityClass.getName()))
                 .collect(Collectors.toList())
                 .toArray(new String[properties.length]);
         return this;
