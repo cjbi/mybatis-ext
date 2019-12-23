@@ -49,8 +49,8 @@ import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.util.ClassUtils;
-import tech.wetech.mybatis.builder.xml.ExtXMLConfigBuilder;
-import tech.wetech.mybatis.session.ExtConfiguration;
+import tech.wetech.mybatis.ExtXMLConfigBuilder;
+import tech.wetech.mybatis.ExtConfiguration;
 
 import javax.sql.DataSource;
 import java.io.IOException;

@@ -5,7 +5,7 @@ import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.mapping.SqlCommandType;
 import tech.wetech.mybatis.annotation.*;
-import tech.wetech.mybatis.session.ExtConfiguration;
+import tech.wetech.mybatis.ExtConfiguration;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;

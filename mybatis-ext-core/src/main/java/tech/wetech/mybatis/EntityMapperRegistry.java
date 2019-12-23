@@ -1,11 +1,10 @@
-package tech.wetech.mybatis.binding;
+package tech.wetech.mybatis;
 
 import org.apache.ibatis.binding.BindingException;
 import org.apache.ibatis.binding.MapperProxyFactory;
 import org.apache.ibatis.binding.MapperRegistry;
 import org.apache.ibatis.session.SqlSession;
 import tech.wetech.mybatis.builder.EntityMapperBuilder;
-import tech.wetech.mybatis.session.ExtConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -22,7 +22,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
-import tech.wetech.mybatis.session.ExtConfiguration;
+import tech.wetech.mybatis.ExtConfiguration;
 
 import java.io.IOException;
 import java.util.Optional;

@@ -3,7 +3,7 @@ package tech.wetech.mybatis.spring.custom;
 import org.apache.ibatis.mapping.SqlCommandType;
 import tech.wetech.mybatis.builder.EntityMapping;
 import tech.wetech.mybatis.mapper.AbstractEntityProvider;
-import tech.wetech.mybatis.session.ExtConfiguration;
+import tech.wetech.mybatis.ExtConfiguration;
 
 public class SelectUserByUserNameMethod extends AbstractEntityProvider {
 

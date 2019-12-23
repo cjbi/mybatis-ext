@@ -1,10 +1,9 @@
-package tech.wetech.mybatis.session;
+package tech.wetech.mybatis;
 
 import org.apache.ibatis.exceptions.ExceptionFactory;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import tech.wetech.mybatis.builder.xml.ExtXMLConfigBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;

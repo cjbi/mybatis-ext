@@ -1,83 +1,73 @@
 package tech.wetech.mybatis.domain;
 
-import tech.wetech.mybatis.example.Sort;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
  * 分页list
+ *
  * @author cjbi
  */
-public class PageList<T> extends ArrayList<T> implements Page {
+public class PageList<T> extends ArrayList<T> {
 
     private static final long serialVersionUID = 1L;
 
-    private long total;
+    private int total;
+    private int pageNumber;
+    private int pageSize;
 
-    private Page page;
-
-    public PageList(Page page) {
-        this.page = page;
-    }
-
-    public PageList(Collection<? extends T> c) {
+    public PageList(Collection<? extends T> c, Page page, int total) {
         super(c);
-    }
-
-    public long getTotal() {
-        return total;
-    }
-
-    public void setTotal(long total) {
+        this.pageNumber = page.getPageNumber();
+        this.pageSize = page.getPageSize();
         this.total = total;
     }
 
-    public Page getPage() {
-        return page;
+
+    public int getTotal() {
+        return total;
     }
 
-    public void setPage(Page page) {
-        this.page = page;
+    public void setTotal(int total) {
+        this.total = total;
     }
 
-    @Override
     public int getPageNumber() {
-        return page.getPageNumber();
+        return this.pageNumber;
     }
 
-    @Override
     public int getPageSize() {
-        return page.getPageSize();
+        return this.pageSize;
     }
 
-    @Override
     public long getOffset() {
-        return page.getOffset();
+        return (this.pageNumber * this.pageSize);
     }
 
-    @Override
-    public Sort getSort() {
-        return page.getSort();
-    }
-
-    @Override
     public boolean isFirst() {
-        return page.isFirst();
+        return false;
     }
 
-    @Override
     public boolean isLast() {
-        return page.isLast();
+        return !hasNext();
     }
 
-    @Override
     public boolean hasNext() {
-        return page.hasNext();
+        //TODO
+        return false;
+    }
+
+    public boolean hasPrevious() {
+        return this.pageNumber > 0;
     }
 
     @Override
-    public boolean hasPrevious() {
-        return page.hasPrevious();
+    public String toString() {
+        return "PageList{" +
+                "total=" + total +
+                ", page=" + pageNumber +
+                ", size=" + pageSize +
+                ", rows=" + super.toString() +
+                '}';
     }
 }

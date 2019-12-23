@@ -3,7 +3,7 @@ package tech.wetech.mybatis.mapper;
 import tech.wetech.mybatis.builder.EntityMapperBuilder;
 import tech.wetech.mybatis.builder.EntityMapping;
 import tech.wetech.mybatis.builder.EntityMapping.ColumnProperty;
-import tech.wetech.mybatis.session.ExtConfiguration;
+import tech.wetech.mybatis.ExtConfiguration;
 
 import java.util.Map;
 import java.util.stream.Collectors;

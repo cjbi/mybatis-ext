@@ -13,7 +13,7 @@ import org.apache.ibatis.reflection.TypeParameterResolver;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.scripting.xmltags.XMLLanguageDriver;
 import tech.wetech.mybatis.mapper.Mapper;
-import tech.wetech.mybatis.session.ExtConfiguration;
+import tech.wetech.mybatis.ExtConfiguration;
 import tech.wetech.mybatis.util.EntityMappingUtil;
 
 import java.lang.reflect.*;

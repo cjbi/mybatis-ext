@@ -54,7 +54,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import tech.wetech.mybatis.session.ExtConfiguration;
+import tech.wetech.mybatis.ExtConfiguration;
 import tech.wetech.mybatis.spring.ExtSqlSessionFactoryBean;
 
 import javax.sql.DataSource;

@@ -89,10 +89,20 @@ public class Example<T> implements Serializable {
         return this;
     }
 
+    /**
+     * forUpdate和内置分页执行器存在冲突，所以将会在后面版本移除
+     * @return
+     */
+    @Deprecated
     public boolean isForUpdate() {
         return forUpdate;
     }
 
+    /**
+     * forUpdate和内置分页执行器存在冲突，所以将会在后面版本移除
+     * @param forUpdate
+     */
+    @Deprecated
     public void setForUpdate(boolean forUpdate) {
         this.forUpdate = forUpdate;
     }

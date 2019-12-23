@@ -9,8 +9,8 @@ import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tech.wetech.mybatis.session.ExtConfiguration;
-import tech.wetech.mybatis.session.ExtSqlSessionFactoryBuilder;
+import tech.wetech.mybatis.ExtConfiguration;
+import tech.wetech.mybatis.ExtSqlSessionFactoryBuilder;
 import tech.wetech.mybatis.simple.mapper.UserMapper;
 
 import javax.sql.DataSource;

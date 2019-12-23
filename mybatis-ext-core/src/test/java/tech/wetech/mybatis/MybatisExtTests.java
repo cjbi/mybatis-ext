@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -15,8 +16,6 @@ import tech.wetech.mybatis.entity.User;
 import tech.wetech.mybatis.example.Example;
 import tech.wetech.mybatis.example.Sort;
 import tech.wetech.mybatis.mapper.UserMapper;
-import tech.wetech.mybatis.session.ExtConfiguration;
-import tech.wetech.mybatis.session.ExtSqlSessionFactoryBuilder;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
@@ -32,6 +31,11 @@ public class MybatisExtTests {
     private static SqlSession sqlSession;
 
     private final Logger log = LoggerFactory.getLogger(MybatisExtTests.class);
+
+    @Before
+    public void before() {
+        ThreadContext.doPage(1,3);
+    }
 
     @BeforeClass
     public static void beforeClass() {
@@ -291,11 +295,11 @@ public class MybatisExtTests {
 
         log.info("example:{}", example.getCriteria());
         example.setDistinct(true);
-//        example.setLimit(1);
-//        example.setOffset(2);
+        example.setLimit(1);
+        example.setOffset(2);
         example.setPage(2, 2);
         example.setSort(new Sort(Sort.Direction.DESC, "mobile", "username"));
-        example.setForUpdate(true);
+//        example.setForUpdate(true);
         List<User> users = mapper.selectByExample(example);
         log.info("selectByExample result: {}", users);
     }
@@ -382,9 +386,9 @@ public class MybatisExtTests {
     public void testCreateExample() {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
         User user = mapper.createExample()
-                .setDistinct(true)
+//                .setDistinct(true)
                 .setColumns(User::getId, User::getBirthday, User::getRegisterTime)
-                .setOrderByClause("id asc,register_time desc")
+//                .setOrderByClause("id asc,register_time desc")
                 .createCriteria()
                 .andEqualTo(User::getId, 1)
                 .selectOneWithOptional()

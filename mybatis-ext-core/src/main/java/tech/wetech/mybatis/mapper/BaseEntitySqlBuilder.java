@@ -1,8 +1,9 @@
 package tech.wetech.mybatis.mapper;
 
 import org.apache.ibatis.jdbc.SQL;
+import tech.wetech.mybatis.ThreadContext;
 import tech.wetech.mybatis.builder.EntityMapping;
-import tech.wetech.mybatis.session.ExtConfiguration;
+import tech.wetech.mybatis.ExtConfiguration;
 
 import java.util.stream.Collectors;
 
@@ -102,10 +103,14 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
         builder.append(String.format("select %s from %s", buildExampleColumnsXML(configuration, entityMapping), entityMapping.getTableName()));
         builder.append(buildCriteriaXML(configuration, entityMapping));
         builder.append(String.format("<if test='orderByClause != null'> order by ${orderByClause}</if>"));
-        builder.append("<if test='limit gt 0'> <if test='offset gt 0'> limit ${offset}, ${limit} </if> <if test='offset == 0'> limit ${limit} </if> </if>");
+        builder.append("<if test='limit gt 0'> ${@tech.wetech.mybatis.mapper.BaseEntitySqlBuilder@setPageDialect(offset, limit)} </if>");
         builder.append("<if test='forUpdate'> for update </if>");
         builder.append("</script>");
         return builder.toString();
+    }
+
+    public static void setPageDialect(int offset, int limit) {
+        ThreadContext.doPageWithOffset(offset, limit);
     }
 
 
