@@ -6,8 +6,7 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.transaction.Transaction;
-import tech.wetech.mybatis.dialect.DBMS;
-import tech.wetech.mybatis.dialect.Dialect;
+import tech.wetech.mybatis.dialect.DialectType;
 import tech.wetech.mybatis.mapper.Mapper;
 
 
@@ -20,12 +19,18 @@ public class ExtConfiguration extends Configuration {
 
     protected final EntityMapperRegistry entityMapperRegistry = new EntityMapperRegistry(this);
 
-    protected boolean pageTotalCountEnabled = true;
-
-    protected DBMS dbms = DBMS.MYSQL;
+    protected DialectType defaultDialect = DialectType.MYSQL;
 
     public ExtConfiguration() {
         super();
+    }
+
+    public DialectType getDefaultDialect() {
+        return defaultDialect;
+    }
+
+    public void setDefaultDialect(DialectType defaultDialect) {
+        this.defaultDialect = defaultDialect;
     }
 
     public ExtConfiguration(Environment environment) {
@@ -61,21 +66,6 @@ public class ExtConfiguration extends Configuration {
     @Override
     public Executor newExecutor(Transaction transaction, ExecutorType executorType) {
         Executor executor = super.newExecutor(transaction, executorType);
-        if (pageTotalCountEnabled) {
-            return new PageExecutor(executor, this);
-        }
-        return executor;
-    }
-
-    public void setDbms(DBMS dbms) {
-        this.dbms = dbms;
-    }
-
-    public Dialect getDialect() {
-        return DBMS.getDbmsDialect(dbms);
-    }
-
-    public void setPageTotalCountEnabled(boolean pageTotalCountEnabled) {
-        this.pageTotalCountEnabled = pageTotalCountEnabled;
+        return new PageExecutor(executor, this);
     }
 }

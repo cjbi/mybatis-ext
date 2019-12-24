@@ -20,23 +20,25 @@ public class ThreadContext {
     }
 
     public static void doPage(int pageNumber, int pageSize) {
-        Page page = new Page(pageNumber, pageSize, null);
+        Page page = new Page(pageNumber, pageSize);
         PAGE_THREAD_LOCAL.set(page);
     }
 
     public static void doPage(int pageNumber, int pageSize, Sort sort) {
-        Page page = new Page(pageNumber, pageSize, sort);
+        Page page = new Page(pageNumber, pageSize);
         PAGE_THREAD_LOCAL.set(page);
+        SORT_THREAD_LOCAL.set(sort);
     }
 
     public static void doPageWithOffset(int offset, int limit) {
-        Page page = new Page(offset / limit + 1, limit, null);
+        Page page = new Page(offset / limit + 1, limit);
         PAGE_THREAD_LOCAL.set(page);
     }
 
     public static void doPageWithOffset(int offset, int limit, Sort sort) {
-        Page page = new Page(offset / limit + 1, limit, sort);
+        Page page = new Page(offset / limit + 1, limit);
         PAGE_THREAD_LOCAL.set(page);
+        SORT_THREAD_LOCAL.set(sort);
     }
 
     public static void setPage(Page page) {

@@ -15,6 +15,8 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.transaction.Transaction;
 import tech.wetech.mybatis.dialect.Dialect;
+import tech.wetech.mybatis.dialect.DialectClient;
+import tech.wetech.mybatis.dialect.DialectType;
 import tech.wetech.mybatis.domain.Page;
 import tech.wetech.mybatis.domain.PageList;
 
@@ -79,22 +81,39 @@ public class PageExecutor implements Executor {
         return newBoundSql;
     }
 
+    private Dialect getAutoDialect() {
+        try {
+            String url = this.getTransaction().getConnection().getMetaData().getURL();
+            for (DialectType dialectType : DialectType.values()) {
+                if (url.toUpperCase().indexOf(String.format(":%s:", dialectType)) != -1) {
+                    return DialectClient.getDialect(dialectType);
+                }
+            }
+        } catch (SQLException e) {
+        }
+        return null;
+    }
+
     @Override
     public <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey cacheKey, BoundSql boundSql) throws SQLException {
         if (ThreadContext.getPage() != null) {
             Page page = ThreadContext.getPage();
             int totalCount = 0;
+            Dialect dialect = getAutoDialect();
+            if (dialect == null) {
+                dialect = DialectClient.getDialect(configuration.getDefaultDialect());
+            }
             try {
-                totalCount = getTotalCount(ms, parameter, boundSql, configuration.getDialect());
+                totalCount = getTotalCount(ms, parameter, boundSql, dialect);
             } catch (SQLException e) {
                 LOG.error("Total count error: ", e);
             }
             if (totalCount > 0) {
                 String sql = boundSql.getSql();
-                String limitSql = configuration.getDialect().getLimitString(sql, page.getOffset(), page.getPageSize());
+                String limitSql = dialect.getLimitString(sql, page.getOffset(), page.getPageSize());
                 BoundSql newBoundSql = copyFromBoundSql(ms, boundSql, limitSql);
                 List<E> list = delegate.query(ms, parameter, rowBounds, resultHandler, cacheKey, newBoundSql);
-                PageList<E> pageList = new PageList<E>(list, page, totalCount);
+                PageList<E> pageList = new PageList<>(list, page, totalCount);
                 return pageList;
             }
             return Collections.emptyList();

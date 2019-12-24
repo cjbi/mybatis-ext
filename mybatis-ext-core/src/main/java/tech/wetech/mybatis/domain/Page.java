@@ -1,7 +1,5 @@
 package tech.wetech.mybatis.domain;
 
-import tech.wetech.mybatis.example.Sort;
-
 import java.io.Serializable;
 
 /**
@@ -12,12 +10,13 @@ public class Page implements Serializable {
     private static final long serialVersionUID = 1L;
     private int pageNumber;
     private int pageSize;
+    private boolean count;
 
     public Page(int pageNumber, int pageSize) {
-        this(pageNumber, pageSize, null);
+        this(pageNumber, pageSize, true);
     }
 
-    public Page(int pageNumber, int pageSize, Sort sort) {
+    public Page(int pageNumber, int pageSize, boolean count) {
         if (pageNumber < 0) {
             throw new IllegalArgumentException("Page index must not be less than zero!");
         } else if (pageNumber < 1) {
@@ -26,6 +25,7 @@ public class Page implements Serializable {
             this.pageNumber = pageNumber;
             this.pageSize = pageSize;
         }
+        this.count = count;
     }
 
     public void setPageNumber(int pageNumber) {
@@ -63,6 +63,14 @@ public class Page implements Serializable {
 
     public boolean hasPrevious() {
         return this.pageNumber > 0;
+    }
+
+    public boolean isCount() {
+        return count;
+    }
+
+    public void setCount(boolean count) {
+        this.count = count;
     }
 
     @Override

@@ -12,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tech.wetech.mybatis.domain.Page;
 import tech.wetech.mybatis.entity.User;
 import tech.wetech.mybatis.example.Example;
 import tech.wetech.mybatis.example.Sort;
@@ -34,7 +35,7 @@ public class MybatisExtTests {
 
     @Before
     public void before() {
-        ThreadContext.doPage(1,3);
+        ThreadContext.doPage(1, 3);
     }
 
     @BeforeClass
@@ -80,7 +81,7 @@ public class MybatisExtTests {
     @Test
     public void testSelectById() {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-        User user = mapper.selectById(1);
+        User user = mapper.selectById(1, new Page(1, 3), new Sort("username"));
         log.info("selectById result: {}", user);
     }
 
