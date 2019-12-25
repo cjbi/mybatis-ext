@@ -48,23 +48,6 @@ public class Page implements Serializable {
         return ((this.pageNumber - 1) * this.pageSize);
     }
 
-    public boolean isFirst() {
-        return false;
-    }
-
-    public boolean isLast() {
-        return !hasNext();
-    }
-
-    public boolean hasNext() {
-        //TODO
-        return false;
-    }
-
-    public boolean hasPrevious() {
-        return this.pageNumber > 0;
-    }
-
     public boolean isCount() {
         return count;
     }
@@ -74,23 +57,11 @@ public class Page implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-
-        if (this == obj) {
-            return true;
-        }
-
-        if (!(obj instanceof Page)) {
-            return false;
-        }
-
-        Page that = (Page) obj;
-
-        return super.equals(that) && this.equals(that);
-    }
-
-    @Override
     public String toString() {
-        return String.format("Page request [pageNumber: %d, pageSize %d]", getPageNumber(), getPageSize());
+        return "Page{" +
+                "pageNumber=" + pageNumber +
+                ", pageSize=" + pageSize +
+                ", count=" + count +
+                '}';
     }
 }

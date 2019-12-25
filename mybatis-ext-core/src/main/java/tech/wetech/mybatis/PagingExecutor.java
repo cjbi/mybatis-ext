@@ -30,12 +30,12 @@ import java.util.List;
 /**
  * @author cjbi
  */
-public class PageExecutor implements Executor {
+public class PagingExecutor implements Executor {
 
     private final Executor delegate;
     private final ExtConfiguration configuration;
 
-    private static final Log LOG = LogFactory.getLog(PageExecutor.class);
+    private static final Log LOG = LogFactory.getLog(PagingExecutor.class);
 
     public int getTotalCount(
             final MappedStatement mappedStatement, final Object parameterObject,
@@ -59,7 +59,7 @@ public class PageExecutor implements Executor {
         return count;
     }
 
-    public PageExecutor(Executor delegate, ExtConfiguration configuration) {
+    public PagingExecutor(Executor delegate, ExtConfiguration configuration) {
         this.delegate = delegate;
         this.configuration = configuration;
     }
@@ -94,29 +94,35 @@ public class PageExecutor implements Executor {
         return null;
     }
 
+    private Page getPage(Object parameter) {
+        Page page = ParametersFinder.getInstance().findParameter(parameter, Page.class);
+        if (page == null && ThreadContext.getPage() != null) {
+            page = ThreadContext.getPage();
+        }
+        return page;
+    }
+
     @Override
     public <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey cacheKey, BoundSql boundSql) throws SQLException {
-        if (ThreadContext.getPage() != null) {
-            Page page = ThreadContext.getPage();
-            int totalCount = 0;
+        Page page = getPage(parameter);
+        if (page != null) {
             Dialect dialect = getAutoDialect();
-            if (dialect == null) {
-                dialect = DialectClient.getDialect(configuration.getDefaultDialect());
+            int totalCount = 0;
+            if (page.isCount()) {
+                try {
+                    totalCount = getTotalCount(ms, parameter, boundSql, dialect);
+                } catch (SQLException e) {
+                    LOG.error("Total count error: ", e);
+                }
             }
-            try {
-                totalCount = getTotalCount(ms, parameter, boundSql, dialect);
-            } catch (SQLException e) {
-                LOG.error("Total count error: ", e);
+            if (totalCount == 0) {
+                return Collections.emptyList();
             }
-            if (totalCount > 0) {
-                String sql = boundSql.getSql();
-                String limitSql = dialect.getLimitString(sql, page.getOffset(), page.getPageSize());
-                BoundSql newBoundSql = copyFromBoundSql(ms, boundSql, limitSql);
-                List<E> list = delegate.query(ms, parameter, rowBounds, resultHandler, cacheKey, newBoundSql);
-                PageList<E> pageList = new PageList<>(list, page, totalCount);
-                return pageList;
-            }
-            return Collections.emptyList();
+            String sql = boundSql.getSql();
+            String limitSql = dialect.getLimitString(sql, page.getOffset(), page.getPageSize());
+            BoundSql newBoundSql = copyFromBoundSql(ms, boundSql, limitSql);
+            List<E> list = delegate.query(ms, parameter, rowBounds, resultHandler, cacheKey, newBoundSql);
+            return new PageList<>(list, page, totalCount);
         }
         return delegate.query(ms, parameter, rowBounds, resultHandler, cacheKey, boundSql);
     }

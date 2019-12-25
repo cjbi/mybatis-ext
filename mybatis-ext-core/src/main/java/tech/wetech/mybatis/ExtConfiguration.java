@@ -6,7 +6,7 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.transaction.Transaction;
-import tech.wetech.mybatis.dialect.DialectType;
+import tech.wetech.mybatis.dialect.Dialect;
 import tech.wetech.mybatis.mapper.Mapper;
 
 
@@ -19,17 +19,17 @@ public class ExtConfiguration extends Configuration {
 
     protected final EntityMapperRegistry entityMapperRegistry = new EntityMapperRegistry(this);
 
-    protected DialectType defaultDialect = DialectType.MYSQL;
+    protected Dialect defaultDialect = null;
 
     public ExtConfiguration() {
         super();
     }
 
-    public DialectType getDefaultDialect() {
+    public Dialect getDefaultDialect() {
         return defaultDialect;
     }
 
-    public void setDefaultDialect(DialectType defaultDialect) {
+    public void setDefaultDialect(Dialect defaultDialect) {
         this.defaultDialect = defaultDialect;
     }
 
@@ -66,6 +66,6 @@ public class ExtConfiguration extends Configuration {
     @Override
     public Executor newExecutor(Transaction transaction, ExecutorType executorType) {
         Executor executor = super.newExecutor(transaction, executorType);
-        return new PageExecutor(executor, this);
+        return new PagingExecutor(executor, this);
     }
 }

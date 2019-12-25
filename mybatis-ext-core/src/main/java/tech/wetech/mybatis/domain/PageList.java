@@ -45,7 +45,7 @@ public class PageList<T> extends ArrayList<T> {
     }
 
     public boolean isFirst() {
-        return false;
+        return !hasPrevious();
     }
 
     public boolean isLast() {
@@ -53,8 +53,7 @@ public class PageList<T> extends ArrayList<T> {
     }
 
     public boolean hasNext() {
-        //TODO
-        return false;
+        return this.pageNumber + 1 < total;
     }
 
     public boolean hasPrevious() {

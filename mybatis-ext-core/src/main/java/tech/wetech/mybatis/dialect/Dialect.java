@@ -1,8 +1,5 @@
 package tech.wetech.mybatis.dialect;
 
-import tech.wetech.mybatis.example.Sort;
-import tech.wetech.mybatis.util.EntityMappingUtil;
-
 /**
  * @author cjbi
  */
@@ -26,26 +23,6 @@ public interface Dialect {
      */
     default String getCountString(String sql) {
         return "SELECT COUNT(*) FROM (" + sql + ") tmp_count";
-    }
-
-    /**
-     * 将sql转换为带排序的sql
-     *
-     * @param sql
-     * @param className
-     * @param sort
-     * @return
-     */
-    default String getSortString(String sql, String className, Sort sort) {
-        StringBuilder builder = new StringBuilder("SELECT * FROM (").append(sql).append(") tmp_order ORDER BY ");
-        for (Sort.Order order : sort.getOrders()) {
-            builder.append(EntityMappingUtil.getColumnName(className, order.getProperty()))
-                    .append(" ")
-                    .append(order.getDirection())
-                    .append(", ");
-        }
-        builder.delete(builder.length() - 2, builder.length());
-        return builder.toString();
     }
 
 }

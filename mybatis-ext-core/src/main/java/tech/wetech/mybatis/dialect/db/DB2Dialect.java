@@ -63,7 +63,7 @@ public class DB2Dialect implements Dialect {
 
         //add the restriction to the outer select
         if (offset > 0) {
-            //			int end = offset + limit;
+//			int end = offset + limit;
             String endString = offsetPlaceholder + "+" + limitPlaceholder;
             pagingSelect.append("between ").append(offsetPlaceholder)
                     .append("+1 and ").append(endString);

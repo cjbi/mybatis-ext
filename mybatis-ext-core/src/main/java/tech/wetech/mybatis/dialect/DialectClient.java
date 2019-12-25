@@ -32,12 +32,6 @@ public class DialectClient {
 //                return new DB2Dialect();
             case POSTGRE:
 //                return new PostgreSQLDialect();
-            case SQLSERVER:
-//                return new SQLServerDialect();
-            case SQLSERVER2005:
-//                return new SQLServer2005Dialect();
-            case SYBASE:
-//                return new SybaseDialect();
             case H2:
 //                return new H2Dialect();
             case HSQL:
