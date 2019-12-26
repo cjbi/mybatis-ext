@@ -22,6 +22,8 @@ public class ExtConfiguration extends Configuration {
 
     protected Class<? extends Dialect> dialectClass = null;
 
+    protected Dialect dialect = null;
+
     public ExtConfiguration() {
         super();
     }
@@ -34,11 +36,14 @@ public class ExtConfiguration extends Configuration {
         if (dialectClass == null) {
             return null;
         }
-        try {
-            return dialectClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw ExceptionFactory.wrapException("Cannot get dialect instance.", e);
+        if (dialect == null) {
+            try {
+                dialect = dialectClass.newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
+                throw ExceptionFactory.wrapException("Cannot get dialect instance.", e);
+            }
         }
+        return dialect;
     }
 
     public void setDialectClass(Class<? extends Dialect> dialectClass) {
