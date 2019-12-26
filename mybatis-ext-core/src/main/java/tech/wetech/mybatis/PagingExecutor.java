@@ -18,13 +18,11 @@ import tech.wetech.mybatis.dialect.Dialect;
 import tech.wetech.mybatis.dialect.DialectClient;
 import tech.wetech.mybatis.dialect.DialectType;
 import tech.wetech.mybatis.domain.Page;
-import tech.wetech.mybatis.domain.PageList;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -97,7 +95,11 @@ public class PagingExecutor implements Executor {
     private Page getPage(Object parameter) {
         Page page = ParametersFinder.getInstance().findParameter(parameter, Page.class);
         if (page == null && ThreadContext.getPage() != null) {
-            page = ThreadContext.getPage();
+            try {
+                page = ThreadContext.getPage();
+            } finally {
+                ThreadContext.removeAll();
+            }
         }
         return page;
     }
@@ -106,23 +108,26 @@ public class PagingExecutor implements Executor {
     public <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey cacheKey, BoundSql boundSql) throws SQLException {
         Page page = getPage(parameter);
         if (page != null) {
-            Dialect dialect = getAutoDialect();
+            //优先使用配置的数据库方言
+            Dialect dialect = configuration.getDialectClass() != null ? configuration.getDialect() : getAutoDialect();
             int totalCount = 0;
-            if (page.isCount()) {
+            if (page.isCountable()) {
                 try {
                     totalCount = getTotalCount(ms, parameter, boundSql, dialect);
                 } catch (SQLException e) {
                     LOG.error("Total count error: ", e);
                 }
-            }
-            if (totalCount == 0) {
-                return Collections.emptyList();
+                if (totalCount == 0) {
+                    return page;
+                }
             }
             String sql = boundSql.getSql();
             String limitSql = dialect.getLimitString(sql, page.getOffset(), page.getPageSize());
             BoundSql newBoundSql = copyFromBoundSql(ms, boundSql, limitSql);
             List<E> list = delegate.query(ms, parameter, rowBounds, resultHandler, cacheKey, newBoundSql);
-            return new PageList<>(list, page, totalCount);
+            page.addAll(list);
+            page.setTotal(totalCount);
+            return page;
         }
         return delegate.query(ms, parameter, rowBounds, resultHandler, cacheKey, boundSql);
     }

@@ -7,7 +7,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -32,11 +31,6 @@ public class MybatisExtTests {
     private static SqlSession sqlSession;
 
     private final Logger log = LoggerFactory.getLogger(MybatisExtTests.class);
-
-    @Before
-    public void before() {
-        ThreadContext.doPage(1, 3);
-    }
 
     @BeforeClass
     public static void beforeClass() {
@@ -397,11 +391,12 @@ public class MybatisExtTests {
         log.info("createExample result: {}", user);
     }
 
-//    @Test
-//    public void testCustomMapper() {
-//        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-//        List<User> users = mapper.selectByUsername("张三");
-//        log.info("customMapper result: {}", users);
-//    }
+    @Test
+    public void testSelectAllWithThreadContext() {
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        ThreadContext.doPage(2, 3,true);
+        Page<User> users = (Page<User>) mapper.selectAll();
+        log.info("customMapper result: {}", users);
+    }
 
 }

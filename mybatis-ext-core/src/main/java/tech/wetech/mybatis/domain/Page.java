@@ -1,22 +1,24 @@
 package tech.wetech.mybatis.domain;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * @author cjbi
  */
-public class Page implements Serializable {
+public class Page<E> extends ArrayList<E> {
 
     private static final long serialVersionUID = 1L;
     private int pageNumber;
     private int pageSize;
-    private boolean count;
+    private boolean countable;
+    private int total;
 
     public Page(int pageNumber, int pageSize) {
-        this(pageNumber, pageSize, true);
+        this(pageNumber, pageSize, false);
     }
 
-    public Page(int pageNumber, int pageSize, boolean count) {
+    public Page(int pageNumber, int pageSize, boolean countable) {
         if (pageNumber < 0) {
             throw new IllegalArgumentException("Page index must not be less than zero!");
         } else if (pageNumber < 1) {
@@ -25,7 +27,15 @@ public class Page implements Serializable {
             this.pageNumber = pageNumber;
             this.pageSize = pageSize;
         }
-        this.count = count;
+        this.countable = countable;
+    }
+
+    public Page() {
+    }
+
+    public Page(Collection<? extends E> c, int total) {
+        super(c);
+        this.total = total;
     }
 
     public void setPageNumber(int pageNumber) {
@@ -48,12 +58,36 @@ public class Page implements Serializable {
         return ((this.pageNumber - 1) * this.pageSize);
     }
 
-    public boolean isCount() {
-        return count;
+    public boolean isCountable() {
+        return countable;
     }
 
-    public void setCount(boolean count) {
-        this.count = count;
+    public void setCountable(boolean countable) {
+        this.countable = countable;
+    }
+
+    public boolean isFirst() {
+        return !hasPrevious();
+    }
+
+    public boolean isLast() {
+        return !hasNext();
+    }
+
+    public boolean hasNext() {
+        return this.pageNumber + 1 < total;
+    }
+
+    public boolean hasPrevious() {
+        return this.pageNumber > 0;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
     }
 
     @Override
@@ -61,7 +95,9 @@ public class Page implements Serializable {
         return "Page{" +
                 "pageNumber=" + pageNumber +
                 ", pageSize=" + pageSize +
-                ", count=" + count +
+                ", countable=" + countable +
+                ", total=" + total +
+                ", list=" + super.toString() +
                 '}';
     }
 }

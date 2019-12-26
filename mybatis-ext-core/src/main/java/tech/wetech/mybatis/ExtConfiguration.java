@@ -1,5 +1,6 @@
 package tech.wetech.mybatis;
 
+import org.apache.ibatis.exceptions.ExceptionFactory;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
@@ -19,18 +20,29 @@ public class ExtConfiguration extends Configuration {
 
     protected final EntityMapperRegistry entityMapperRegistry = new EntityMapperRegistry(this);
 
-    protected Dialect defaultDialect = null;
+    protected Class<? extends Dialect> dialectClass = null;
 
     public ExtConfiguration() {
         super();
     }
 
-    public Dialect getDefaultDialect() {
-        return defaultDialect;
+    public Class<? extends Dialect> getDialectClass() {
+        return dialectClass;
     }
 
-    public void setDefaultDialect(Dialect defaultDialect) {
-        this.defaultDialect = defaultDialect;
+    public Dialect getDialect() {
+        if (dialectClass == null) {
+            return null;
+        }
+        try {
+            return dialectClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw ExceptionFactory.wrapException("Cannot get dialect instance.", e);
+        }
+    }
+
+    public void setDialectClass(Class<? extends Dialect> dialectClass) {
+        this.dialectClass = dialectClass;
     }
 
     public ExtConfiguration(Environment environment) {

@@ -18,8 +18,8 @@ public class ThreadContext {
         PAGE_THREAD_LOCAL.set(page);
     }
 
-    public static void doPage(int pageNumber, int pageSize, boolean count) {
-        Page page = new Page(pageNumber, pageSize, count);
+    public static void doPage(int pageNumber, int pageSize, boolean countable) {
+        Page page = new Page(pageNumber, pageSize, countable);
         PAGE_THREAD_LOCAL.set(page);
     }
 
@@ -45,4 +45,7 @@ public class ThreadContext {
         PAGE_THREAD_LOCAL.remove();
     }
 
+    public static void removeAll() {
+        removePage();
+    }
 }
