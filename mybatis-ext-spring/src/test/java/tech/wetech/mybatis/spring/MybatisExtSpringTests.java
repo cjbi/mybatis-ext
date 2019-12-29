@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import tech.wetech.mybatis.ThreadContext;
+import tech.wetech.mybatis.domain.Page;
 import tech.wetech.mybatis.example.Example;
 import tech.wetech.mybatis.spring.entity.User;
 import tech.wetech.mybatis.spring.mapper.UserMapper;
@@ -104,6 +106,27 @@ public class MybatisExtSpringTests {
     public void testCustomMapper() {
         List<User> users = mapper.selectByUsername("张三");
         log.info("customMapper result: {}", users);
+    }
+
+    @Test
+    public void testSelectAllWithThreadContext() {
+        ThreadContext.setPage(1, 3, true);
+        Page<User> users = (Page<User>) mapper.selectAll();
+        log.info("testSelectAllWithThreadContext result: {}", users);
+    }
+
+    @Test
+    public void testSelectUserWithPage() {
+        Page page = new Page(1, 2, true);
+        List<User> users = mapper.selectUserWithPage(page);
+        log.info("testSelectUserWithPage result: {}", users);
+    }
+
+    @Test
+    public void testSelectAllUserWithFunctionInterface() {
+        Page page = new Page(1, 3, true);
+        page.select(() -> mapper.selectAllUser());
+        log.info("testSelectAllUserWithFunctionInterface result: {}", page);
     }
 
 }

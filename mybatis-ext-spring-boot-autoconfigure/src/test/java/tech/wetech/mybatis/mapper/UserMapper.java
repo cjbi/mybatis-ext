@@ -2,6 +2,7 @@ package tech.wetech.mybatis.mapper;
 
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import tech.wetech.mybatis.domain.Page;
 import tech.wetech.mybatis.entity.User;
 
 import java.util.List;
@@ -24,4 +25,6 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("select count(*) from weshop_user where id=#{id}")
     Boolean existById(Integer id);
 
+    @Select("select * from weshop_user")
+    List<User> selectUserWithPage(Page page);
 }

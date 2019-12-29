@@ -13,7 +13,6 @@
     </bean>
     <bean id="sqlSessionFactory" class="tech.wetech.mybatis.spring.ExtSqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="methodDefinitionsPackage" value="tech.wetech.mybatis.spring.custom"/>
         <property name="mapperLocations" value="classpath*:tech/wetech/mybatis/spring/mapper/*Mapper.xml"/>
     </bean>
 

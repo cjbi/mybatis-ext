@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import tech.wetech.mybatis.domain.Page;
 import tech.wetech.mybatis.entity.User;
 import tech.wetech.mybatis.example.Example;
 import tech.wetech.mybatis.mapper.UserMapper;
@@ -98,6 +99,27 @@ public class MybatisExtSpringBootTests {
                 .selectOneWithOptional()
                 .orElseThrow(() -> new RuntimeException("数据不存在"));
         log.info("createExample result: {}", user);
+    }
+
+    @Test
+    public void testSelectAllWithThreadContext() {
+        ThreadContext.setPage(1, 3, true);
+        Page<User> users = (Page<User>) mapper.selectAll();
+        log.info("testSelectAllWithThreadContext result: {}", users);
+    }
+
+    @Test
+    public void testSelectUserWithPage() {
+        Page page = new Page(1, 2, true);
+        List<User> users = mapper.selectUserWithPage(page);
+        log.info("testSelectUserWithPage result: {}", users);
+    }
+
+    @Test
+    public void testSelectAllUserWithFunctionInterface() {
+        Page page = new Page(1, 3, true);
+        page.select(() -> mapper.selectAllUser());
+        log.info("testSelectAllUserWithFunctionInterface result: {}", page);
     }
 
 }
