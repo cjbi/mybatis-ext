@@ -38,8 +38,8 @@ public class DialectClient {
                 return new HSQLDialect();
             case SQLSERVER:
                 return new SQLServerDialect();
-            case SQLSERVER2005:
-                return new SQLServer2005Dialect();
+            case SQLSERVER2012:
+                return new SqlServer2012Dialect();
             default:
                 throw new UnsupportedOperationException("Empty dbms dialect");
         }

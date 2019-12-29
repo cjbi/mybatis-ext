@@ -49,8 +49,9 @@ import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.util.ClassUtils;
-import tech.wetech.mybatis.ExtXMLConfigBuilder;
 import tech.wetech.mybatis.ExtConfiguration;
+import tech.wetech.mybatis.ExtXMLConfigBuilder;
+import tech.wetech.mybatis.dialect.Dialect;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -140,6 +141,17 @@ public class ExtSqlSessionFactoryBean
     private ObjectFactory objectFactory;
 
     private ObjectWrapperFactory objectWrapperFactory;
+
+    private Class<? extends Dialect> dialect;
+
+    public Class<? extends Dialect> getDialect() {
+        return dialect;
+    }
+
+    public void setDialect(Class<? extends Dialect> dialect) {
+        this.dialect = dialect;
+    }
+
     /**
      * Sets the ObjectFactory.
      *
@@ -474,6 +486,7 @@ public class ExtSqlSessionFactoryBean
         Optional.ofNullable(this.objectFactory).ifPresent(targetConfiguration::setObjectFactory);
         Optional.ofNullable(this.objectWrapperFactory).ifPresent(targetConfiguration::setObjectWrapperFactory);
         Optional.ofNullable(this.vfs).ifPresent(targetConfiguration::setVfsImpl);
+        Optional.ofNullable(this.dialect).ifPresent(targetConfiguration::setDialect);
 
         if (hasLength(this.typeAliasesPackage)) {
             scanClasses(this.typeAliasesPackage, this.typeAliasesSuperType).stream()

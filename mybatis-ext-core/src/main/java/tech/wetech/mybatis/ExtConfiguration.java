@@ -8,7 +8,11 @@ import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.transaction.Transaction;
 import tech.wetech.mybatis.dialect.Dialect;
+import tech.wetech.mybatis.dialect.DialectClient;
+import tech.wetech.mybatis.dialect.DialectType;
 import tech.wetech.mybatis.mapper.Mapper;
+
+import java.sql.SQLException;
 
 
 /**
@@ -20,34 +24,22 @@ public class ExtConfiguration extends Configuration {
 
     protected final EntityMapperRegistry entityMapperRegistry = new EntityMapperRegistry(this);
 
-    protected Class<? extends Dialect> dialectClass = null;
-
     protected Dialect dialect = null;
 
     public ExtConfiguration() {
         super();
     }
 
-    public Class<? extends Dialect> getDialectClass() {
-        return dialectClass;
-    }
-
     public Dialect getDialect() {
-        if (dialectClass == null) {
-            return null;
-        }
-        if (dialect == null) {
-            try {
-                dialect = dialectClass.newInstance();
-            } catch (InstantiationException | IllegalAccessException e) {
-                throw ExceptionFactory.wrapException("Cannot get dialect instance.", e);
-            }
-        }
         return dialect;
     }
 
-    public void setDialectClass(Class<? extends Dialect> dialectClass) {
-        this.dialectClass = dialectClass;
+    public void setDialect(Class<? extends Dialect> dialect) {
+        try {
+            this.dialect = dialect.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            ExceptionFactory.wrapException("Cannot set dialect.", e);
+        }
     }
 
     public ExtConfiguration(Environment environment) {
@@ -83,6 +75,20 @@ public class ExtConfiguration extends Configuration {
     @Override
     public Executor newExecutor(Transaction transaction, ExecutorType executorType) {
         Executor executor = super.newExecutor(transaction, executorType);
-        return new PagingExecutor(executor, this);
+        return new PagingExecutor(executor, dialect != null ? dialect : getAutoDialect(transaction));
+    }
+
+    public Dialect getAutoDialect(Transaction transaction) {
+        try {
+            String url = transaction.getConnection().getMetaData().getURL();
+            for (DialectType dialectType : DialectType.values()) {
+                if (url.toUpperCase().indexOf(String.format(":%s:", dialectType)) != -1) {
+                    return DialectClient.getDialect(dialectType);
+                }
+            }
+        } catch (SQLException e) {
+            ExceptionFactory.wrapException("Cannot get auto dialect.", e);
+        }
+        return null;
     }
 }

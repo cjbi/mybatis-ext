@@ -79,7 +79,11 @@ public class MybatisExtTests {
     @Test
     public void testSelectByPrimaryKeyWithOptional() {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-        User user = mapper.selectByPrimaryKeyWithOptional(1).orElseThrow(() -> new RuntimeException("未查到数据"));
+        User user = null;
+        try {
+            user = mapper.selectByPrimaryKeyWithOptional(1).orElseThrow(() -> new RuntimeException("未查到数据"));
+        } catch (RuntimeException e) {
+        }
         log.info("selectByPrimaryKey result: {}", user);
     }
 

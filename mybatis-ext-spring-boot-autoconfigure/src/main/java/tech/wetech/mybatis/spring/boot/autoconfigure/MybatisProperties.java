@@ -23,6 +23,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import tech.wetech.mybatis.ExtConfiguration;
+import tech.wetech.mybatis.dialect.Dialect;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -94,6 +95,17 @@ public class MybatisProperties {
      */
     @NestedConfigurationProperty
     private ExtConfiguration configuration;
+
+    private Class<? extends Dialect> dialect;
+
+    public Class<? extends Dialect> getDialect() {
+        return dialect;
+    }
+
+    public void setDialect(Class<? extends Dialect> dialect) {
+        this.dialect = dialect;
+    }
+
     /**
      * @since 1.1.0
      */

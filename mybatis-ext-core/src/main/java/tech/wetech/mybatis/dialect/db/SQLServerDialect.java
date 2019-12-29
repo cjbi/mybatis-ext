@@ -44,9 +44,4 @@ public class SQLServerDialect implements Dialect {
 				.insert(getAfterSelectInsertPoint(sql), " top " + limit)
 				.toString();
 	}
-
-	@Override
-	public String getCountString(String querySqlString) {
-		return "select count(1) from (" + querySqlString + ") as tmp_count";
-	}
 }

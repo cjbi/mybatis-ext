@@ -15,8 +15,6 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.transaction.Transaction;
 import tech.wetech.mybatis.dialect.Dialect;
-import tech.wetech.mybatis.dialect.DialectClient;
-import tech.wetech.mybatis.dialect.DialectType;
 import tech.wetech.mybatis.domain.Page;
 
 import java.sql.Connection;
@@ -31,7 +29,7 @@ import java.util.List;
 public class PagingExecutor implements Executor {
 
     private final Executor delegate;
-    private final ExtConfiguration configuration;
+    private final Dialect dialect;
 
     private static final Log LOG = LogFactory.getLog(PagingExecutor.class);
 
@@ -57,9 +55,9 @@ public class PagingExecutor implements Executor {
         return count;
     }
 
-    public PagingExecutor(Executor delegate, ExtConfiguration configuration) {
+    public PagingExecutor(Executor delegate, Dialect dialect) {
         this.delegate = delegate;
-        this.configuration = configuration;
+        this.dialect = dialect;
     }
 
     @Override
@@ -79,19 +77,6 @@ public class PagingExecutor implements Executor {
         return newBoundSql;
     }
 
-    private Dialect getAutoDialect() {
-        try {
-            String url = this.getTransaction().getConnection().getMetaData().getURL();
-            for (DialectType dialectType : DialectType.values()) {
-                if (url.toUpperCase().indexOf(String.format(":%s:", dialectType)) != -1) {
-                    return DialectClient.getDialect(dialectType);
-                }
-            }
-        } catch (SQLException e) {
-        }
-        return null;
-    }
-
     private Page getPage(Object parameter) {
         Page page = ParametersFinder.getInstance().findParameter(parameter, Page.class);
         if (page == null && ThreadContext.getPage() != null) {
@@ -109,7 +94,6 @@ public class PagingExecutor implements Executor {
         Page page = getPage(parameter);
         if (page != null) {
             //优先使用配置的数据库方言
-            Dialect dialect = configuration.getDialectClass() != null ? configuration.getDialect() : getAutoDialect();
             int totalCount = 0;
             if (page.isCountable()) {
                 try {

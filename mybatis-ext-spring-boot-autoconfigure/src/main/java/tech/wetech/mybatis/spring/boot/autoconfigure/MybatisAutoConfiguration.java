@@ -67,7 +67,7 @@ import java.util.stream.Stream;
 /**
  * {@link EnableAutoConfiguration Auto-Configuration} for Mybatis. Contributes a {@link SqlSessionFactory} and a
  * {@link SqlSessionTemplate}.
- *
+ * <p>
  * If {@link org.mybatis.spring.annotation.MapperScan} is used, or a configuration file is specified as a property,
  * those will be considered, otherwise this auto-configuration will attempt to register mappers based on the interface
  * definitions in or under the root auto-configuration package.
@@ -150,6 +150,9 @@ public class MybatisAutoConfiguration implements InitializingBean {
         }
         if (this.properties.getTypeAliasesSuperType() != null) {
             factory.setTypeAliasesSuperType(this.properties.getTypeAliasesSuperType());
+        }
+        if (this.properties.getDialect() != null) {
+            factory.setDialect(this.properties.getDialect());
         }
         if (StringUtils.hasLength(this.properties.getTypeHandlersPackage())) {
             factory.setTypeHandlersPackage(this.properties.getTypeHandlersPackage());
