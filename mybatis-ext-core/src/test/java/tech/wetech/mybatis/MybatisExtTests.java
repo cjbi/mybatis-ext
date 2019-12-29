@@ -409,7 +409,7 @@ public class MybatisExtTests {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
         Page page = new Page(1, 3, true);
         page.select(() -> mapper.selectAllUser());
-        log.info("testSelectAllUserWithSupplier result: {}", page);
+        log.info("testSelectAllUserWithFunctionInterface result: {}", page);
     }
 
     @Test
@@ -417,7 +417,7 @@ public class MybatisExtTests {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
         Page page = new Page(1, 3, true);
         int count = page.count(() -> mapper.selectAllUser());
-        log.info("testCountWithSupplier result: {}", count);
+        log.info("testCountWithFunctionInterface result: {}", count);
     }
 
 }
