@@ -1,6 +1,6 @@
 package tech.wetech.mybatis.dialect;
 
-import tech.wetech.mybatis.dialect.db.MySQLDialect;
+import tech.wetech.mybatis.dialect.db.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,15 +27,19 @@ public class DialectClient {
             case MYSQL:
                 return new MySQLDialect();
             case ORACLE:
-//                return new OracleDialect();
+                return new OracleDialect();
             case DB2:
-//                return new DB2Dialect();
+                return new DB2Dialect();
             case POSTGRE:
-//                return new PostgreSQLDialect();
+                return new PostgreSQLDialect();
             case H2:
-//                return new H2Dialect();
+                return new H2Dialect();
             case HSQL:
-//                return new HSQLDialect();
+                return new HSQLDialect();
+            case SQLSERVER:
+                return new SQLServerDialect();
+            case SQLSERVER2005:
+                return new SQLServer2005Dialect();
             default:
                 throw new UnsupportedOperationException("Empty dbms dialect");
         }

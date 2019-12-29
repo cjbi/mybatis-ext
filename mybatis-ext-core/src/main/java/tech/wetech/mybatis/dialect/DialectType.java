@@ -11,5 +11,7 @@ public enum DialectType {
     DB2,
     H2,
     HSQL,
-    POSTGRE
+    POSTGRE,
+    SQLSERVER,
+    SQLSERVER2005
 }
