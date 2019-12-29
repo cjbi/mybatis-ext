@@ -18,10 +18,7 @@ import tech.wetech.mybatis.example.Sort;
 import tech.wetech.mybatis.mapper.UserMapper;
 
 import javax.sql.DataSource;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * 测试用例类
@@ -394,9 +391,33 @@ public class MybatisExtTests {
     @Test
     public void testSelectAllWithThreadContext() {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-        ThreadContext.doPage(2, 3,true);
+        ThreadContext.setPage(1, 3, true);
         Page<User> users = (Page<User>) mapper.selectAll();
-        log.info("customMapper result: {}", users);
+        log.info("testSelectAllWithThreadContext result: {}", users);
+    }
+
+    @Test
+    public void testSelectUserWithPage() {
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        Page page = new Page(1, 2, true);
+        List<User> users = mapper.selectUserWithPage(page);
+        log.info("testSelectUserWithPage result: {}", users);
+    }
+
+    @Test
+    public void testSelectAllUserWithFunctionInterface() {
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        Page page = new Page(1, 3, true);
+        page.select(() -> mapper.selectAllUser());
+        log.info("testSelectAllUserWithSupplier result: {}", page);
+    }
+
+    @Test
+    public void testCountWithFunctionInterface() {
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        Page page = new Page(1, 3, true);
+        int count = page.count(() -> mapper.selectAllUser());
+        log.info("testCountWithSupplier result: {}", count);
     }
 
 }

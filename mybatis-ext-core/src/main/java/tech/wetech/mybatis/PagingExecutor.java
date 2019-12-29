@@ -120,13 +120,16 @@ public class PagingExecutor implements Executor {
                 if (totalCount == 0) {
                     return page;
                 }
+                page.setTotal(totalCount);
+            }
+            if (page.getPageSize() < 1) {
+                return page;
             }
             String sql = boundSql.getSql();
             String limitSql = dialect.getLimitString(sql, page.getOffset(), page.getPageSize());
             BoundSql newBoundSql = copyFromBoundSql(ms, boundSql, limitSql);
             List<E> list = delegate.query(ms, parameter, rowBounds, resultHandler, cacheKey, newBoundSql);
             page.addAll(list);
-            page.setTotal(totalCount);
             return page;
         }
         return delegate.query(ms, parameter, rowBounds, resultHandler, cacheKey, boundSql);

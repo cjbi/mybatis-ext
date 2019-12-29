@@ -110,7 +110,7 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
     }
 
     public static void setPageDialect(int offset, int limit) {
-        ThreadContext.doPageWithOffset(offset, limit);
+        ThreadContext.setPageWithOffset(offset, limit);
     }
 
 

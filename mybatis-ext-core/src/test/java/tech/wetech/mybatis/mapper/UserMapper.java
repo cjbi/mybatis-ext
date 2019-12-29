@@ -18,6 +18,9 @@ public interface UserMapper extends BaseMapper<User> {
     @Select("select * from weshop_user")
     List<User> selectAllUserWithAnnotation();
 
+    @Select("select * from weshop_user")
+    List<User> selectUserWithPage(Page page);
+
     @Select("select * from weshop_user where id=#{id}")
     User selectById(@Param("id") Integer id, @Param("page") Page page, @Param("sort") Sort sort);
 

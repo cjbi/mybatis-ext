@@ -1,5 +1,7 @@
 package tech.wetech.mybatis.domain;
 
+import tech.wetech.mybatis.ThreadContext;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -8,25 +10,28 @@ import java.util.Collection;
  */
 public class Page<E> extends ArrayList<E> {
 
-    private static final long serialVersionUID = 1L;
     private int pageNumber;
     private int pageSize;
     private boolean countable;
     private int total;
+
+    public Page select(Select select) {
+        ThreadContext.setPage(this);
+        return (Page) select.get();
+    }
+
+    public int count(Select select) {
+        ThreadContext.setPage(0, 0, countable);
+        return ((Page)select.get()).getTotal();
+    }
 
     public Page(int pageNumber, int pageSize) {
         this(pageNumber, pageSize, false);
     }
 
     public Page(int pageNumber, int pageSize, boolean countable) {
-        if (pageNumber < 0) {
-            throw new IllegalArgumentException("Page index must not be less than zero!");
-        } else if (pageNumber < 1) {
-            throw new IllegalArgumentException("Page size must not be less than one!");
-        } else {
-            this.pageNumber = pageNumber;
-            this.pageSize = pageSize;
-        }
+        this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
         this.countable = countable;
     }
 
@@ -99,5 +104,10 @@ public class Page<E> extends ArrayList<E> {
                 ", total=" + total +
                 ", list=" + super.toString() +
                 '}';
+    }
+
+    public interface Select {
+        Collection get();
+
     }
 }
