@@ -21,7 +21,7 @@ public class Page<E> extends ArrayList<E> {
     }
 
     public int count(Select select) {
-        ThreadContext.setPage(0, 0, countable);
+        ThreadContext.setPage(0, 0, true);
         return ((Page)select.get()).getTotal();
     }
 
@@ -108,6 +108,5 @@ public class Page<E> extends ArrayList<E> {
 
     public interface Select {
         Collection get();
-
     }
 }
