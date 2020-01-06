@@ -18,20 +18,23 @@ MyBatis-Ext是MyBatis的增强扩展，简化了MyBatis对单表增删改查的�
     <dependency>
         <groupId>tech.wetech.mybatis</groupId>
         <artifactId>mybatis-ext-core</artifactId>
-        <version>1.4.1</version>
+        <!--  Use the latest released version:
+        https://repo1.maven.org/maven2/tech/wetech/mybatis/
+         -->
+        <version>LATEST_VERSION</version>
     </dependency>
     <!-- springframework请引入此模块（已包含以上依赖） -->
     <dependency>
         <groupId>tech.wetech.mybatis</groupId>
         <artifactId>mybatis-ext-spring</artifactId>
-        <version>1.4.1</version>
+        <version>LATEST_VERSION</version>
     </dependency>
     <!-- spring-boot请引入此模块（已包含以上依赖） -->
     <!-- 请注意：引入mybatis-ext-spring-boot-starter无需再引入mybatis-spring-boot-starter -->
     <dependency>
         <groupId>tech.wetech.mybatis</groupId>
         <artifactId>mybatis-ext-spring-boot-starter</artifactId>
-        <version>1.4.1</version>
+        <version>LATEST_VERSION</version>
     </dependency>
 </dependencys>
 ```
