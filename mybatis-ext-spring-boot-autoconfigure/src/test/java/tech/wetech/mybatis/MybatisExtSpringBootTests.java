@@ -61,10 +61,8 @@ public class MybatisExtSpringBootTests {
                 .orIn(User::getMobile, Arrays.asList(111, "aaa", 222))
                 .andLike(User::getAvatar, "selectOne * from t_user");
 
-        log.info("example:{}", example.getCriteria());
+        log.info("example:{}", example);
         example.setDistinct(true);
-        example.setLimit(1);
-        example.setOffset(2);
         List<User> users = mapper.selectByExample(example);
         log.info("selectByExample result: {}", users);
     }
@@ -83,7 +81,7 @@ public class MybatisExtSpringBootTests {
                 .orIn(User::getMobile, Arrays.asList(111, "aaa", 222))
                 .andLike(User::getAvatar, "selectOne * from t_user");
 
-        log.info("example:{}", example.getCriteria());
+        log.info("example:{}", example);
         Integer rows = mapper.countByExample(example);
         log.info("countByExample result: {}", rows);
     }
