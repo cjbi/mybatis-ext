@@ -1,9 +1,8 @@
 package tech.wetech.mybatis.mapper;
 
 import org.apache.ibatis.jdbc.SQL;
-import tech.wetech.mybatis.ThreadContext;
-import tech.wetech.mybatis.builder.EntityMapping;
 import tech.wetech.mybatis.ExtConfiguration;
+import tech.wetech.mybatis.builder.EntityMapping;
 
 import java.util.stream.Collectors;
 
@@ -49,9 +48,9 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
             }
             setBuilder.append(String.format("<if test='record.%s != null'>%s = #{record.%s},</if>", columnProperty.getPropertyName(), columnProperty.getColumnName(), columnProperty.getPropertyName()));
         }
-        builder.append("<bind name='criteria' value='example.criteria'/>");
+        builder.append("<bind name='oredCriteria' value='example.oredCriteria'/>");
         setBuilder.append("</set>");
-        builder.append(String.format("UPDATE %s %s %s", entityMapping.getTableName(), setBuilder, buildCriteriaXML(configuration, entityMapping)));
+        builder.append(String.format("UPDATE %s %s %s", entityMapping.getTableName(), setBuilder, buildExampleXML(configuration, entityMapping)));
         builder.append("</script>");
         return builder.toString();
     }
@@ -68,8 +67,8 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
             setBuilder.append(String.format("%s = #{record.%s},", columnProperty.getColumnName(), columnProperty.getPropertyName()));
         }
         setBuilder.append("</set>");
-        builder.append("<bind name='criteria' value='example.criteria'/>");
-        builder.append(String.format("UPDATE %s %s %s", entityMapping.getTableName(), setBuilder, buildCriteriaXML(configuration, entityMapping)));
+        builder.append("<bind name='oredCriteria' value='example.oredCriteria'/>");
+        builder.append(String.format("UPDATE %s %s %s", entityMapping.getTableName(), setBuilder, buildExampleXML(configuration, entityMapping)));
         builder.append("</script>");
         return builder.toString();
     }
@@ -83,7 +82,7 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
         } else {
             builder.append(String.format("DELETE FROM %s", entityMapping.getTableName()));
         }
-        builder.append(buildCriteriaXML(configuration, entityMapping));
+        builder.append(buildExampleXML(configuration, entityMapping));
         builder.append("</script>");
         return builder.toString();
     }
@@ -92,7 +91,7 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
     public String countByExample(ExtConfiguration configuration, EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
         builder.append(String.format("SELECT COUNT(*) FROM %s", entityMapping.getTableName()));
-        builder.append(buildCriteriaXML(configuration, entityMapping));
+        builder.append(buildExampleXML(configuration, entityMapping));
         builder.append("</script>");
         return builder.toString();
     }
@@ -101,16 +100,10 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
     public String selectByExample(ExtConfiguration configuration, EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
         builder.append(String.format("select %s from %s", buildExampleColumnsXML(configuration, entityMapping), entityMapping.getTableName()));
-        builder.append(buildCriteriaXML(configuration, entityMapping));
+        builder.append(buildExampleXML(configuration, entityMapping));
         builder.append(String.format("<if test='orderByClause != null'> order by ${orderByClause}</if>"));
-        builder.append("<if test='limit gt 0'> ${@tech.wetech.mybatis.mapper.BaseEntitySqlBuilder@setPageDialect(offset, limit)} </if>");
-        builder.append("<if test='forUpdate'> for update </if>");
         builder.append("</script>");
         return builder.toString();
-    }
-
-    public static void setPageDialect(int offset, int limit) {
-        ThreadContext.setPageWithOffset(offset, limit);
     }
 
 

@@ -3,6 +3,7 @@ package tech.wetech.mybatis.example;
 import tech.wetech.mybatis.domain.Property;
 import tech.wetech.mybatis.mapper.BaseMapper;
 import tech.wetech.mybatis.util.EntityMappingUtil;
+
 /**
  * @author cjbi
  */
@@ -17,8 +18,15 @@ public final class MapperExample<T> extends Example<T> {
 
     @Override
     public MapperCriteria<T> createCriteria() {
-        return (MapperCriteria<T>) super.createCriteria(new MapperCriteria<>(mapper, this));
+        MapperCriteria mapperCriteria = new MapperCriteria<>(mapper, this);
+        this.oredCriteria.add(mapperCriteria);
+        return mapperCriteria;
     }
+
+//    public MapperCriteria<T> createCriteria(Criteria criteria) {
+//        this.oredCriteria.add(criteria);
+//        return (MapperCriteria<T>) criteria;
+//    }
 
     @Override
     public MapperExample<T> setColumns(Property<T, ?>... properties) {
@@ -40,18 +48,6 @@ public final class MapperExample<T> extends Example<T> {
     @Override
     public MapperExample<T> setOrderByClause(String orderByClause) {
         super.setOrderByClause(orderByClause);
-        return this;
-    }
-
-    @Override
-    public MapperExample<T> setLimit(int limit) {
-        super.setLimit(limit);
-        return this;
-    }
-
-    @Override
-    public MapperExample<T> setOffset(int offset) {
-        super.setOffset(offset);
         return this;
     }
 

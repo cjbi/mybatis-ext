@@ -13,12 +13,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.wetech.mybatis.domain.Page;
 import tech.wetech.mybatis.entity.User;
+import tech.wetech.mybatis.example.Criteria;
 import tech.wetech.mybatis.example.Example;
 import tech.wetech.mybatis.example.Sort;
 import tech.wetech.mybatis.mapper.UserMapper;
 
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * 测试用例类
@@ -289,13 +293,10 @@ public class MybatisExtTests {
                 .orIn(User::getMobile, Arrays.asList(111, "aaa", 222))
                 .andLike(User::getAvatar, "select * from t_user");
 
-        log.info("example:{}", example.getCriteria());
+        log.info("example:{}", example);
         example.setDistinct(true);
-        example.setLimit(1);
-        example.setOffset(2);
         example.setPage(2, 2);
         example.setSort(new Sort(Sort.Direction.DESC, "mobile", "username"));
-//        example.setForUpdate(true);
         List<User> users = mapper.selectByExample(example);
         log.info("selectByExample result: {}", users);
     }
@@ -315,7 +316,7 @@ public class MybatisExtTests {
                 .orIn(User::getMobile, Arrays.asList(111, "aaa", 222))
                 .andLike(User::getAvatar, "select * from t_user");
 
-        log.info("example:{}", example.getCriteria());
+        log.info("example:{}", example);
         Integer rows = mapper.countByExample(example);
         log.info("countByExample result: {}", rows);
     }
@@ -356,6 +357,8 @@ public class MybatisExtTests {
         user.setWechatOpenId("222");
 
         Example<User> example = Example.of(User.class);
+        Criteria<User> criteria = example.createCriteria();
+        Criteria<User> subcriteria = example.createCriteria();
         example.createCriteria()
                 .andEqualTo(User::getId, 1)
                 .andEqualTo(User::getUsername, "张三");
@@ -422,6 +425,17 @@ public class MybatisExtTests {
         Page page = new Page(1, 3, true);
         int count = page.count(() -> mapper.selectAllUser());
         log.info("testCountWithFunctionInterface result: {}", count);
+    }
+
+    @Test
+    public void testSelectByExampleWithSub() {
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        Example<User> example = Example.of(User.class);
+        example.and().orEqualTo(User::getUsername, "bbb").andEqualTo(User::getId, 2);
+        example.or().andEqualTo(User::getUsername, "aaa");
+        example.or().andLessThanOrEqualTo(User::getId, 1000).andGreaterThanOrEqualTo(User::getId, 1);
+        List<User> users = mapper.selectByExample(example);
+        log.info("testSelectByExampleWithSub result: {}", users);
     }
 
 }

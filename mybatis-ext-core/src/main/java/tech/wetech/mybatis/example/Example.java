@@ -1,10 +1,13 @@
 package tech.wetech.mybatis.example;
 
+import tech.wetech.mybatis.ThreadContext;
 import tech.wetech.mybatis.domain.Property;
 import tech.wetech.mybatis.util.EntityMappingUtil;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -14,41 +17,60 @@ public class Example<T> implements Serializable {
 
     protected String[] columns;
     protected boolean distinct;
-    protected boolean forUpdate;
     protected String orderByClause;
-    protected int limit;
-    protected int offset;
-    protected Criteria<T> criteria;
     protected final Class<?> entityClass;
+    protected List<Criteria> oredCriteria;
+
+    public Criteria<T> or() {
+        Criteria<T> criteria = createCriteriaInternal();
+        oredCriteria.add(criteria);
+        return criteria;
+    }
+
+    public Criteria<T> or(Criteria<T> criteria) {
+        oredCriteria.add(criteria);
+        return criteria;
+    }
+
+    public Criteria<T> and() {
+        Criteria<T> criteria = createCriteriaInternal();
+        criteria.setAndOr("and");
+        oredCriteria.add(criteria);
+        return criteria;
+    }
+
+    public Criteria<T> and(Criteria<T> criteria) {
+        oredCriteria.add(criteria);
+        criteria.setAndOr("and");
+        return criteria;
+    }
 
     public static <T> Example<T> of(Class<T> entityClass) {
         return new Example<>(entityClass);
     }
 
     public Criteria<T> createCriteria() {
-        this.criteria = new Criteria<>();
-        return this.criteria;
+        Criteria criteria = createCriteriaInternal();
+        if (oredCriteria.size() == 0) {
+            oredCriteria.add(criteria);
+        }
+        return criteria;
     }
 
-    public Criteria<T> createCriteria(Criteria criteria) {
-        this.criteria = criteria;
-        return this.criteria;
+    private Criteria<T> createCriteriaInternal() {
+        Criteria<T> criteria = new Criteria<>();
+        return criteria;
     }
 
     public Example(Class<?> entityClass) {
         this.entityClass = entityClass;
-    }
-
-    public Criteria<T> getCriteria() {
-        return criteria != null ? criteria : createCriteria();
+        this.oredCriteria = new ArrayList<>();
     }
 
     public void clear() {
+        oredCriteria.clear();
         orderByClause = null;
-        limit = 0;
-        offset = 0;
         distinct = false;
-        criteria.clear();
     }
 
     public String[] getColumns() {
@@ -89,24 +111,6 @@ public class Example<T> implements Serializable {
         return this;
     }
 
-    /**
-     * forUpdate和内置分页执行器存在冲突，所以将会在后面版本移除
-     * @return
-     */
-    @Deprecated
-    public boolean isForUpdate() {
-        return forUpdate;
-    }
-
-    /**
-     * forUpdate和内置分页执行器存在冲突，所以将会在后面版本移除
-     * @param forUpdate
-     */
-    @Deprecated
-    public void setForUpdate(boolean forUpdate) {
-        this.forUpdate = forUpdate;
-    }
-
     public Example<T> setOrderByClause(String orderByClause) {
         this.orderByClause = orderByClause;
         return this;
@@ -116,27 +120,8 @@ public class Example<T> implements Serializable {
         return orderByClause;
     }
 
-    public int getLimit() {
-        return limit;
-    }
-
-    public Example<T> setLimit(int limit) {
-        this.limit = limit;
-        return this;
-    }
-
-    public int getOffset() {
-        return offset;
-    }
-
-    public Example<T> setOffset(int offset) {
-        this.offset = offset;
-        return this;
-    }
-
     public Example<T> setPage(int pageSize, int pageNumber) {
-        this.limit = pageSize;
-        this.offset = (pageNumber - 1) * pageSize;
+        ThreadContext.setPage(pageSize, pageNumber);
         return this;
     }
 
@@ -155,9 +140,7 @@ public class Example<T> implements Serializable {
                 "columns=" + Arrays.toString(columns) +
                 ", distinct=" + distinct +
                 ", orderByClause='" + orderByClause + '\'' +
-                ", limit=" + limit +
-                ", offset=" + offset +
-                ", criteria=" + criteria +
+                ", oredCriteria=" + oredCriteria +
                 ", entityClass=" + entityClass +
                 '}';
     }
