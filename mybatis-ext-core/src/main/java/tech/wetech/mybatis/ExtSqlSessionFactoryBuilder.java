@@ -15,7 +15,6 @@ import java.util.Properties;
  */
 public class ExtSqlSessionFactoryBuilder extends SqlSessionFactoryBuilder {
 
-
     @Override
     public SqlSessionFactory build(Reader reader, String environment, Properties properties) {
         try {
