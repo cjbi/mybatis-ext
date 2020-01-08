@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
  */
 public class BaseEntitySqlBuilder extends AbstractEntityProvider {
 
-
     public String deleteByPrimaryKey(EntityMapping entityMapping) {
         if (entityMapping.isLogicDelete()) {
             return new SQL() {{

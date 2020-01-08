@@ -37,7 +37,7 @@ public class PagingExecutor implements Executor {
         Log statementLog = ms.getStatementLog();
         final String countSql = dialect.getCountString(boundSql.getSql());
         if (statementLog.isDebugEnabled()) {
-            statementLog.debug("==>  Total count SQL: " + countSql);
+            statementLog.debug("==>   CountSQL: " + countSql);
         }
         Connection connection = this.getTransaction().getConnection();
         PreparedStatement countStmt = connection.prepareStatement(countSql);
@@ -50,7 +50,7 @@ public class PagingExecutor implements Executor {
             count = rs.getInt(1);
         }
         if (statementLog.isDebugEnabled()) {
-            statementLog.debug("==>  Total count: " + count);
+            statementLog.debug("==> TotalCount: " + count);
         }
         return count;
     }
