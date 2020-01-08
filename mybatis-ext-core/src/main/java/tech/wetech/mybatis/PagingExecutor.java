@@ -33,14 +33,11 @@ public class PagingExecutor implements Executor {
 
     public int getTotalCount(
             final MappedStatement ms, final Object parameterObject,
-            final BoundSql boundSql, Dialect dialect) throws SQLException {
+            final BoundSql boundSql, final Dialect dialect) throws SQLException {
         Log statementLog = ms.getStatementLog();
         final String countSql = dialect.getCountString(boundSql.getSql());
         if (statementLog.isDebugEnabled()) {
-            statementLog.debug("Total count SQL: " + countSql);
-            if (parameterObject != null) {
-                statementLog.debug("Total count Parameters: " + parameterObject);
-            }
+            statementLog.debug("==>  Total count SQL: " + countSql);
         }
         Connection connection = this.getTransaction().getConnection();
         PreparedStatement countStmt = connection.prepareStatement(countSql);
@@ -53,7 +50,7 @@ public class PagingExecutor implements Executor {
             count = rs.getInt(1);
         }
         if (statementLog.isDebugEnabled()) {
-            statementLog.debug("Total count: " + count);
+            statementLog.debug("==>  Total count: " + count);
         }
         return count;
     }

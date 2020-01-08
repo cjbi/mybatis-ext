@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import tech.wetech.mybatis.domain.Page;
 import tech.wetech.mybatis.entity.User;
-import tech.wetech.mybatis.example.Sort;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +21,7 @@ public interface UserMapper extends BaseMapper<User> {
     List<User> selectUserWithPage(Page page);
 
     @Select("select * from weshop_user where id=#{id}")
-    User selectById(@Param("id") Integer id, @Param("page") Page page, @Param("sort") Sort sort);
+    User selectById(@Param("id") Integer id, @Param("page") Page page);
 
     @Update("update weshop_user set username='dddd' where id=#{id}")
     int updateById(Integer id);

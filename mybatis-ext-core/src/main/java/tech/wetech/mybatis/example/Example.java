@@ -34,14 +34,14 @@ public class Example<T> implements Serializable {
 
     public Criteria<T> and() {
         Criteria<T> criteria = createCriteriaInternal();
-        criteria.setAndOr("and");
+        criteria.andOr("and");
         oredCriteria.add(criteria);
         return criteria;
     }
 
     public Criteria<T> and(Criteria<T> criteria) {
         oredCriteria.add(criteria);
-        criteria.setAndOr("and");
+        criteria.andOr("and");
         return criteria;
     }
 

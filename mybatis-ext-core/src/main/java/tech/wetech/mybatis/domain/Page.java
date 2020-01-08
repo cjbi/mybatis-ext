@@ -1,7 +1,5 @@
 package tech.wetech.mybatis.domain;
 
-import tech.wetech.mybatis.ThreadContext;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -14,16 +12,6 @@ public class Page<E> extends ArrayList<E> {
     private int pageSize;
     private boolean countable;
     private int total;
-
-    public Page select(Select select) {
-        ThreadContext.setPage(this);
-        return (Page) select.get();
-    }
-
-    public int count(Select select) {
-        ThreadContext.setPage(0, 0, true);
-        return ((Page)select.get()).getTotal();
-    }
 
     public Page(int pageNumber, int pageSize) {
         this(pageNumber, pageSize, false);
@@ -106,7 +94,4 @@ public class Page<E> extends ArrayList<E> {
                 '}';
     }
 
-    public interface Select {
-        Collection get();
-    }
 }

@@ -12,8 +12,8 @@ import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.reflection.TypeParameterResolver;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.scripting.xmltags.XMLLanguageDriver;
-import tech.wetech.mybatis.mapper.Mapper;
 import tech.wetech.mybatis.ExtConfiguration;
+import tech.wetech.mybatis.mapper.Mapper;
 import tech.wetech.mybatis.util.EntityMappingUtil;
 
 import java.lang.reflect.*;
@@ -31,7 +31,6 @@ public class EntityMapperBuilder {
     private final MapperBuilderAssistant assistant;
     private final Class<?> type;
     public final static Map<String, EntityMapping> TABLE_ENTITY_CACHE = new HashMap<>();
-    private static final String T = "T";
 
     public EntityMapperBuilder(ExtConfiguration configuration, Class<?> type) {
         this.configuration = configuration;
@@ -114,7 +113,7 @@ public class EntityMapperBuilder {
     private Class<?> getReturnType(Method method, EntityMapperAnnotationResolver resolver) {
         Class<?> returnType = method.getReturnType();
         Type resolvedReturnType = TypeParameterResolver.resolveReturnType(method, type);
-        if (T.equals(resolvedReturnType.getTypeName())) {
+        if ("T".equals(resolvedReturnType.getTypeName())) {
             returnType = resolver.getEntityMapping().getEntityClass();
         }
         if (resolvedReturnType instanceof Class) {
@@ -145,7 +144,7 @@ public class EntityMapperBuilder {
                         Class<?> componentType = (Class<?>) ((GenericArrayType) returnTypeParameter).getGenericComponentType();
                         // (gcode issue #525) support List<byte[]>
                         returnType = Array.newInstance(componentType, 0).getClass();
-                    } else if (T.equals(returnTypeParameter.getTypeName())) {
+                    } else if ("T".equals(returnTypeParameter.getTypeName())) {
                         returnType = resolver.getEntityMapping().getEntityClass();
                     }
                 }
@@ -166,7 +165,7 @@ public class EntityMapperBuilder {
                 Type returnTypeParameter = actualTypeArguments[0];
                 if (returnTypeParameter instanceof Class<?>) {
                     returnType = (Class<?>) returnTypeParameter;
-                } else if (T.equals(returnTypeParameter.getTypeName())) {
+                } else if ("T".equals(returnTypeParameter.getTypeName())) {
                     returnType = resolver.getEntityMapping().getEntityClass();
                 }
             }

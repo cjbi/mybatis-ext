@@ -25,13 +25,45 @@ public class Criteria<T> implements Serializable {
         return andOr;
     }
 
-    public void setAndOr(String andOr) {
+    public void andOr(String andOr) {
         this.andOr = andOr;
     }
 
     public boolean isValid() {
         return criteria.size() > 0;
     }
+
+    private void addCriterion(String property, String condition, String andOr) {
+        if (property == null) {
+            throw new RuntimeException("Property cannot be null");
+        }
+        if (condition == null) {
+            throw new RuntimeException("Value for condition cannot be null");
+        }
+        criteria.add(new Criterion(property, condition, andOr));
+    }
+
+
+    private void addCriterion(String property, Object value, String condition, String andOr) {
+        if (property == null) {
+            throw new RuntimeException("Property cannot be null");
+        }
+        if (value == null) {
+            throw new RuntimeException("Value for " + property + " cannot be null");
+        }
+        criteria.add(new Criterion(property, value, condition, andOr));
+    }
+
+    private void addCriterion(String property, Object value1, Object value2, String condition, String andOr) {
+        if (property == null) {
+            throw new RuntimeException("Property cannot be null");
+        }
+        if (value1 == null || value2 == null) {
+            throw new RuntimeException("Between values for " + property + " cannot be null");
+        }
+        criteria.add(new Criterion(property, value1, value2, condition, andOr));
+    }
+
 
     public Criteria<T> andEqualTo(Property<T, ?> property, Object value) {
         andEqualTo(property.getPropertyName(), value);
@@ -174,142 +206,142 @@ public class Criteria<T> implements Serializable {
     }
 
     public Criteria<T> andEqualTo(String property, Object value) {
-        this.criteria.add(new Criterion(property, value, "=", "and"));
+        addCriterion(property, value, "=", "and");
         return this;
     }
 
     public Criteria<T> andNotEqualTo(String property, Object value) {
-        this.criteria.add(new Criterion(property, value, "<>", "and"));
+        addCriterion(property, value, "<>", "and");
         return this;
     }
 
     public Criteria<T> andGreaterThan(String property, Object value) {
-        this.criteria.add(new Criterion(property, value, ">", "and"));
+        addCriterion(property, value, ">", "and");
         return this;
     }
 
     public Criteria<T> andGreaterThanOrEqualTo(String property, Object value) {
-        this.criteria.add(new Criterion(property, value, ">=", "and"));
+        addCriterion(property, value, ">=", "and");
         return this;
     }
 
     public Criteria<T> andLessThan(String property, Object value) {
-        this.criteria.add(new Criterion(property, value, "<", "and"));
+        addCriterion(property, value, "<", "and");
         return this;
     }
 
     public Criteria<T> andLessThanOrEqualTo(String property, Object value) {
-        this.criteria.add(new Criterion(property, value, "<=", "and"));
+        addCriterion(property, value, "<=", "and");
         return this;
     }
 
     public Criteria<T> andIn(String property, Iterable<?> values) {
-        this.criteria.add(new Criterion(property, values, "in", "and"));
+        addCriterion(property, values, "in", "and");
         return this;
     }
 
     public Criteria<T> andNotIn(String property, Iterable<?> values) {
-        this.criteria.add(new Criterion(property, values, "not in", "and"));
+        addCriterion(property, values, "not in", "and");
         return this;
     }
 
     public Criteria<T> andBetween(String property, Object value1, Object value2) {
-        this.criteria.add(new Criterion(property, value1, value2, "between", "and"));
+        addCriterion(property, value1, value2, "between", "and");
         return this;
     }
 
     public Criteria<T> andNotBetween(String property, Object value1, Object value2) {
-        this.criteria.add(new Criterion(property, value1, value2, "not between", "and"));
+        addCriterion(property, value1, value2, "not between", "and");
         return this;
     }
 
     public Criteria<T> andLike(String property, String value) {
-        this.criteria.add(new Criterion(property, value, "like", "and"));
+        addCriterion(property, value, "like", "and");
         return this;
     }
 
     public Criteria<T> andNotLike(String property, String value) {
-        this.criteria.add(new Criterion(property, value, "not like", "and"));
+        addCriterion(property, value, "not like", "and");
         return this;
     }
 
     public Criteria<T> andIsNull(String property) {
-        this.criteria.add(new Criterion(property, "is null", "and"));
+        addCriterion(property, "is null", "and");
         return this;
     }
 
     public Criteria<T> andIsNotNull(String property) {
-        this.criteria.add(new Criterion(property, "is not null", "and"));
+        addCriterion(property, "is not null", "and");
         return this;
     }
 
     public Criteria<T> orIsNull(String property) {
-        this.criteria.add(new Criterion(property, "is null", "or"));
+        addCriterion(property, "is null", "or");
         return this;
     }
 
     public Criteria<T> orIsNotNull(String property) {
-        this.criteria.add(new Criterion(property, "is not null", "or"));
+        addCriterion(property, "is not null", "or");
         return this;
     }
 
     public Criteria<T> orEqualTo(String property, Object value) {
-        this.criteria.add(new Criterion(property, value, "=", "or"));
+        addCriterion(property, value, "=", "or");
         return this;
     }
 
     public Criteria<T> orNotEqualTo(String property, Object value) {
-        this.criteria.add(new Criterion(property, value, "<>", "or"));
+        addCriterion(property, value, "<>", "or");
         return this;
     }
 
     public Criteria<T> orGreaterThan(String property, Object value) {
-        this.criteria.add(new Criterion(property, value, ">", "or"));
+        addCriterion(property, value, ">", "or");
         return this;
     }
 
     public Criteria<T> orGreaterThanOrEqualTo(String property, Object value) {
-        this.criteria.add(new Criterion(property, value, ">=", "or"));
+        addCriterion(property, value, ">=", "or");
         return this;
     }
 
     public Criteria<T> orLessThan(String property, Object value) {
-        this.criteria.add(new Criterion(property, value, "<", "or"));
+        addCriterion(property, value, "<", "or");
         return this;
     }
 
     public Criteria<T> orLessThanOrEqualTo(String property, Object value) {
-        this.criteria.add(new Criterion(property, value, "<=", "or"));
+        addCriterion(property, value, "<=", "or");
         return this;
     }
 
     public Criteria<T> orIn(String property, Iterable<?> values) {
-        this.criteria.add(new Criterion(property, values, "in", "or"));
+        addCriterion(property, values, "in", "or");
         return this;
     }
 
     public Criteria<T> orNotIn(String property, Iterable<?> values) {
-        this.criteria.add(new Criterion(property, values, "not in", "or"));
+        addCriterion(property, values, "not in", "or");
         return this;
     }
 
     public Criteria<T> orBetween(String property, Object value1, Object value2) {
-        this.criteria.add(new Criterion(property, value1, value2, "between", "or"));
+        addCriterion(property, value1, value2, "between", "or");
         return this;
     }
 
     public Criteria<T> orNotBetween(String property, Object value1, Object value2) {
-        this.criteria.add(new Criterion(property, value1, value2, "not between", "or"));
+        addCriterion(property, value1, value2, "not between", "or");
         return this;
     }
 
     public Criteria<T> orLike(String property, String value) {
-        this.criteria.add(new Criterion(property, value, "like", "or"));
+        addCriterion(property, value, "like", "or");
         return this;
     }
 
     public Criteria<T> orNotLike(String property, String value) {
-        this.criteria.add(new Criterion(property, value, "not like", "or"));
+        addCriterion(property, value, "not like", "or");
         return this;
     }
 
@@ -418,7 +450,7 @@ public class Criteria<T> implements Serializable {
     @Override
     public String toString() {
         return "Criteria{" +
-                "criterions=" + criteria +
+                "criteria=" + criteria +
                 '}';
     }
 

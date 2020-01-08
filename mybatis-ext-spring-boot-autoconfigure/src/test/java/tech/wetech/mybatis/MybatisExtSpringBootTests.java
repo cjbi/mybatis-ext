@@ -113,11 +113,4 @@ public class MybatisExtSpringBootTests {
         log.info("testSelectUserWithPage result: {}", users);
     }
 
-    @Test
-    public void testSelectAllUserWithFunctionInterface() {
-        Page page = new Page(1, 3, true);
-        page.select(() -> mapper.selectAllUser());
-        log.info("testSelectAllUserWithFunctionInterface result: {}", page);
-    }
-
 }

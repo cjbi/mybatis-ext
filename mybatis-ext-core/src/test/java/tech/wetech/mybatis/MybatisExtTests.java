@@ -76,7 +76,7 @@ public class MybatisExtTests {
     @Test
     public void testSelectById() {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-        User user = mapper.selectById(1, new Page(1, 3), new Sort("username"));
+        User user = mapper.selectById(1, new Page(1, 3, true));
         log.info("selectById result: {}", user);
     }
 
@@ -282,20 +282,21 @@ public class MybatisExtTests {
     @Test
     public void testSelectByExample() {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        Page page = new Page();
+        page.setPageNumber(3);
+        page.setPageSize(10);
+        ThreadContext.setPage(page);
         Example<User> example = Example.of(User.class);
-
         example.createCriteria()
                 .andEqualTo(User::getId, 1)
-                .orEqualTo(User::getUsername, "张三")
+//                .orEqualTo(User::getUsername, "张三")
                 .orNotLike(User::getAvatar, "aaa")
                 .orIsNull(User::getBirthday)
                 .orBetween(User::getRegisterTime, new Date(), new Date())
-                .orIn(User::getMobile, Arrays.asList(111, "aaa", 222))
-                .andLike(User::getAvatar, "select * from t_user");
-
+                .orIn(User::getMobile, Arrays.asList(111, "aaa", 222));
         log.info("example:{}", example);
         example.setDistinct(true);
-        example.setPage(2, 2);
+//        example.setPage(2, 2);
         example.setSort(new Sort(Sort.Direction.DESC, "mobile", "username"));
         List<User> users = mapper.selectByExample(example);
         log.info("selectByExample result: {}", users);
@@ -357,8 +358,6 @@ public class MybatisExtTests {
         user.setWechatOpenId("222");
 
         Example<User> example = Example.of(User.class);
-        Criteria<User> criteria = example.createCriteria();
-        Criteria<User> subcriteria = example.createCriteria();
         example.createCriteria()
                 .andEqualTo(User::getId, 1)
                 .andEqualTo(User::getUsername, "张三");
@@ -406,34 +405,29 @@ public class MybatisExtTests {
     @Test
     public void testSelectUserWithPage() {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-        Page page = new Page(1, 2, true);
+        Page page = new Page();
+        page.setPageNumber(1);
+        page.setPageSize(10);
+        page.setCountable(true);
         List<User> users = mapper.selectUserWithPage(page);
         log.info("testSelectUserWithPage result: {}", users);
-    }
-
-    @Test
-    public void testSelectAllUserWithFunctionInterface() {
-        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-        Page page = new Page(1, 3, true);
-        page.select(() -> mapper.selectAllUser());
-        log.info("testSelectAllUserWithFunctionInterface result: {}", page);
-    }
-
-    @Test
-    public void testCountWithFunctionInterface() {
-        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-        Page page = new Page(1, 3, true);
-        int count = page.count(() -> mapper.selectAllUser());
-        log.info("testCountWithFunctionInterface result: {}", count);
     }
 
     @Test
     public void testSelectByExampleWithSub() {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
         Example<User> example = Example.of(User.class);
-        example.and().orEqualTo(User::getUsername, "bbb").andEqualTo(User::getId, 2);
-        example.or().andEqualTo(User::getUsername, "aaa");
-        example.or().andLessThanOrEqualTo(User::getId, 1000).andGreaterThanOrEqualTo(User::getId, 1);
+        example.or()
+                .orEqualTo(User::getUsername, "bbb")
+                .andEqualTo(User::getId, 2);
+        example.or()
+                .andEqualTo(User::getUsername, "aaa");
+        example.and()
+                .andLessThanOrEqualTo(User::getId, 1000)
+                .andGreaterThanOrEqualTo(User::getId, 1);
+        Criteria<User> criteria = new Criteria<>();
+        criteria.andIsNull("mobile").andLessThan(User::getNickname, "测试");
+        example.and(criteria);
         List<User> users = mapper.selectByExample(example);
         log.info("testSelectByExampleWithSub result: {}", users);
     }
