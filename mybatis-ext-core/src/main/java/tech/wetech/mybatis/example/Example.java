@@ -57,7 +57,7 @@ public class Example<T> implements Serializable {
         return criteria;
     }
 
-    private Criteria<T> createCriteriaInternal() {
+    protected Criteria<T> createCriteriaInternal() {
         Criteria<T> criteria = new Criteria<>();
         return criteria;
     }
@@ -77,12 +77,24 @@ public class Example<T> implements Serializable {
         return columns;
     }
 
+    /**
+     * 请使用 ${@link Example#setSelects(tech.wetech.mybatis.domain.Property[])}方法替代
+     *
+     * @param properties
+     * @return
+     */
     @Deprecated
     public Example<T> setColumns(Property<T, ?>... properties) {
         setSelects(properties);
         return this;
     }
 
+    /**
+     * 请使用 ${@link Example#setSelects(java.lang.String...)}方法替代
+     *
+     * @param columns
+     * @return
+     */
     @Deprecated
     public Example<T> setColumns(String... columns) {
         setSelects(columns);
