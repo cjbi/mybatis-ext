@@ -24,6 +24,13 @@ public interface BaseMapper<T> extends Mapper<T> {
     @InsertEntityProvider(type = BaseEntitySqlBuilder.class, method = "insert")
     <S extends T> int insert(S record);
 
+    /**
+     * 批量插入将会在以后版本中删除
+     *
+     * @param record
+     * @param <S>
+     * @return
+     */
     @InsertEntityProvider(type = BaseEntitySqlBuilder.class, method = "insertAll")
     @Deprecated
     <S extends T> int insertAll(Collection<S> record);
