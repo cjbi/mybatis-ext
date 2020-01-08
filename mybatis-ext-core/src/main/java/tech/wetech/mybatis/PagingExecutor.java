@@ -2,10 +2,10 @@ package tech.wetech.mybatis;
 
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.cursor.Cursor;
+import org.apache.ibatis.exceptions.ExceptionFactory;
 import org.apache.ibatis.executor.BatchResult;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.logging.Log;
-import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMapping;
@@ -31,19 +31,17 @@ public class PagingExecutor implements Executor {
     private final Executor delegate;
     private final Dialect dialect;
 
-    private static final Log LOG = LogFactory.getLog(PagingExecutor.class);
-
     public int getTotalCount(
-            final MappedStatement mappedStatement, final Object parameterObject,
-            final BoundSql boundSql, Dialect dialect) throws SQLException {
-        final String count_sql = dialect.getCountString(boundSql.getSql());
-        LOG.debug("Total count SQL: " + count_sql);
-        if (parameterObject != null) {
-            LOG.debug("Total count Parameters: " + parameterObject);
+            final MappedStatement ms, final Object parameterObject,
+            final BoundSql boundSql, final Dialect dialect) throws SQLException {
+        Log statementLog = ms.getStatementLog();
+        final String countSql = dialect.getCountString(boundSql.getSql());
+        if (statementLog.isDebugEnabled()) {
+            statementLog.debug("==>  Total count SQL: " + countSql);
         }
         Connection connection = this.getTransaction().getConnection();
-        PreparedStatement countStmt = connection.prepareStatement(count_sql);
-        DefaultParameterHandler handler = new DefaultParameterHandler(mappedStatement, parameterObject, boundSql);
+        PreparedStatement countStmt = connection.prepareStatement(countSql);
+        DefaultParameterHandler handler = new DefaultParameterHandler(ms, parameterObject, boundSql);
         handler.setParameters(countStmt);
 
         ResultSet rs = countStmt.executeQuery();
@@ -51,7 +49,9 @@ public class PagingExecutor implements Executor {
         if (rs.next()) {
             count = rs.getInt(1);
         }
-        LOG.debug("Total count: " + count);
+        if (statementLog.isDebugEnabled()) {
+            statementLog.debug("==>  Total count: " + count);
+        }
         return count;
     }
 
@@ -99,7 +99,7 @@ public class PagingExecutor implements Executor {
                 try {
                     totalCount = getTotalCount(ms, parameter, boundSql, dialect);
                 } catch (SQLException e) {
-                    LOG.error("Total count error: ", e);
+                    ExceptionFactory.wrapException("Total count error: ", e);
                 }
                 if (totalCount == 0) {
                     return page;

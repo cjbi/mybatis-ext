@@ -62,10 +62,8 @@ public class MybatisExtSpringTests {
                 .orIn(User::getMobile, Arrays.asList(111, "aaa", 222))
                 .andLike(User::getAvatar, "select * from t_user");
 
-        log.info("example:{}", example.getCriteria());
+        log.info("example:{}", example);
         example.setDistinct(true);
-        example.setLimit(1);
-        example.setOffset(2);
         List<User> users = mapper.selectByExample(example);
         log.info("selectByExample result: {}", users);
     }
@@ -84,7 +82,7 @@ public class MybatisExtSpringTests {
                 .orIn(User::getMobile, Arrays.asList(111, "aaa", 222))
                 .andLike(User::getAvatar, "select * from t_user");
 
-        log.info("example:{}", example.getCriteria());
+        log.info("example:{}", example);
         Integer rows = mapper.countByExample(example);
         log.info("countByExample result: {}", rows);
     }
@@ -120,13 +118,6 @@ public class MybatisExtSpringTests {
         Page page = new Page(1, 2, true);
         List<User> users = mapper.selectUserWithPage(page);
         log.info("testSelectUserWithPage result: {}", users);
-    }
-
-    @Test
-    public void testSelectAllUserWithFunctionInterface() {
-        Page page = new Page(1, 3, true);
-        page.select(() -> mapper.selectAllUser());
-        log.info("testSelectAllUserWithFunctionInterface result: {}", page);
     }
 
 }
