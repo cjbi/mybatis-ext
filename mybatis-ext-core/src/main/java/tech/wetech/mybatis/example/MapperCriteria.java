@@ -19,7 +19,6 @@ public class MapperCriteria<T> extends Criteria<T> {
     public MapperCriteria(BaseMapper<T> mapper) {
         this.mapper = mapper;
         this.mapperExample = new MapperExample(mapper);
-//        mapperExample.createCriteria();
         this.mapperExample.oredCriteria.add(this);
     }
 
