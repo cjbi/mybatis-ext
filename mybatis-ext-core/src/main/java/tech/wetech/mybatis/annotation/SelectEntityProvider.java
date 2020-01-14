@@ -12,8 +12,6 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @EntityProviderSqlCommandType(SqlCommandType.SELECT)
 public @interface SelectEntityProvider {
-
     Class<?> type();
-
     String method();
 }

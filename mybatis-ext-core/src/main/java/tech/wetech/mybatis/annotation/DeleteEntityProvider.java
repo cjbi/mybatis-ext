@@ -13,7 +13,5 @@ import java.lang.annotation.*;
 @EntityProviderSqlCommandType(SqlCommandType.DELETE)
 public @interface DeleteEntityProvider {
     Class<?> type();
-
     String method();
-
 }
