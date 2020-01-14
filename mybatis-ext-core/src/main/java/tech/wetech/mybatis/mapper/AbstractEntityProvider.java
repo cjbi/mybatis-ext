@@ -13,13 +13,6 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractEntityProvider {
 
-    public static String columnName(String className, String property) {
-        EntityMapping entityMapping = EntityMapperBuilder.TABLE_ENTITY_CACHE.get(className);
-        Map<String, ColumnProperty> columnPropertyMap = entityMapping.getColumnPropertyMap();
-        ColumnProperty columnProperty = columnPropertyMap.get(property);
-        return columnProperty.getColumnName();
-    }
-
     protected String buildAllColumns(ExtConfiguration extConfiguration, EntityMapping entityMapping) {
         return entityMapping.getColumnProperties().stream()
                 .map(ColumnProperty::getColumnName)
