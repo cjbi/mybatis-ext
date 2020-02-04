@@ -12,8 +12,6 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @EntityProviderSqlCommandType(SqlCommandType.UPDATE)
 public @interface UpdateEntityProvider {
-
     Class<?> type();
-
     String method();
 }

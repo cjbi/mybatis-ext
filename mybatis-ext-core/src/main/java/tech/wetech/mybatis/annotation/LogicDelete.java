@@ -14,6 +14,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface LogicDelete {
     String normalValue() default "0";
-
     String deletedValue() default "1";
 }

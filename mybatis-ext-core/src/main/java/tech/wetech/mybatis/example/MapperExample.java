@@ -11,6 +11,26 @@ public final class MapperExample<T> extends Example<T> {
 
     private final BaseMapper<T> mapper;
 
+    @Override
+    public MapperCriteria<T> or() {
+        return (MapperCriteria<T>) super.or();
+    }
+
+    @Override
+    public MapperCriteria<T> or(Criteria<T> criteria) {
+        return (MapperCriteria<T>) super.or(criteria);
+    }
+
+    @Override
+    public MapperCriteria<T> and() {
+        return (MapperCriteria<T>) super.and();
+    }
+
+    @Override
+    public MapperCriteria<T> and(Criteria<T> criteria) {
+        return (MapperCriteria<T>) super.and(criteria);
+    }
+
     public MapperExample(BaseMapper<T> mapper) {
         super(EntityMappingUtil.extractEntityClass(mapper.getClass().getInterfaces()[0]));
         this.mapper = mapper;

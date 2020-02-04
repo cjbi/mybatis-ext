@@ -77,7 +77,6 @@ public class User {
 ### 3. 继承BaseMapper接口
 ```java
 public interface UserMapper extends BaseMapper<User> {
-  // BaseMapper<User>第一个泛型为实体类，第二个为关联主键
 }
 ```
 Mybatis-ext提供了对原生Java、Springframework以及SpringBoot的支持。
@@ -469,7 +468,7 @@ public class MybatisExtTests {
 ```
 以上示例可以看出Mybatis-Ext对原生Mybatis并没有多大改动，只是继承了原有的类做了增强，配置上和Mybatis也相差无几。
 
-## 目前BaseMapper\<T, PK extends Serializable\>内置的通用方法有：
+## 目前BaseMapper\<T\>内置的通用方法有：
 
 - int deleteByPrimaryKey(PK id);
 - \<S extends T\> int insert(S record);

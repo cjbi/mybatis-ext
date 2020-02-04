@@ -12,8 +12,6 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @EntityProviderSqlCommandType(SqlCommandType.INSERT)
 public @interface InsertEntityProvider {
-
     Class<?> type();
-
     String method();
 }

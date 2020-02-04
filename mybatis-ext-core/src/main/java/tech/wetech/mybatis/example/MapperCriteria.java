@@ -43,7 +43,6 @@ public class MapperCriteria<T> extends Criteria<T> {
         }
     }
 
-
     public List<T> selectList() {
         return mapper.selectByExample(mapperExample);
     }
@@ -398,11 +397,6 @@ public class MapperCriteria<T> extends Criteria<T> {
     public MapperCriteria<T> orNotLike(String property, String value) {
         super.orNotLike(property, value);
         return this;
-    }
-
-    @Override
-    public List<Criterion> getCriteria() {
-        return super.getCriteria();
     }
 
 }
