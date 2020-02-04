@@ -103,7 +103,7 @@ public class EntityMapperBuilder {
         if (resultType == resolver.getEntityMapping().getEntityClass()) {
             resultType = entityMapping.getEntityClass();
             for (EntityMapping.ColumnProperty columnProperty : entityMapping.getColumnProperties()) {
-                ResultMapping.Builder builder = new ResultMapping.Builder(configuration, columnProperty.getPropertyName(), columnProperty.getColumnName(), columnProperty.getJavaType());
+                ResultMapping.Builder builder = new ResultMapping.Builder(configuration, columnProperty.getPropertyName(), columnProperty.getColumnName().replace("`",""), columnProperty.getJavaType());
                 resultMappings.add(builder.build());
             }
         }
