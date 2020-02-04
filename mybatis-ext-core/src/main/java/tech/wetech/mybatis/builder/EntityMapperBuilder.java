@@ -9,6 +9,7 @@ import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.mapping.*;
+import org.apache.ibatis.reflection.ParamNameResolver;
 import org.apache.ibatis.reflection.TypeParameterResolver;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.scripting.xmltags.XMLLanguageDriver;
@@ -66,10 +67,7 @@ public class EntityMapperBuilder {
 
         LanguageDriver languageDriver = configuration.getLanguageDriver(XMLLanguageDriver.class);
         assistant.setCurrentNamespace(type.getName());
-
-
         final String mappedStatementId = type.getName() + "." + method.getName();
-
         String resultMapId = mappedStatementId + "#resultMap";
         String script = annotationResolver.getScript();
         SqlSource sqlSource = languageDriver.createSqlSource(configuration, script, entityClass);
@@ -80,14 +78,25 @@ public class EntityMapperBuilder {
         boolean flushCache = !isSelect;
         boolean useCache = isSelect;
         KeyGenerator keyGenerator;
+        String keyProperty = entityMapping.getKeyProperty();
         if (sqlCommandType == SqlCommandType.INSERT) {
             keyGenerator = Jdbc3KeyGenerator.INSTANCE;
+            if (method.getParameterCount() > 1) {
+                ParamNameResolver paramNameResolver = new ParamNameResolver(configuration, method);
+                Type[] resolveParamTypes = TypeParameterResolver.resolveParamTypes(method, type);
+                for (int i = 0; i < method.getParameterTypes().length; i++) {
+                    if ("T".equals(resolveParamTypes[i].getTypeName())) {
+                        keyProperty = paramNameResolver.getNames()[i] + "." + entityMapping.getKeyProperty();
+                        break;
+                    }
+                }
+            }
         } else {
             keyGenerator = NoKeyGenerator.INSTANCE;
         }
         assistant.addMappedStatement(mappedStatementId, sqlSource, StatementType.PREPARED, sqlCommandType,
                 null, null, null, entityClass, resultMapId, entityClass,
-                resultSetType, flushCache, useCache, false, keyGenerator, entityMapping.getKeyProperty(), entityMapping.getKeyColumn(),
+                resultSetType, flushCache, useCache, false, keyGenerator, keyProperty, entityMapping.getKeyColumn(),
                 configuration.getDatabaseId(), languageDriver, null);
     }
 
@@ -103,7 +112,7 @@ public class EntityMapperBuilder {
         if (resultType == resolver.getEntityMapping().getEntityClass()) {
             resultType = entityMapping.getEntityClass();
             for (EntityMapping.ColumnProperty columnProperty : entityMapping.getColumnProperties()) {
-                ResultMapping.Builder builder = new ResultMapping.Builder(configuration, columnProperty.getPropertyName(), columnProperty.getColumnName().replace("`",""), columnProperty.getJavaType());
+                ResultMapping.Builder builder = new ResultMapping.Builder(configuration, columnProperty.getPropertyName(), columnProperty.getColumnName().replace("`", ""), columnProperty.getJavaType());
                 resultMappings.add(builder.build());
             }
         }
