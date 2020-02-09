@@ -23,15 +23,12 @@ public class EntityMapperAnnotationResolver {
     private final Method method;
     private final ExtConfiguration configuration;
     private final EntityMapping entityMapping;
-
     private boolean isEntityMethodProvider;
     private SqlCommandType sqlCommandType;
     private String script;
 
     private final Log log = LogFactory.getLog(EntityMapperAnnotationResolver.class);
-
     private static final Set<Class<? extends Annotation>> SQL_ENTITY_PROVIDER_ANNOTATION_TYPES = new HashSet<>();
-
     private final Map<Class, Object> injectArgsMap = new HashMap<>();
 
     static {
@@ -56,9 +53,7 @@ public class EntityMapperAnnotationResolver {
                 String providerMethodName = (String) sqlEntityProviderAnnotationType.getMethod("method").invoke(annotation);
                 sqlCommandType = sqlEntityProviderAnnotationType.getAnnotation(EntityProviderSqlCommandType.class).value();
                 isEntityMethodProvider = true;
-
                 List<Method> providerMethods = Stream.of(providerMethodClass.getMethods()).filter(m -> providerMethodName.equals(m.getName())).collect(Collectors.toList());
-
                 if (providerMethods.size() == 0) {
                     String msg = String.format("Not found method %s in class %s", providerMethodName, providerMethodClass);
                     log.error(msg);
@@ -77,7 +72,6 @@ public class EntityMapperAnnotationResolver {
                     args[i] = injectArgsMap.get(parameters[i].getType());
                 }
                 script = providerMethod.invoke(providerMethodClass.newInstance(), args).toString();
-
                 isEntityMethodProvider = true;
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | InstantiationException e) {
                 throw new BuilderException(e);

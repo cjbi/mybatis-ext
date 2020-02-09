@@ -12,9 +12,7 @@ import java.util.List;
 public class Criteria<T> implements Serializable {
 
     private static final String DEFAULT_AND_OR = "or";
-
     private final List<Criterion> criteria;
-
     private String andOr = DEFAULT_AND_OR;
 
     public Criteria() {

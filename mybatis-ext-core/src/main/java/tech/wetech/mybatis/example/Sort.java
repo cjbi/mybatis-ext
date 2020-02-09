@@ -11,7 +11,6 @@ import java.util.List;
 public class Sort implements Serializable {
 
     public static final Sort.Direction DEFAULT_DIRECTION;
-
     private final List<Order> orders;
 
     static {

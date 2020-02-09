@@ -23,7 +23,6 @@ import java.sql.SQLException;
 public class ExtConfiguration extends Configuration {
 
     protected final EntityMapperRegistry entityMapperRegistry = new EntityMapperRegistry(this);
-
     protected Dialect dialect = null;
 
     public ExtConfiguration() {

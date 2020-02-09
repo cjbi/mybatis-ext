@@ -12,9 +12,7 @@ import java.util.Map;
 public class EntityMapping {
 
     private Class<?> entityClass;
-
     private String tableName;
-
     private List<ColumnProperty> columnProperties;
     /**
      * 表主键ID 属性名
@@ -24,7 +22,6 @@ public class EntityMapping {
      * 表主键ID 字段名
      */
     private String keyColumn;
-
     private Map<String, ColumnProperty> columnPropertyMap;
     /**
      * 是否逻辑删除
@@ -34,9 +31,7 @@ public class EntityMapping {
      * 逻辑删除列
      */
     private String logicDeleteColumn;
-
     private String logicDeleteNormalValue;
-
     private String logicDeleteDeletedValue;
     /**
      * 乐观锁
@@ -158,15 +153,10 @@ public class EntityMapping {
     public static class ColumnProperty {
 
         private String columnName;
-
         private String propertyName;
-
         private boolean identity;
-
         private Class<?> javaType;
-
         private List<Annotation> annotations;
-
         public String getColumnName() {
             return columnName;
         }

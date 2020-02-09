@@ -13,7 +13,6 @@ import java.util.Optional;
 public class MapperCriteria<T> extends Criteria<T> {
 
     private final BaseMapper<T> mapper;
-
     private final MapperExample mapperExample;
 
     public MapperCriteria(BaseMapper<T> mapper) {
