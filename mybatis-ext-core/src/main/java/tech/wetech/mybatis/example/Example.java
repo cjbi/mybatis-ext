@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  */
 public class Example<T> implements Serializable {
 
-    protected String[] columns;
+    protected List<String> columns;
     protected boolean distinct;
     protected String orderByClause;
     protected final Class<?> entityClass;
@@ -73,44 +73,19 @@ public class Example<T> implements Serializable {
         distinct = false;
     }
 
-    public String[] getColumns() {
+    public List<String> getColumns() {
         return columns;
-    }
-
-    /**
-     * 请使用 ${@link Example#setSelects(tech.wetech.mybatis.domain.Property[])}方法替代
-     *
-     * @param properties
-     * @return
-     */
-    @Deprecated
-    public Example<T> setColumns(Property<T, ?>... properties) {
-        setSelects(properties);
-        return this;
-    }
-
-    /**
-     * 请使用 ${@link Example#setSelects(java.lang.String...)}方法替代
-     *
-     * @param columns
-     * @return
-     */
-    @Deprecated
-    public Example<T> setColumns(String... columns) {
-        setSelects(columns);
-        return this;
     }
 
     public Example<T> setSelects(Property<T, ?>... properties) {
         this.columns = Arrays.stream(properties)
                 .map(p -> p.getColumnName(entityClass.getName()))
-                .collect(Collectors.toList())
-                .toArray(new String[properties.length]);
+                .collect(Collectors.toList());
         return this;
     }
 
-    public Example<T> setSelects(String... columns) {
-        this.columns = columns;
+    public Example<T> setSelects(String... properties) {
+        this.columns = Arrays.asList(properties);
         return this;
     }
 
@@ -149,7 +124,7 @@ public class Example<T> implements Serializable {
     @Override
     public String toString() {
         return "Example{" +
-                "columns=" + Arrays.toString(columns) +
+                "columns=" + columns +
                 ", distinct=" + distinct +
                 ", orderByClause='" + orderByClause + '\'' +
                 ", oredCriteria=" + oredCriteria +

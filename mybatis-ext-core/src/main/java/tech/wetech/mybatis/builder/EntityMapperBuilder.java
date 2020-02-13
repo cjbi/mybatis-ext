@@ -79,7 +79,7 @@ public class EntityMapperBuilder {
         boolean useCache = isSelect;
         KeyGenerator keyGenerator;
         String keyProperty = entityMapping.getKeyProperty();
-        if (sqlCommandType == SqlCommandType.INSERT) {
+        if (sqlCommandType == SqlCommandType.INSERT && keyProperty != null) {
             keyGenerator = Jdbc3KeyGenerator.INSTANCE;
             if (method.getParameterCount() > 1) {
                 ParamNameResolver paramNameResolver = new ParamNameResolver(configuration, method);

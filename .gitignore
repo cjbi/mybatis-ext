@@ -22,3 +22,8 @@
 /nbdist/
 /.nb-gradle/
 /build/
+
+# These are needed if running in IDE without properties set
+/ibderby
+derby.log
+/bin/

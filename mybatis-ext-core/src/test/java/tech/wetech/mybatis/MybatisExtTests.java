@@ -385,7 +385,7 @@ public class MybatisExtTests {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
         User user = mapper.createExample()
 //                .setDistinct(true)
-                .setColumns(User::getId, User::getBirthday, User::getRegisterTime)
+                .setSelects(User::getId, User::getBirthday, User::getRegisterTime)
 //                .setOrderByClause("id asc,register_time desc")
                 .createCriteria()
                 .andEqualTo(User::getId, 1)

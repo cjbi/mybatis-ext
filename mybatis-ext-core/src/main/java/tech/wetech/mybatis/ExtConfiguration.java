@@ -74,7 +74,8 @@ public class ExtConfiguration extends Configuration {
     @Override
     public Executor newExecutor(Transaction transaction, ExecutorType executorType) {
         Executor executor = super.newExecutor(transaction, executorType);
-        return new PagingExecutor(executor, dialect != null ? dialect : getAutoDialect(transaction));
+        Dialect dialect = this.dialect != null ? this.dialect : getAutoDialect(transaction);
+        return dialect == null ? executor : new PagingExecutor(executor, dialect);
     }
 
     public Dialect getAutoDialect(Transaction transaction) {

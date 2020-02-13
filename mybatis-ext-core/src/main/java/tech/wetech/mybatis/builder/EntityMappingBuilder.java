@@ -125,7 +125,7 @@ public class EntityMappingBuilder {
                 return columnProperty.getPropertyName();
             }
         }
-        return "id";
+        return null;
     }
 
     private String buildKeyColumn(List<ColumnProperty> columnProperties) {
@@ -134,7 +134,7 @@ public class EntityMappingBuilder {
                 return columnProperty.getColumnName();
             }
         }
-        return "id";
+        return null;
     }
 
     private String camelhumpToUnderline(String str) {

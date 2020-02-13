@@ -47,39 +47,16 @@ public final class MapperExample<T> extends Example<T> {
         return mapperCriteria;
     }
 
-    /**
-     * 请使用 {@link MapperExample#setSelects(tech.wetech.mybatis.domain.Property[])} 替代
-     *
-     * @param properties
-     * @return
-     */
     @Override
-    @Deprecated
-    public MapperExample<T> setColumns(Property<T, ?>... properties) {
-        super.setColumns(properties);
+    public MapperExample<T> setSelects(Property<T, ?>... properties) {
+        super.setSelects(properties);
         return this;
     }
 
-    /**
-     * 请使用 {@link MapperExample#setSelects(java.lang.String...)}方法替代
-     *
-     * @param columns
-     * @return
-     */
     @Override
-    @Deprecated
-    public Example<T> setColumns(String... columns) {
-        return super.setColumns(columns);
-    }
-
-    @Override
-    public Example<T> setSelects(Property<T, ?>... properties) {
-        return super.setSelects(properties);
-    }
-
-    @Override
-    public Example<T> setSelects(String... columns) {
-        return super.setSelects(columns);
+    public MapperExample<T> setSelects(String... properties) {
+        super.setSelects(properties);
+        return this;
     }
 
     @Override
