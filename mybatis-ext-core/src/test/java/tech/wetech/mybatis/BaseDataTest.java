@@ -3,14 +3,9 @@ package tech.wetech.mybatis;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import tech.wetech.mybatis.mapper.GoodsMapperTest;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.SQLException;

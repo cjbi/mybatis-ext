@@ -27,7 +27,7 @@ public class ParametersFinder {
             return null;
         }
         Class<?> pClass = parameterObject.getClass();
-        if (clazz == pClass || pClass.isAssignableFrom(clazz)) {
+        if (clazz == pClass || clazz.isAssignableFrom(pClass)) {
             return (T) parameterObject;
         } else if (parameterObject instanceof Map) {
             return findParameterFromMap((Map) parameterObject, clazz);
