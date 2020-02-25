@@ -1,11 +1,8 @@
 package tech.wetech.mybatis.mapper;
 
-import tech.wetech.mybatis.ExtConfiguration;
-import tech.wetech.mybatis.builder.EntityMapperBuilder;
 import tech.wetech.mybatis.builder.EntityMapping;
 import tech.wetech.mybatis.builder.EntityMapping.ColumnProperty;
 
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -13,13 +10,13 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractEntityProvider {
 
-    protected String buildAllColumns(ExtConfiguration extConfiguration, EntityMapping entityMapping) {
+    protected String buildAllColumns(EntityMapping entityMapping) {
         return entityMapping.getColumnProperties().stream()
                 .map(ColumnProperty::getColumnName)
                 .collect(Collectors.joining(", "));
     }
 
-    protected String buildExampleColumnsXML(ExtConfiguration extConfiguration, EntityMapping entityMapping) {
+    protected String buildExampleColumnsXML(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder();
         builder.append("<if test='distinct'> distinct </if> ");
         builder.append("<choose>");
@@ -27,13 +24,13 @@ public abstract class AbstractEntityProvider {
         builder.append(String.format("<foreach collection='columns' separator=', ' item='item'>${item}</foreach>", entityMapping.getEntityClass().getName()));
         builder.append("</when>");
         builder.append("<when test='columns == null'>");
-        builder.append(buildAllColumns(extConfiguration, entityMapping));
+        builder.append(buildAllColumns(entityMapping));
         builder.append("</when>");
         builder.append("</choose>");
         return builder.toString();
     }
 
-    protected String buildExampleXML(ExtConfiguration extConfiguration, EntityMapping entityMapping) {
+    protected String buildExampleXML(EntityMapping entityMapping) {
         String className = entityMapping.getEntityClass().getName();
         StringBuilder builder = new StringBuilder();
         builder.append("<where>");
@@ -68,7 +65,7 @@ public abstract class AbstractEntityProvider {
         return builder.toString();
     }
 
-    protected String buildWhereNotNullXML(ExtConfiguration extConfiguration, EntityMapping entityMapping) {
+    protected String buildWhereNotNullXML(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder();
         builder.append("<where>");
         for (ColumnProperty columnProperty : entityMapping.getColumnProperties()) {

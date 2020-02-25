@@ -5,14 +5,13 @@
     <parent>
         <artifactId>mybatis-ext-parent</artifactId>
         <groupId>tech.wetech.mybatis</groupId>
-        <version>1.5.3</version>
+        <version>1.5.4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>mybatis-ext-spring-boot-autoconfigure</artifactId>
     <properties>
-        <spring-boot.version>2.1.7.RELEASE</spring-boot.version>
-        <mybatis.version>3.5.3</mybatis.version>
+        <spring-boot.version>2.2.4.RELEASE</spring-boot.version>
         <mybatis-spring.version>2.0.3</mybatis-spring.version>
         <mybatis-freemarker.version>1.2.0</mybatis-freemarker.version>
         <mybatis-velocity.version>2.1.0</mybatis-velocity.version>

@@ -12,8 +12,6 @@ import tech.wetech.mybatis.dialect.DialectClient;
 import tech.wetech.mybatis.dialect.DialectType;
 import tech.wetech.mybatis.mapper.Mapper;
 
-import java.sql.SQLException;
-
 
 /**
  * 增强配置类
@@ -37,7 +35,7 @@ public class ExtConfiguration extends Configuration {
         try {
             this.dialect = dialect.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            ExceptionFactory.wrapException("Cannot set dialect.", e);
+            throw ExceptionFactory.wrapException("Cannot set Dialect.", e);
         }
     }
 
@@ -74,7 +72,9 @@ public class ExtConfiguration extends Configuration {
     @Override
     public Executor newExecutor(Transaction transaction, ExecutorType executorType) {
         Executor executor = super.newExecutor(transaction, executorType);
-        Dialect dialect = this.dialect != null ? this.dialect : getAutoDialect(transaction);
+        if (dialect == null) {
+            dialect = getAutoDialect(transaction);
+        }
         return dialect == null ? executor : new PagingExecutor(executor, dialect);
     }
 
@@ -86,8 +86,7 @@ public class ExtConfiguration extends Configuration {
                     return DialectClient.getDialect(dialectType);
                 }
             }
-        } catch (SQLException e) {
-            ExceptionFactory.wrapException("Cannot get auto dialect.", e);
+        } catch (Exception e) {
         }
         return null;
     }

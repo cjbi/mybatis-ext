@@ -148,7 +148,7 @@ public class GoodsMapperTest {
         }
     }
 
-    @Test
+//    @Test
     public void testInsertSelective() {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             GoodsMapper goodsMapper = session.getMapper(GoodsMapper.class);

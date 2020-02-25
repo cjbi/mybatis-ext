@@ -90,7 +90,7 @@ public class MybatisExtSpringBootTests {
     public void testCreateExample() {
         User user = mapper.createExample()
                 .setDistinct(true)
-                .setColumns(User::getId, User::getBirthday, User::getRegisterTime)
+                .setSelects(User::getId, User::getBirthday, User::getRegisterTime)
                 .setOrderByClause("id asc,register_time desc")
                 .createCriteria()
                 .andEqualTo(User::getId, 1)

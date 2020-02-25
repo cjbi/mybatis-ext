@@ -1,7 +1,6 @@
 package tech.wetech.mybatis.mapper;
 
 import org.apache.ibatis.jdbc.SQL;
-import tech.wetech.mybatis.ExtConfiguration;
 import tech.wetech.mybatis.builder.EntityMapping;
 
 import java.util.stream.Collectors;
@@ -37,7 +36,7 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
     }
 
 
-    public String updateByExampleSelective(ExtConfiguration configuration, EntityMapping entityMapping) {
+    public String updateByExampleSelective(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
         StringBuilder setBuilder = new StringBuilder("<set>");
         for (EntityMapping.ColumnProperty columnProperty : entityMapping.getColumnProperties()) {
@@ -49,13 +48,13 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
         }
         builder.append("<bind name='oredCriteria' value='example.oredCriteria'/>");
         setBuilder.append("</set>");
-        builder.append(String.format("UPDATE %s %s %s", entityMapping.getTableName(), setBuilder, buildExampleXML(configuration, entityMapping)));
+        builder.append(String.format("UPDATE %s %s %s", entityMapping.getTableName(), setBuilder, buildExampleXML(entityMapping)));
         builder.append("</script>");
         return builder.toString();
     }
 
 
-    public String updateByExample(ExtConfiguration configuration, EntityMapping entityMapping) {
+    public String updateByExample(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
         StringBuilder setBuilder = new StringBuilder("<set>");
         for (EntityMapping.ColumnProperty columnProperty : entityMapping.getColumnProperties()) {
@@ -67,13 +66,13 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
         }
         setBuilder.append("</set>");
         builder.append("<bind name='oredCriteria' value='example.oredCriteria'/>");
-        builder.append(String.format("UPDATE %s %s %s", entityMapping.getTableName(), setBuilder, buildExampleXML(configuration, entityMapping)));
+        builder.append(String.format("UPDATE %s %s %s", entityMapping.getTableName(), setBuilder, buildExampleXML(entityMapping)));
         builder.append("</script>");
         return builder.toString();
     }
 
 
-    public String deleteByExample(ExtConfiguration configuration, EntityMapping entityMapping) {
+    public String deleteByExample(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
         if (entityMapping.isLogicDelete()) {
             builder.append(String.format("UPDATE %s", entityMapping.getTableName()));
@@ -81,70 +80,70 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
         } else {
             builder.append(String.format("DELETE FROM %s", entityMapping.getTableName()));
         }
-        builder.append(buildExampleXML(configuration, entityMapping));
+        builder.append(buildExampleXML(entityMapping));
         builder.append("</script>");
         return builder.toString();
     }
 
 
-    public String countByExample(ExtConfiguration configuration, EntityMapping entityMapping) {
+    public String countByExample(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
         builder.append(String.format("SELECT COUNT(*) FROM %s", entityMapping.getTableName()));
-        builder.append(buildExampleXML(configuration, entityMapping));
+        builder.append(buildExampleXML(entityMapping));
         builder.append("</script>");
         return builder.toString();
     }
 
 
-    public String selectByExample(ExtConfiguration configuration, EntityMapping entityMapping) {
+    public String selectByExample(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
-        builder.append(String.format("select %s from %s", buildExampleColumnsXML(configuration, entityMapping), entityMapping.getTableName()));
-        builder.append(buildExampleXML(configuration, entityMapping));
+        builder.append(String.format("select %s from %s", buildExampleColumnsXML(entityMapping), entityMapping.getTableName()));
+        builder.append(buildExampleXML(entityMapping));
         builder.append(String.format("<if test='orderByClause != null'> order by ${orderByClause}</if>"));
         builder.append("</script>");
         return builder.toString();
     }
 
 
-    public String count(ExtConfiguration configuration, EntityMapping entityMapping) {
+    public String count(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
         builder.append(String.format("SELECT COUNT(*) FROM %s ", entityMapping.getTableName()));
-        builder.append(buildWhereNotNullXML(configuration, entityMapping));
+        builder.append(buildWhereNotNullXML(entityMapping));
         builder.append("</script>");
         return builder.toString();
     }
 
 
-    public String selectOneWithOptional(ExtConfiguration configuration, EntityMapping entityMapping) {
+    public String selectOneWithOptional(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
-        builder.append(String.format("SELECT %s FROM %s ", buildAllColumns(configuration, entityMapping), entityMapping.getTableName()));
-        builder.append(buildWhereNotNullXML(configuration, entityMapping));
+        builder.append(String.format("SELECT %s FROM %s ", buildAllColumns(entityMapping), entityMapping.getTableName()));
+        builder.append(buildWhereNotNullXML(entityMapping));
         builder.append("</script>");
         return builder.toString();
     }
 
 
-    public String selectOne(ExtConfiguration configuration, EntityMapping entityMapping) {
+    public String selectOne(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
-        builder.append(String.format("SELECT %s FROM %s ", buildAllColumns(configuration, entityMapping), entityMapping.getTableName()));
-        builder.append(buildWhereNotNullXML(configuration, entityMapping));
+        builder.append(String.format("SELECT %s FROM %s ", buildAllColumns(entityMapping), entityMapping.getTableName()));
+        builder.append(buildWhereNotNullXML(entityMapping));
         builder.append("</script>");
         return builder.toString();
     }
 
 
-    public String selectList(ExtConfiguration configuration, EntityMapping entityMapping) {
+    public String selectList(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
-        builder.append(String.format("SELECT %s FROM %s ", buildAllColumns(configuration, entityMapping), entityMapping.getTableName()));
-        builder.append(buildWhereNotNullXML(configuration, entityMapping));
+        builder.append(String.format("SELECT %s FROM %s ", buildAllColumns(entityMapping), entityMapping.getTableName()));
+        builder.append(buildWhereNotNullXML(entityMapping));
         builder.append("</script>");
         return builder.toString();
     }
 
 
-    public String selectAll(ExtConfiguration configuration, EntityMapping entityMapping) {
+    public String selectAll(EntityMapping entityMapping) {
         return new SQL() {{
-            SELECT(buildAllColumns(configuration, entityMapping));
+            SELECT(buildAllColumns(entityMapping));
             FROM(entityMapping.getTableName());
             if (entityMapping.isLogicDelete()) {
                 WHERE(String.format("%s = %s", entityMapping.getLogicDeleteColumn(), entityMapping.getLogicDeleteNormalValue()));
@@ -199,9 +198,9 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
     }
 
 
-    public String selectByPrimaryKeyWithOptional(ExtConfiguration configuration, EntityMapping entityMapping) {
+    public String selectByPrimaryKeyWithOptional(EntityMapping entityMapping) {
         return new SQL() {{
-            SELECT(buildAllColumns(configuration, entityMapping));
+            SELECT(buildAllColumns(entityMapping));
             FROM(entityMapping.getTableName());
             WHERE(String.format("%s = #{%s}", entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
             if (entityMapping.isLogicDelete()) {
@@ -211,9 +210,9 @@ public class BaseEntitySqlBuilder extends AbstractEntityProvider {
     }
 
 
-    public String selectByPrimaryKey(ExtConfiguration configuration, EntityMapping entityMapping) {
+    public String selectByPrimaryKey(EntityMapping entityMapping) {
         return new SQL() {{
-            SELECT(buildAllColumns(configuration, entityMapping));
+            SELECT(buildAllColumns(entityMapping));
             FROM(entityMapping.getTableName());
             WHERE(String.format("%s = #{%s}", entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
             if (entityMapping.isLogicDelete()) {
