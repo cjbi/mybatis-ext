@@ -2,9 +2,9 @@ package tech.wetech.mybatis;
 
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.cursor.Cursor;
-import org.apache.ibatis.exceptions.ExceptionFactory;
 import org.apache.ibatis.executor.BatchResult;
 import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.executor.ExecutorException;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -99,7 +99,7 @@ public class PagingExecutor implements Executor {
                 try {
                     totalCount = getTotalCount(ms, parameter, boundSql, dialect);
                 } catch (SQLException e) {
-                    ExceptionFactory.wrapException("Total count error: ", e);
+                    throw new ExecutorException("TotalCount error: ", e);
                 }
                 if (totalCount == 0) {
                     return page;

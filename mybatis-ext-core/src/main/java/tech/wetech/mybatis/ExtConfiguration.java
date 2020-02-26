@@ -1,6 +1,5 @@
 package tech.wetech.mybatis;
 
-import org.apache.ibatis.exceptions.ExceptionFactory;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
@@ -35,7 +34,7 @@ public class ExtConfiguration extends Configuration {
         try {
             this.dialect = dialect.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            throw ExceptionFactory.wrapException("Cannot set Dialect.", e);
+            throw new IllegalArgumentException("Cannot set Dialect.", e);
         }
     }
 
@@ -75,7 +74,10 @@ public class ExtConfiguration extends Configuration {
         if (dialect == null) {
             dialect = getAutoDialect(transaction);
         }
-        return dialect == null ? executor : new PagingExecutor(executor, dialect);
+        if (dialect == null) {
+            return executor;
+        }
+        return new PagingExecutor(executor, dialect);
     }
 
     public Dialect getAutoDialect(Transaction transaction) {
