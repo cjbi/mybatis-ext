@@ -2,16 +2,14 @@ package tech.wetech.mybatis.entity;
 
 import tech.wetech.mybatis.annotation.LogicDelete;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.Version;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Table(name = "t_goods")
 public class Goods {
     @Id
+    @GeneratedValue
     private Long id;
     private Long categoryId;
     private String goodsSn;

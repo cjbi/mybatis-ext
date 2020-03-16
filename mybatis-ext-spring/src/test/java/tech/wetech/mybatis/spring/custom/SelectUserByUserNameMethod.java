@@ -1,11 +1,10 @@
 package tech.wetech.mybatis.spring.custom;
 
 import org.apache.ibatis.mapping.SqlCommandType;
-import tech.wetech.mybatis.builder.EntityMapping;
-import tech.wetech.mybatis.mapper.AbstractEntityProvider;
 import tech.wetech.mybatis.ExtConfiguration;
+import tech.wetech.mybatis.builder.EntityMapping;
 
-public class SelectUserByUserNameMethod extends AbstractEntityProvider {
+public class SelectUserByUserNameMethod {
 
     public String script(ExtConfiguration extConfiguration, EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder();
