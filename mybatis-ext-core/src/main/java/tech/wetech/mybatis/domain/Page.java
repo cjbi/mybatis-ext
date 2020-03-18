@@ -11,7 +11,7 @@ public class Page<E> extends ArrayList<E> {
     private int pageNumber;
     private int pageSize;
     private boolean countable;
-    private int total;
+    private long total;
 
     public Page(int pageNumber, int pageSize) {
         this(pageNumber, pageSize, false);
@@ -26,7 +26,7 @@ public class Page<E> extends ArrayList<E> {
     public Page() {
     }
 
-    public Page(Collection<? extends E> c, int total) {
+    public Page(Collection<? extends E> c, long total) {
         super(c);
         this.total = total;
     }
@@ -75,7 +75,7 @@ public class Page<E> extends ArrayList<E> {
         return this.pageNumber > 0;
     }
 
-    public int getTotal() {
+    public long getTotal() {
         return total;
     }
 

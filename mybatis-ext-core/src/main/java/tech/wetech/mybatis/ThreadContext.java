@@ -9,7 +9,7 @@ public class ThreadContext {
 
     private static final ThreadLocal<Page> PAGE = new ThreadLocal<>();
 
-    public static void setPage(Page page) {
+    public static <T extends Page> void setPage(T page) {
         PAGE.set(page);
     }
 
@@ -33,8 +33,8 @@ public class ThreadContext {
         PAGE.set(page);
     }
 
-    public static Page getPage() {
-        return PAGE.get();
+    public static <T extends Page> T getPage() {
+        return (T) PAGE.get();
     }
 
     public static void removePage() {

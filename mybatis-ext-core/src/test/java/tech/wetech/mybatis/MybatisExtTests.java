@@ -17,6 +17,7 @@ import tech.wetech.mybatis.example.Criteria;
 import tech.wetech.mybatis.example.Example;
 import tech.wetech.mybatis.example.Sort;
 import tech.wetech.mybatis.mapper.UserMapper;
+import tech.wetech.mybatis.wrapper.PageWrapper;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
@@ -282,10 +283,10 @@ public class MybatisExtTests {
     @Test
     public void testSelectByExample() {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-        Page page = new Page();
-        page.setPageNumber(3);
-        page.setPageSize(10);
-        ThreadContext.setPage(page);
+        PageWrapper page = new PageWrapper();
+        page.setPageNumber(1);
+        page.setPageSize(3);
+        PageContext.setPage(page);
         Example<User> example = Example.of(User.class);
         example.createCriteria()
                 .andEqualTo(User::getId, 1)
@@ -298,8 +299,8 @@ public class MybatisExtTests {
         example.setDistinct(true);
 //        example.setPage(2, 2);
         example.setSort(new Sort(Sort.Direction.DESC, "mobile", "username"));
-        List<User> users = mapper.selectByExample(example);
-        log.info("selectByExample result: {}", users);
+        PageWrapper<User> users = (PageWrapper<User>) mapper.selectByExample(example);
+        log.info("selectByExample result: {}", users.get(0));
     }
 
 
