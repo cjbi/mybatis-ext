@@ -11,6 +11,7 @@ import tech.wetech.mybatis.dialect.DialectClient;
 import tech.wetech.mybatis.dialect.DialectType;
 import tech.wetech.mybatis.mapper.Mapper;
 
+import java.sql.SQLException;
 
 /**
  * 增强配置类
@@ -21,6 +22,7 @@ public class ExtConfiguration extends Configuration {
 
     protected final EntityMapperRegistry entityMapperRegistry = new EntityMapperRegistry(this);
     protected Dialect dialect = null;
+    private boolean noAutoDialect;
 
     public ExtConfiguration() {
         super();
@@ -74,22 +76,24 @@ public class ExtConfiguration extends Configuration {
         if (dialect == null) {
             dialect = getAutoDialect(transaction);
         }
-        if (dialect == null) {
-            return executor;
-        }
-        return new PagingExecutor(executor, dialect);
+        return dialect == null ? executor : new PagingExecutor(executor, dialect);
     }
 
-    public Dialect getAutoDialect(Transaction transaction) {
-        try {
-            String url = transaction.getConnection().getMetaData().getURL();
-            for (DialectType dialectType : DialectType.values()) {
-                if (url.toUpperCase().indexOf(String.format(":%s:", dialectType)) != -1) {
-                    return DialectClient.getDialect(dialectType);
+
+    private Dialect getAutoDialect(Transaction transaction) {
+        Dialect dialect = null;
+        if (!noAutoDialect) {
+            try {
+                String url = transaction.getConnection().getMetaData().getURL();
+                for (DialectType dialectType : DialectType.values()) {
+                    if (url.toUpperCase().indexOf(String.format(":%s:", dialectType)) != -1) {
+                        dialect = DialectClient.getDialect(dialectType);
+                    }
                 }
+            } catch (SQLException | UnsupportedOperationException e) {
+                noAutoDialect = true;
             }
-        } catch (Exception e) {
         }
-        return null;
+        return dialect;
     }
 }
