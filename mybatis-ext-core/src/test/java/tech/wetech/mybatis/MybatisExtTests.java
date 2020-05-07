@@ -286,7 +286,7 @@ public class MybatisExtTests {
         PageWrapper page = new PageWrapper();
         page.setPageNumber(1);
         page.setPageSize(3);
-        PageContext.setPage(page);
+        ThreadContext.setPage(page);
         Example<User> example = Example.of(User.class);
         example.createCriteria()
                 .andEqualTo(User::getId, 1)

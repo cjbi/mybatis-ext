@@ -2,10 +2,7 @@ package tech.wetech.mybatis.domain;
 
 import tech.wetech.mybatis.util.EntityMappingUtil;
 
-import java.beans.Introspector;
 import java.io.Serializable;
-import java.lang.invoke.SerializedLambda;
-import java.lang.reflect.Method;
 import java.util.function.Function;
 
 /**
