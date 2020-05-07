@@ -121,6 +121,10 @@ public class Example<T> implements Serializable {
         return this;
     }
 
+    public List<Criteria> getOredCriteria() {
+        return oredCriteria;
+    }
+
     @Override
     public String toString() {
         return "Example{" +
