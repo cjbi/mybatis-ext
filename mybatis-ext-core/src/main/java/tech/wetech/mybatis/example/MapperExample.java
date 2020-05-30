@@ -72,12 +72,6 @@ public final class MapperExample<T> extends Example<T> {
     }
 
     @Override
-    public MapperExample<T> setPage(int pageSize, int pageNumber) {
-        super.setPage(pageSize, pageNumber);
-        return this;
-    }
-
-    @Override
     public MapperExample<T> setSort(Sort sort) {
         super.setSort(sort);
         return this;

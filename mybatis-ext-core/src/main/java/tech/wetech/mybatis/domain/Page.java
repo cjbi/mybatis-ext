@@ -2,6 +2,8 @@ package tech.wetech.mybatis.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * @author cjbi
@@ -11,7 +13,9 @@ public class Page<E> extends ArrayList<E> {
     private int pageNumber;
     private int pageSize;
     private boolean countable;
-    private int total;
+    private long total;
+
+    private static final ThreadLocal<Page> PAGE = new ThreadLocal<>();
 
     public Page(int pageNumber, int pageSize) {
         this(pageNumber, pageSize, false);
@@ -21,6 +25,19 @@ public class Page<E> extends ArrayList<E> {
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
         this.countable = countable;
+    }
+
+    public static Page of(int pageNumber, int pageSize) {
+        return new Page(pageNumber, pageSize, false);
+    }
+
+    public static Page of(int pageNumber, int pageSize, boolean countable) {
+        return new Page(pageNumber, pageSize, countable);
+    }
+
+    public List<E> list(Supplier<? extends Page<E>> supplier) {
+        PAGE.set(this);
+        return supplier.get();
     }
 
     public Page() {
@@ -94,4 +111,11 @@ public class Page<E> extends ArrayList<E> {
                 '}';
     }
 
+    public static Page getThreadPage() {
+        return PAGE.get();
+    }
+
+    public void remove() {
+        PAGE.remove();
+    }
 }

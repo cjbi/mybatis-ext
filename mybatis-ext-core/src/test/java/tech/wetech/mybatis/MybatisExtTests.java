@@ -286,7 +286,6 @@ public class MybatisExtTests {
         PageWrapper page = new PageWrapper();
         page.setPageNumber(1);
         page.setPageSize(3);
-        ThreadContext.setPage(page);
         Example<User> example = Example.of(User.class);
         example.createCriteria()
                 .andEqualTo(User::getId, 1)
@@ -398,8 +397,7 @@ public class MybatisExtTests {
     @Test
     public void testSelectAllWithThreadContext() {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-        ThreadContext.setPage(1, 3, true);
-        Page<User> users = (Page<User>) mapper.selectAll();
+        List<User> users = mapper.selectAll();
         log.info("testSelectAllWithThreadContext result: {}", users);
     }
 

@@ -79,12 +79,9 @@ public class PagingExecutor implements Executor {
 
     private Page getPage(Object parameter) {
         Page page = ParametersFinder.getInstance().findParameter(parameter, Page.class);
-        if (page == null && ThreadContext.getPage() != null) {
-            try {
-                page = ThreadContext.getPage();
-            } finally {
-                ThreadContext.removeAll();
-            }
+        if (page == null && Page.getThreadPage() != null) {
+            page = Page.getThreadPage();
+            page.remove();
         }
         return page;
     }

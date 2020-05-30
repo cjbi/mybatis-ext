@@ -12,7 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import tech.wetech.mybatis.BaseDataTest;
 import tech.wetech.mybatis.ExtConfiguration;
-import tech.wetech.mybatis.ThreadContext;
+import tech.wetech.mybatis.domain.Page;
 import tech.wetech.mybatis.entity.Goods;
 
 import javax.sql.DataSource;
@@ -60,10 +60,9 @@ public class GoodsMapperTest {
     @Test
     public void testSelectAll() {
         try (SqlSession session = sqlSessionFactory.openSession()) {
-            ThreadContext.setPage(1,10,true);
             GoodsMapper goodsMapper = session.getMapper(GoodsMapper.class);
-            List<Goods> goods = goodsMapper.selectAll();
-            Assert.assertEquals(goods.size(), 100);
+            List<Goods> goods = Page.of(1, 10).list(goodsMapper::selectAll);
+            Assert.assertEquals(goods.size(), 10);
         }
     }
 

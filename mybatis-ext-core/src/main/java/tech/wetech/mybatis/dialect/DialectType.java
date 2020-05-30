@@ -14,4 +14,5 @@ public enum DialectType {
     POSTGRE,
     SQLSERVER,
     SQLSERVER2012,
+    DERBY
 }

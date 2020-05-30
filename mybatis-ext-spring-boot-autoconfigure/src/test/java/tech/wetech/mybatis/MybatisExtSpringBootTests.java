@@ -101,7 +101,6 @@ public class MybatisExtSpringBootTests {
 
     @Test
     public void testSelectAllWithThreadContext() {
-        ThreadContext.setPage(1, 3, true);
         Page<User> users = (Page<User>) mapper.selectAll();
         log.info("testSelectAllWithThreadContext result: {}", users);
     }

@@ -1,6 +1,5 @@
 package tech.wetech.mybatis.example;
 
-import tech.wetech.mybatis.ThreadContext;
 import tech.wetech.mybatis.domain.Property;
 import tech.wetech.mybatis.util.EntityMappingUtil;
 
@@ -105,11 +104,6 @@ public class Example<T> implements Serializable {
 
     public String getOrderByClause() {
         return orderByClause;
-    }
-
-    public Example<T> setPage(int pageSize, int pageNumber) {
-        ThreadContext.setPage(pageSize, pageNumber);
-        return this;
     }
 
     public Example<T> setSort(Sort sort) {

@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import tech.wetech.mybatis.ThreadContext;
 import tech.wetech.mybatis.domain.Page;
 import tech.wetech.mybatis.example.Example;
 import tech.wetech.mybatis.spring.entity.User;
@@ -108,7 +107,6 @@ public class MybatisExtSpringTests {
 
     @Test
     public void testSelectAllWithThreadContext() {
-        ThreadContext.setPage(1, 3, true);
         Page<User> users = (Page<User>) mapper.selectAll();
         log.info("testSelectAllWithThreadContext result: {}", users);
     }

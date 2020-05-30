@@ -40,6 +40,8 @@ public class DialectClient {
                 return new SQLServerDialect();
             case SQLSERVER2012:
                 return new SqlServer2012Dialect();
+            case DERBY:
+                return new DerbyDialect();
             default:
                 throw new UnsupportedOperationException("This database is not supported");
         }
