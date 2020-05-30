@@ -1,5 +1,6 @@
 package tech.wetech.mybatis.mapper;
 
+import org.apache.ibatis.logging.stdout.StdOutImpl;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
@@ -14,6 +15,8 @@ import tech.wetech.mybatis.BaseDataTest;
 import tech.wetech.mybatis.ExtConfiguration;
 import tech.wetech.mybatis.domain.Page;
 import tech.wetech.mybatis.entity.Goods;
+import tech.wetech.mybatis.example.Criteria;
+import tech.wetech.mybatis.example.Example;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
@@ -34,6 +37,7 @@ public class GoodsMapperTest {
         configuration.setLazyLoadingEnabled(true);
         configuration.setUseActualParamName(false); // to test legacy style reference (#{0} #{1})
         configuration.getTypeAliasRegistry().registerAlias(Goods.class);
+        configuration.setLogImpl(StdOutImpl.class);
         configuration.addMapper(GoodsMapper.class);
         sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
     }
@@ -185,6 +189,30 @@ public class GoodsMapperTest {
             int rows = goodsMapper.insertSelective(goods);
             Assert.assertEquals(rows, 1);
         }
+    }
+
+    @Test
+    public void testSelectByExampleWithSub() {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            GoodsMapper goodsMapper = session.getMapper(GoodsMapper.class);
+            Example<Goods> example = Example.of(Goods.class);
+            example.or()
+                    .orEqualTo(Goods::getName, "轻奢纯棉刺绣水洗四件套")
+                    .andEqualTo(Goods::getId, 10000);
+            example.or()
+                    .andEqualTo(Goods::getGoodsBrief, "厚实舒适");
+            example.and()
+                    .andLessThanOrEqualTo(Goods::getId, 10099)
+                    .andGreaterThanOrEqualTo(Goods::getId, 10000);
+            Criteria<Goods> criteria = new Criteria<>();
+            criteria.andIsNull("brandId").andLessThan(Goods::getGoodsNumber, 1L);
+            example.or(criteria);
+            List<Goods> users = goodsMapper.selectByExample(example);
+            Assert.assertEquals(2, users.size());
+            Assert.assertEquals("轻奢纯棉刺绣水洗四件套", users.get(0).getName());
+            Assert.assertEquals("埃及进口长绒棉毛巾", users.get(1).getName());
+        }
+
     }
 
 
