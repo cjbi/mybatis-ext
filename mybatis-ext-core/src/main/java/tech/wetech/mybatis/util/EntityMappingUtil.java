@@ -5,15 +5,47 @@ import tech.wetech.mybatis.builder.EntityMapperBuilder;
 import tech.wetech.mybatis.builder.EntityMapping;
 
 import java.beans.Introspector;
+import java.lang.annotation.Annotation;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.*;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author cjbi
  */
 public class EntityMappingUtil {
+
+    /**
+     * 通过注解查找实体属性
+     *
+     * @param entityMapping
+     * @param clazz
+     * @return
+     */
+    public static List<EntityMapping.ColumnProperty> findAnnotationColumnProperty(EntityMapping entityMapping, Class<? extends Annotation> clazz) {
+        return entityMapping.getColumnProperties()
+                .stream()
+                .filter(columnProperty -> columnProperty.getAnnotation(clazz) != null)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 通过注解查找一个实体属性
+     *
+     * @param entityMapping
+     * @param clazz
+     * @return
+     */
+    public static EntityMapping.ColumnProperty findAnnotationColumnPropertyOne(EntityMapping entityMapping, Class<? extends Annotation> clazz) {
+        return entityMapping.getColumnProperties()
+                .stream()
+                .filter(columnProperty -> columnProperty.getAnnotation(clazz) != null)
+                .findFirst()
+                .orElse(null);
+    }
 
     public static String getColumnName(String className, String property) {
         EntityMapping entityMapping = EntityMapperBuilder.TABLE_ENTITY_CACHE.get(className);

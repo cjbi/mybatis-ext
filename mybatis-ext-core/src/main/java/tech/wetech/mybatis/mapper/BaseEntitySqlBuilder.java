@@ -1,8 +1,11 @@
 package tech.wetech.mybatis.mapper;
 
 import org.apache.ibatis.jdbc.SQL;
+import tech.wetech.mybatis.annotation.LogicDelete;
 import tech.wetech.mybatis.builder.EntityMapping;
+import tech.wetech.mybatis.util.EntityMappingUtil;
 
+import javax.persistence.Version;
 import java.util.stream.Collectors;
 
 /**
@@ -10,11 +13,13 @@ import java.util.stream.Collectors;
  */
 public class BaseEntitySqlBuilder {
 
+
     public String deleteByPrimaryKey(EntityMapping entityMapping) {
-        if (entityMapping.isLogicDelete()) {
+        EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
+        if (logicDeleteProperty != null) {
             return new SQL() {{
                 UPDATE(entityMapping.getTableName());
-                SET(String.format("%s = %s", entityMapping.getLogicDeleteColumn(), entityMapping.getLogicDeleteDeletedValue()));
+                SET(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
                 WHERE(String.format("%s = #{%s}", entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
             }}.toString();
         }
@@ -25,23 +30,25 @@ public class BaseEntitySqlBuilder {
     }
 
     public String existsByPrimaryKey(EntityMapping entityMapping) {
+        EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         return new SQL() {{
             SELECT("COUNT(*)");
             FROM(entityMapping.getTableName());
             WHERE(String.format("%s = #{%s}", entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
-            if (entityMapping.isLogicDelete()) {
-                WHERE(String.format("%s = %s", entityMapping.getLogicDeleteColumn(), entityMapping.getLogicDeleteNormalValue()));
+            if (logicDeleteProperty != null) {
+                WHERE(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
             }
         }}.toString();
     }
 
 
     public String updateByExampleSelective(EntityMapping entityMapping) {
+        EntityMapping.ColumnProperty versionProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, Version.class);
         StringBuilder builder = new StringBuilder("<script>");
         StringBuilder setBuilder = new StringBuilder("<set>");
         for (EntityMapping.ColumnProperty columnProperty : entityMapping.getColumnProperties()) {
-            if (entityMapping.isOptimisticLock() && entityMapping.getOptimisticLockProperty().equals(columnProperty.getPropertyName())) {
-                setBuilder.append(String.format("%s = %s + 1,", entityMapping.getOptimisticLockColumn(), entityMapping.getOptimisticLockColumn()));
+            if (versionProperty != null && versionProperty.getPropertyName().equals(columnProperty.getPropertyName())) {
+                setBuilder.append(String.format("%s = %s + 1,", columnProperty.getColumnName(), columnProperty.getColumnName()));
                 continue;
             }
             setBuilder.append(String.format("<if test='record.%s != null'>%s = #{record.%s},</if>", columnProperty.getPropertyName(), columnProperty.getColumnName(), columnProperty.getPropertyName()));
@@ -55,11 +62,12 @@ public class BaseEntitySqlBuilder {
 
 
     public String updateByExample(EntityMapping entityMapping) {
+        EntityMapping.ColumnProperty versionProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, Version.class);
         StringBuilder builder = new StringBuilder("<script>");
         StringBuilder setBuilder = new StringBuilder("<set>");
         for (EntityMapping.ColumnProperty columnProperty : entityMapping.getColumnProperties()) {
-            if (entityMapping.isOptimisticLock() && entityMapping.getOptimisticLockProperty().equals(columnProperty.getPropertyName())) {
-                setBuilder.append(String.format("%s = %s + 1,", entityMapping.getOptimisticLockColumn(), entityMapping.getOptimisticLockColumn()));
+            if (versionProperty != null && versionProperty.getPropertyName().equals(columnProperty.getPropertyName())) {
+                setBuilder.append(String.format("%s = %s + 1,", columnProperty.getColumnName(), columnProperty.getColumnName()));
                 continue;
             }
             setBuilder.append(String.format("%s = #{record.%s},", columnProperty.getColumnName(), columnProperty.getPropertyName()));
@@ -73,10 +81,11 @@ public class BaseEntitySqlBuilder {
 
 
     public String deleteByExample(EntityMapping entityMapping) {
+        EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         StringBuilder builder = new StringBuilder("<script>");
-        if (entityMapping.isLogicDelete()) {
+        if (logicDeleteProperty != null) {
             builder.append(String.format("UPDATE %s", entityMapping.getTableName()));
-            builder.append(String.format(" SET %s = %s", entityMapping.getLogicDeleteColumn(), entityMapping.getLogicDeleteDeletedValue()));
+            builder.append(String.format(" SET %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
         } else {
             builder.append(String.format("DELETE FROM %s", entityMapping.getTableName()));
         }
@@ -142,21 +151,24 @@ public class BaseEntitySqlBuilder {
 
 
     public String selectAll(EntityMapping entityMapping) {
+        EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         return new SQL() {{
             SELECT(buildAllColumns(entityMapping));
             FROM(entityMapping.getTableName());
-            if (entityMapping.isLogicDelete()) {
-                WHERE(String.format("%s = %s", entityMapping.getLogicDeleteColumn(), entityMapping.getLogicDeleteNormalValue()));
+            if (logicDeleteProperty != null) {
+                WHERE(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
             }
         }}.toString();
     }
 
 
     public String updateByPrimaryKeySelective(EntityMapping entityMapping) {
+        EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
+        EntityMapping.ColumnProperty versionProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, Version.class);
         StringBuilder builder = new StringBuilder("<script>");
         StringBuilder setBuilder = new StringBuilder("<set>");
         for (EntityMapping.ColumnProperty columnProperty : entityMapping.getColumnProperties()) {
-            if (entityMapping.isOptimisticLock() && entityMapping.getOptimisticLockProperty().equals(columnProperty.getPropertyName())) {
+            if (versionProperty != null && versionProperty.getPropertyName().equals(columnProperty.getPropertyName())) {
                 setBuilder.append(String.format("%s = %s + 1,", columnProperty.getColumnName(), columnProperty.getColumnName()));
                 continue;
             }
@@ -164,11 +176,11 @@ public class BaseEntitySqlBuilder {
         }
         setBuilder.append("</set>");
         builder.append(String.format("UPDATE %s %s WHERE %s = #{%s}", entityMapping.getTableName(), setBuilder, entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
-        if (entityMapping.isLogicDelete()) {
-            builder.append(String.format(" and %s = %s", entityMapping.getLogicDeleteColumn(), entityMapping.getLogicDeleteNormalValue()));
+        if (logicDeleteProperty != null) {
+            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
         }
-        if (entityMapping.isOptimisticLock()) {
-            builder.append(String.format("<if test='%s != null'> and %s = #{%s}</if>", entityMapping.getOptimisticLockProperty(), entityMapping.getOptimisticLockColumn(), entityMapping.getOptimisticLockProperty()));
+        if (logicDeleteProperty != null) {
+            builder.append(String.format("<if test='%s != null'> and %s = #{%s}</if>", logicDeleteProperty.getPropertyName(), logicDeleteProperty.getColumnName(), logicDeleteProperty.getPropertyName()));
         }
         builder.append("</script>");
         return builder.toString();
@@ -176,22 +188,24 @@ public class BaseEntitySqlBuilder {
 
 
     public String updateByPrimaryKey(EntityMapping entityMapping) {
+        EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
+        EntityMapping.ColumnProperty versionProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, Version.class);
         StringBuilder builder = new StringBuilder("<script>");
         StringBuilder setBuilder = new StringBuilder("<set>");
         for (EntityMapping.ColumnProperty columnProperty : entityMapping.getColumnProperties()) {
-            if (entityMapping.isOptimisticLock() && entityMapping.getOptimisticLockProperty().equals(columnProperty.getPropertyName())) {
-                setBuilder.append(String.format("%s = %s + 1,", entityMapping.getOptimisticLockColumn(), entityMapping.getOptimisticLockColumn()));
+            if (versionProperty != null && versionProperty.getPropertyName().equals(columnProperty.getPropertyName())) {
+                setBuilder.append(String.format("%s = %s + 1,", columnProperty.getColumnName(), columnProperty.getColumnName()));
                 continue;
             }
             setBuilder.append(String.format("%s = #{%s},", columnProperty.getColumnName(), columnProperty.getPropertyName()));
         }
         setBuilder.append("</set>");
         builder.append(String.format("UPDATE %s %s WHERE %s = #{%s}", entityMapping.getTableName(), setBuilder, entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
-        if (entityMapping.isLogicDelete()) {
-            builder.append(String.format(" and %s = %s", entityMapping.getLogicDeleteColumn(), entityMapping.getLogicDeleteNormalValue()));
+        if (logicDeleteProperty != null) {
+            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
         }
-        if (entityMapping.isOptimisticLock()) {
-            builder.append(String.format("<if test='%s != null'> and %s = #{%s}</if>", entityMapping.getOptimisticLockProperty(), entityMapping.getOptimisticLockColumn(), entityMapping.getOptimisticLockProperty()));
+        if (versionProperty != null) {
+            builder.append(String.format("<if test='%s != null'> and %s = #{%s}</if>", versionProperty.getPropertyName(), versionProperty.getColumnName(), versionProperty.getPropertyName()));
         }
         builder.append("</script>");
         return builder.toString();
@@ -199,24 +213,26 @@ public class BaseEntitySqlBuilder {
 
 
     public String selectByPrimaryKeyWithOptional(EntityMapping entityMapping) {
+        EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         return new SQL() {{
             SELECT(buildAllColumns(entityMapping));
             FROM(entityMapping.getTableName());
             WHERE(String.format("%s = #{%s}", entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
-            if (entityMapping.isLogicDelete()) {
-                WHERE(String.format("%s = %s", entityMapping.getLogicDeleteColumn(), entityMapping.getLogicDeleteNormalValue()));
+            if (logicDeleteProperty != null) {
+                WHERE(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
             }
         }}.toString();
     }
 
 
     public String selectByPrimaryKey(EntityMapping entityMapping) {
+        EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         return new SQL() {{
             SELECT(buildAllColumns(entityMapping));
             FROM(entityMapping.getTableName());
             WHERE(String.format("%s = #{%s}", entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
-            if (entityMapping.isLogicDelete()) {
-                WHERE(String.format("%s = %s", entityMapping.getLogicDeleteColumn(), entityMapping.getLogicDeleteNormalValue()));
+            if (logicDeleteProperty != null) {
+                WHERE(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
             }
         }}.toString();
     }
@@ -289,6 +305,7 @@ public class BaseEntitySqlBuilder {
     }
 
     protected String buildExampleXML(EntityMapping entityMapping) {
+        EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         String className = entityMapping.getEntityClass().getName();
         StringBuilder builder = new StringBuilder();
         builder.append("<where>");
@@ -313,8 +330,8 @@ public class BaseEntitySqlBuilder {
         builder.append("</when>");
         builder.append("</choose>");
         builder.append("</foreach>");
-        if (entityMapping.isLogicDelete()) {
-            builder.append(String.format(" and %s = %s", entityMapping.getLogicDeleteColumn(), entityMapping.getLogicDeleteNormalValue()));
+        if (logicDeleteProperty != null) {
+            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
         }
         builder.append("</trim>");
         builder.append("</if>");
@@ -324,13 +341,14 @@ public class BaseEntitySqlBuilder {
     }
 
     protected String buildWhereNotNullXML(EntityMapping entityMapping) {
+        EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         StringBuilder builder = new StringBuilder();
         builder.append("<where>");
         for (EntityMapping.ColumnProperty columnProperty : entityMapping.getColumnProperties()) {
             builder.append(String.format("<if test='%s != null'> AND %s = #{%s}</if>", columnProperty.getPropertyName(), columnProperty.getColumnName(), columnProperty.getPropertyName()));
         }
-        if (entityMapping.isLogicDelete()) {
-            builder.append(String.format(" and %s = %s", entityMapping.getLogicDeleteColumn(), entityMapping.getLogicDeleteNormalValue()));
+        if (logicDeleteProperty != null) {
+            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
         }
         builder.append("</where>");
         return builder.toString();

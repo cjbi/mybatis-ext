@@ -1,7 +1,6 @@
 package tech.wetech.mybatis.builder;
 
 import java.lang.annotation.Annotation;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,30 +27,7 @@ public class EntityMapping {
      */
     private Class<?> keyResultType;
     private Map<String, ColumnProperty> columnPropertyMap;
-    /**
-     * 是否逻辑删除
-     */
-    private boolean isLogicDelete;
-    /**
-     * 逻辑删除列
-     */
-    private String logicDeleteColumn;
-    private String logicDeleteNormalValue;
-    private String logicDeleteDeletedValue;
-    /**
-     * 乐观锁
-     */
-    private boolean isOptimisticLock;
-    /**
-     * 乐观锁字段
-     */
-    private String optimisticLockColumn;
-    /**
-     * 乐观锁字段
-     */
-    private String optimisticLockProperty;
-
-    private Map<Class<? extends Annotation>, ? extends Annotation> annotationMap = new HashMap<>();
+    private Map<Class<? extends Annotation>, ? extends Annotation> annotationMap;
 
     public Class<?> getEntityClass() {
         return entityClass;
@@ -101,60 +77,8 @@ public class EntityMapping {
         this.columnPropertyMap = columnPropertyMap;
     }
 
-    public boolean isLogicDelete() {
-        return isLogicDelete;
-    }
-
-    public void setLogicDelete(boolean logicDelete) {
-        isLogicDelete = logicDelete;
-    }
-
-    public String getLogicDeleteColumn() {
-        return logicDeleteColumn;
-    }
-
-    public void setLogicDeleteColumn(String logicDeleteColumn) {
-        this.logicDeleteColumn = logicDeleteColumn;
-    }
-
-    public String getLogicDeleteNormalValue() {
-        return logicDeleteNormalValue;
-    }
-
-    public void setLogicDeleteNormalValue(String logicDeleteNormalValue) {
-        this.logicDeleteNormalValue = logicDeleteNormalValue;
-    }
-
-    public String getLogicDeleteDeletedValue() {
-        return logicDeleteDeletedValue;
-    }
-
-    public void setLogicDeleteDeletedValue(String logicDeleteDeletedValue) {
-        this.logicDeleteDeletedValue = logicDeleteDeletedValue;
-    }
-
-    public boolean isOptimisticLock() {
-        return isOptimisticLock;
-    }
-
-    public void setOptimisticLock(boolean optimisticLock) {
-        isOptimisticLock = optimisticLock;
-    }
-
-    public String getOptimisticLockColumn() {
-        return optimisticLockColumn;
-    }
-
-    public void setOptimisticLockColumn(String optimisticLockColumn) {
-        this.optimisticLockColumn = optimisticLockColumn;
-    }
-
-    public String getOptimisticLockProperty() {
-        return optimisticLockProperty;
-    }
-
-    public void setOptimisticLockProperty(String optimisticLockProperty) {
-        this.optimisticLockProperty = optimisticLockProperty;
+    public ColumnProperty getColumnProperty(String property) {
+        return this.columnPropertyMap.get(property);
     }
 
     public Class<?> getKeyResultType() {
@@ -183,7 +107,7 @@ public class EntityMapping {
         private String propertyName;
         private boolean identity;
         private Class<?> javaType;
-        private Map<Class<? extends Annotation>, ? extends Annotation> annotationMap = new HashMap<>();
+        private Map<Class<? extends Annotation>, ? extends Annotation> annotationMap;
 
         public String getColumnName() {
             return columnName;

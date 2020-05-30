@@ -1,9 +1,11 @@
 package tech.wetech.mybatis.builder;
 
-import tech.wetech.mybatis.annotation.LogicDelete;
 import tech.wetech.mybatis.builder.EntityMapping.ColumnProperty;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -94,18 +96,6 @@ public class EntityMappingBuilder {
             }
             if (field.isAnnotationPresent(Id.class)) {
                 columnProperty.setIdentity(true);
-            }
-            if (field.isAnnotationPresent(LogicDelete.class)) {
-                LogicDelete logicDelete = field.getAnnotation(LogicDelete.class);
-                entityMapping.setLogicDelete(true);
-                entityMapping.setLogicDeleteColumn(columnProperty.getColumnName());
-                entityMapping.setLogicDeleteNormalValue(logicDelete.normalValue());
-                entityMapping.setLogicDeleteDeletedValue(logicDelete.deletedValue());
-            }
-            if (field.isAnnotationPresent(Version.class)) {
-                entityMapping.setOptimisticLock(true);
-                entityMapping.setOptimisticLockColumn(columnProperty.getColumnName());
-                entityMapping.setOptimisticLockProperty(columnProperty.getPropertyName());
             }
             columnProperty.setAnnotationMap(Arrays.stream(field.getAnnotations()).collect(Collectors.toMap(Annotation::annotationType, annotation -> annotation, (a1, a2) -> a2)));
             columnProperties.add(columnProperty);
