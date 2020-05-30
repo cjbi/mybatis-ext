@@ -2,7 +2,6 @@ package tech.wetech.mybatis.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -35,7 +34,7 @@ public class Page<E> extends ArrayList<E> {
         return new Page(pageNumber, pageSize, countable);
     }
 
-    public List<E> list(Supplier<? extends Page<E>> supplier) {
+    public Page<E> list(Supplier<? extends Page<E>> supplier) {
         PAGE.set(this);
         return supplier.get();
     }
@@ -43,7 +42,7 @@ public class Page<E> extends ArrayList<E> {
     public Page() {
     }
 
-    public Page(Collection<? extends E> c, int total) {
+    public Page(Collection<? extends E> c, long total) {
         super(c);
         this.total = total;
     }
