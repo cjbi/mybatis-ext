@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author cjbi
@@ -29,7 +30,9 @@ public class EntityMappingBuilder {
         entityMapping.setColumnProperties(columnProperties);
         entityMapping.setKeyProperty(buildKeyProperty(columnProperties));
         entityMapping.setKeyColumn(buildKeyColumn(columnProperties));
+        entityMapping.setKeyResultType(buildKeyResultType(columnProperties));
         entityMapping.setColumnPropertyMap(buildColumnPropertiesMap(columnProperties));
+        entityMapping.setAnnotationMap(Arrays.stream(entityClass.getAnnotations()).collect(Collectors.toMap(Annotation::annotationType, annotation -> annotation, (a1, a2) -> a2)));
         return entityMapping;
     }
 
@@ -80,7 +83,6 @@ public class EntityMappingBuilder {
                 continue;
             }
             ColumnProperty columnProperty = new ColumnProperty();
-            columnProperty.setAnnotations(Arrays.asList(field.getAnnotations()));
             columnProperty.setPropertyName(field.getName());
             columnProperty.setJavaType(field.getType());
             if (field.isAnnotationPresent(Column.class)) {
@@ -105,6 +107,7 @@ public class EntityMappingBuilder {
                 entityMapping.setOptimisticLockColumn(columnProperty.getColumnName());
                 entityMapping.setOptimisticLockProperty(columnProperty.getPropertyName());
             }
+            columnProperty.setAnnotationMap(Arrays.stream(field.getAnnotations()).collect(Collectors.toMap(Annotation::annotationType, annotation -> annotation, (a1, a2) -> a2)));
             columnProperties.add(columnProperty);
         }
         return columnProperties;
@@ -132,6 +135,15 @@ public class EntityMappingBuilder {
         for (ColumnProperty columnProperty : columnProperties) {
             if (columnProperty.isIdentity()) {
                 return columnProperty.getColumnName();
+            }
+        }
+        return null;
+    }
+
+    private Class<?> buildKeyResultType(List<ColumnProperty> columnProperties) {
+        for (ColumnProperty columnProperty : columnProperties) {
+            if (columnProperty.isIdentity()) {
+                return columnProperty.getJavaType();
             }
         }
         return null;

@@ -41,7 +41,7 @@ public class DialectClient {
             case SQLSERVER2012:
                 return new SqlServer2012Dialect();
             default:
-                throw new UnsupportedOperationException("This dialect is not supported");
+                throw new UnsupportedOperationException("This database is not supported");
         }
     }
 

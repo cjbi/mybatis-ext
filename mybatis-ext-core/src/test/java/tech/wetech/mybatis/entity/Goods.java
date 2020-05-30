@@ -1,15 +1,19 @@
 package tech.wetech.mybatis.entity;
 
 import tech.wetech.mybatis.annotation.LogicDelete;
+import tech.wetech.mybatis.annotation.SelectEntityKey;
 
-import javax.persistence.*;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.persistence.Version;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Table(name = "t_goods")
 public class Goods {
     @Id
-    @GeneratedValue
+    @SelectEntityKey(statement = "VALUES IDENTITY_VAL_LOCAL()", before = false)
     private Long id;
     private Long categoryId;
     private String goodsSn;

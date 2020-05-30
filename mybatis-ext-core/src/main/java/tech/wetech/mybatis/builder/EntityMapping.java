@@ -1,6 +1,7 @@
 package tech.wetech.mybatis.builder;
 
 import java.lang.annotation.Annotation;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,13 +16,17 @@ public class EntityMapping {
     private String tableName;
     private List<ColumnProperty> columnProperties;
     /**
-     * 表主键ID 属性名
+     * 主键对应实体属性
      */
     private String keyProperty;
     /**
-     * 表主键ID 字段名
+     * 主键字段
      */
     private String keyColumn;
+    /**
+     * 主键返回类型
+     */
+    private Class<?> keyResultType;
     private Map<String, ColumnProperty> columnPropertyMap;
     /**
      * 是否逻辑删除
@@ -45,6 +50,8 @@ public class EntityMapping {
      * 乐观锁字段
      */
     private String optimisticLockProperty;
+
+    private Map<Class<? extends Annotation>, ? extends Annotation> annotationMap = new HashMap<>();
 
     public Class<?> getEntityClass() {
         return entityClass;
@@ -150,13 +157,34 @@ public class EntityMapping {
         this.optimisticLockProperty = optimisticLockProperty;
     }
 
+    public Class<?> getKeyResultType() {
+        return keyResultType;
+    }
+
+    public void setKeyResultType(Class<?> keyResultType) {
+        this.keyResultType = keyResultType;
+    }
+
+    public Map<Class<? extends Annotation>, ? extends Annotation> getAnnotationMap() {
+        return annotationMap;
+    }
+
+    public void setAnnotationMap(Map<Class<? extends Annotation>, ? extends Annotation> annotationMap) {
+        this.annotationMap = annotationMap;
+    }
+
+    public <T extends Annotation> T getAnnotation(Class<T> clazz) {
+        return (T) this.annotationMap.get(clazz);
+    }
+
     public static class ColumnProperty {
 
         private String columnName;
         private String propertyName;
         private boolean identity;
         private Class<?> javaType;
-        private List<Annotation> annotations;
+        private Map<Class<? extends Annotation>, ? extends Annotation> annotationMap = new HashMap<>();
+
         public String getColumnName() {
             return columnName;
         }
@@ -189,13 +217,16 @@ public class EntityMapping {
             this.javaType = javaType;
         }
 
-        public List<Annotation> getAnnotations() {
-            return annotations;
+        public Map<Class<? extends Annotation>, ? extends Annotation> getAnnotationMap() {
+            return annotationMap;
         }
 
-        public ColumnProperty setAnnotations(List<Annotation> annotations) {
-            this.annotations = annotations;
-            return this;
+        public void setAnnotationMap(Map<Class<? extends Annotation>, ? extends Annotation> annotationMap) {
+            this.annotationMap = annotationMap;
+        }
+
+        public <T extends Annotation> T getAnnotation(Class<T> clazz) {
+            return (T) this.annotationMap.get(clazz);
         }
     }
 

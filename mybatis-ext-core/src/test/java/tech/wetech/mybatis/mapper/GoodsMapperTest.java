@@ -71,8 +71,8 @@ public class GoodsMapperTest {
     public void testSelectByPrimaryKey() {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             GoodsMapper goodsMapper = session.getMapper(GoodsMapper.class);
-            Goods goods = goodsMapper.selectByPrimaryKey(1006002L);
-            Assert.assertEquals(goods.getId().longValue(), 1006002L);
+            Goods goods = goodsMapper.selectByPrimaryKey(10000L);
+            Assert.assertEquals(goods.getId().longValue(), 10000L);
             Assert.assertEquals(goods.getName(), "轻奢纯棉刺绣水洗四件套");
             Assert.assertEquals(goods.getGoodsBrief(), "设计师原款，精致绣花");
         }
@@ -82,8 +82,8 @@ public class GoodsMapperTest {
     public void testSelectByPrimaryKeyWithOptional() {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             GoodsMapper goodsMapper = session.getMapper(GoodsMapper.class);
-            Goods goods = goodsMapper.selectByPrimaryKeyWithOptional(1006002L).get();
-            Assert.assertEquals(goods.getId().longValue(), 1006002L);
+            Goods goods = goodsMapper.selectByPrimaryKeyWithOptional(10000L).get();
+            Assert.assertEquals(goods.getId().longValue(), 10000L);
             Assert.assertEquals(goods.getName(), "轻奢纯棉刺绣水洗四件套");
             Assert.assertEquals(goods.getGoodsBrief(), "设计师原款，精致绣花");
         }
@@ -94,7 +94,7 @@ public class GoodsMapperTest {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             GoodsMapper goodsMapper = session.getMapper(GoodsMapper.class);
             Goods queryModel = new Goods();
-            queryModel.setId(1086023L);
+            queryModel.setId(10097L);
             queryModel.setGoodsUnit("件");
             Goods goods = goodsMapper.selectOne(queryModel);
             Assert.assertEquals(goods.getName(), "彩色波点缓冲宠物牵引绳");
@@ -107,7 +107,7 @@ public class GoodsMapperTest {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             GoodsMapper goodsMapper = session.getMapper(GoodsMapper.class);
             Goods queryModel = new Goods();
-            queryModel.setId(1086023L);
+            queryModel.setId(10097L);
             queryModel.setGoodsUnit("件");
             Goods goods = goodsMapper.selectOneWithOptional(queryModel).get();
             Assert.assertEquals(goods.getName(), "彩色波点缓冲宠物牵引绳");
@@ -148,7 +148,7 @@ public class GoodsMapperTest {
         }
     }
 
-//    @Test
+    @Test
     public void testInsertSelective() {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             GoodsMapper goodsMapper = session.getMapper(GoodsMapper.class);

@@ -11,6 +11,7 @@ import tech.wetech.mybatis.dialect.DialectClient;
 import tech.wetech.mybatis.dialect.DialectType;
 import tech.wetech.mybatis.mapper.Mapper;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 
 /**
@@ -34,8 +35,8 @@ public class ExtConfiguration extends Configuration {
 
     public void setDialect(Class<? extends Dialect> dialect) {
         try {
-            this.dialect = dialect.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            this.dialect = dialect.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new IllegalArgumentException("Cannot set Dialect.", e);
         }
     }

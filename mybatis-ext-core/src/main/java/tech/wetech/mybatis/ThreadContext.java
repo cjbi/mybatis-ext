@@ -5,6 +5,7 @@ import tech.wetech.mybatis.domain.Page;
 /**
  * @author cjbi
  */
+@Deprecated
 public class ThreadContext {
 
     private static final ThreadLocal<Page> PAGE = new ThreadLocal<>();

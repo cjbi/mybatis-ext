@@ -8,12 +8,14 @@ import org.apache.ibatis.cursor.Cursor;
 import org.apache.ibatis.executor.keygen.Jdbc3KeyGenerator;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
+import org.apache.ibatis.executor.keygen.SelectKeyGenerator;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.reflection.ParamNameResolver;
 import org.apache.ibatis.reflection.TypeParameterResolver;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.scripting.xmltags.XMLLanguageDriver;
 import tech.wetech.mybatis.ExtConfiguration;
+import tech.wetech.mybatis.annotation.SelectEntityKey;
 import tech.wetech.mybatis.mapper.Mapper;
 import tech.wetech.mybatis.util.EntityMappingUtil;
 
@@ -50,6 +52,48 @@ public class EntityMapperBuilder {
         }
     }
 
+    private KeyGenerator handleSelectEntityKeyAnnotation(EntityMapping entityMapping, SelectEntityKey selectEntityKeyAnnotation, String baseStatementId, Class<?> parameterTypeClass, LanguageDriver languageDriver) {
+        String id = baseStatementId + SelectKeyGenerator.SELECT_KEY_SUFFIX;
+        Class<?> resultTypeClass = entityMapping.getKeyResultType();
+        StatementType statementType = selectEntityKeyAnnotation.statementType();
+        String keyProperty = entityMapping.getKeyProperty();
+        String keyColumn = entityMapping.getKeyColumn();
+        boolean executeBefore = selectEntityKeyAnnotation.before();
+
+        // defaults
+        boolean useCache = false;
+        KeyGenerator keyGenerator = NoKeyGenerator.INSTANCE;
+        Integer fetchSize = null;
+        Integer timeout = null;
+        boolean flushCache = false;
+        String parameterMap = null;
+        String resultMap = null;
+        ResultSetType resultSetTypeEnum = null;
+
+        SqlSource sqlSource = buildSqlSourceFromStrings(selectEntityKeyAnnotation.statement(), parameterTypeClass, languageDriver);
+        SqlCommandType sqlCommandType = SqlCommandType.SELECT;
+
+        assistant.addMappedStatement(id, sqlSource, statementType, sqlCommandType, fetchSize, timeout, parameterMap, parameterTypeClass, resultMap, resultTypeClass, resultSetTypeEnum,
+                flushCache, useCache, false,
+                keyGenerator, keyProperty, keyColumn, null, languageDriver, null);
+
+        id = assistant.applyCurrentNamespace(id, false);
+
+        MappedStatement keyStatement = configuration.getMappedStatement(id, false);
+        SelectKeyGenerator answer = new SelectKeyGenerator(keyStatement, executeBefore);
+        configuration.addKeyGenerator(id, answer);
+        return answer;
+    }
+
+    private SqlSource buildSqlSourceFromStrings(String[] strings, Class<?> parameterTypeClass, LanguageDriver languageDriver) {
+        final StringBuilder sql = new StringBuilder();
+        for (String fragment : strings) {
+            sql.append(fragment);
+            sql.append(" ");
+        }
+        return languageDriver.createSqlSource(configuration, sql.toString().trim(), parameterTypeClass);
+    }
+
     private void parseStatement(Method method) {
         Class<?> entityClass = EntityMappingUtil.extractEntityClass(type);
         if (entityClass == null) {
@@ -80,7 +124,13 @@ public class EntityMapperBuilder {
         KeyGenerator keyGenerator;
         String keyProperty = entityMapping.getKeyProperty();
         if (sqlCommandType == SqlCommandType.INSERT && keyProperty != null) {
-            keyGenerator = Jdbc3KeyGenerator.INSTANCE;
+            EntityMapping.ColumnProperty keyColumnProperty = entityMapping.getColumnPropertyMap().get(keyProperty);
+            SelectEntityKey selectEntityKeyAnnotation = keyColumnProperty.getAnnotation(SelectEntityKey.class);
+            if (selectEntityKeyAnnotation != null) {
+                keyGenerator = handleSelectEntityKeyAnnotation(entityMapping, selectEntityKeyAnnotation, mappedStatementId, entityClass, languageDriver);
+            } else {
+                keyGenerator = Jdbc3KeyGenerator.INSTANCE;
+            }
             if (method.getParameterCount() > 1) {
                 ParamNameResolver paramNameResolver = new ParamNameResolver(configuration, method);
                 Type[] resolveParamTypes = TypeParameterResolver.resolveParamTypes(method, type);
