@@ -4,4 +4,7 @@
     <select id="selectAllGoods" resultType="java.util.Map">
         select * from t_goods
     </select>
+    <select id="selectAllGoodsWithPage" resultType="java.util.Map">
+        select * from t_goods
+    </select>
 </mapper>

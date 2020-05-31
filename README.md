@@ -464,6 +464,59 @@ public class MybatisExtTests {
                 .selectOneWithOptional()
                 .orElseThrow(() -> new RuntimeException("数据不存在"));
     }
+    //多个组合
+    @Test
+    public void testSelectByExampleWithSub() {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            GoodsMapper goodsMapper = session.getMapper(GoodsMapper.class);
+            Example<Goods> example = Example.of(Goods.class);
+            example.or()
+                    .orEqualTo(Goods::getName, "轻奢纯棉刺绣水洗四件套")
+                    .andEqualTo(Goods::getId, 10000);
+            example.or()
+                    .andEqualTo(Goods::getGoodsBrief, "厚实舒适");
+            example.and()
+                    .andLessThanOrEqualTo(Goods::getId, 10099)
+                    .andGreaterThanOrEqualTo(Goods::getId, 10000);
+            Criteria<Goods> criteria = new Criteria<>();
+            criteria.andIsNull("brandId").andLessThan(Goods::getGoodsNumber, 1L);
+            example.or(criteria);
+            List<Goods> users = goodsMapper.selectByExample(example);
+            Assert.assertEquals(2, users.size());
+            Assert.assertEquals("轻奢纯棉刺绣水洗四件套", users.get(0).getName());
+            Assert.assertEquals("埃及进口长绒棉毛巾", users.get(1).getName());
+        }
+    }
+    //排序
+    @Test
+    public void testSelectSortWithLambda() {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            GoodsMapper goodsMapper = session.getMapper(GoodsMapper.class);
+            example.setSort(Sort.by("id").desc());
+            List<Goods> goods = goodsMapper.selectByExample(example);
+            Assert.assertEquals(goods.get(0).getId(), Long.valueOf(10099));
+            example.setSort(Sort.by("name", Sort.Direction.DESC).and("id"));
+            example.setSort(Sort.by(Goods::getName, Sort.Direction.DESC).and(Goods::getId));
+            List<Goods> goods2 = goodsMapper.selectByExample(example);
+            Assert.assertEquals(goods2.get(0).getId(), Long.valueOf(10041));
+            example.setSort(Sort.by(Goods::getName, Sort.Direction.DESC).and(Goods::getId, Sort.Direction.DESC));
+            List<Goods> goods3 = goodsMapper.selectByExample(example);
+            Assert.assertEquals(goods3.get(0).getId(), Long.valueOf(10041));
+        }
+    }
+    //分页
+    @Test
+    public void testSelectWithPage() {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            GoodsMapper goodsMapper = session.getMapper(GoodsMapper.class);
+            Page list = Page.of(1, 3, true).list(() -> goodsMapper.selectAllGoods());
+            Assert.assertEquals(list.getTotal(), 100L);
+            Assert.assertEquals(list.size(), 3);
+            List<Map<String, Object>> list2 = goodsMapper.selectAllGoodsWithPage(Page.of(1, 5));
+            Assert.assertEquals(list2.size(), 5);
+        }
+    }    
+
 }
 ```
 以上示例可以看出Mybatis-Ext对原生Mybatis并没有多大改动，只是继承了原有的类做了增强，配置上和Mybatis也相差无几。

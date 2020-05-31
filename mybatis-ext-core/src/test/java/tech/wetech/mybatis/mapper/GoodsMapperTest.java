@@ -249,5 +249,17 @@ public class GoodsMapperTest {
         }
     }
 
+    @Test
+    public void testSelectWithPage() {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            GoodsMapper goodsMapper = session.getMapper(GoodsMapper.class);
+            Page list = Page.of(1, 3, true).list(() -> goodsMapper.selectAllGoods());
+            Assert.assertEquals(list.getTotal(), 100L);
+            Assert.assertEquals(list.size(), 3);
+            List<Map<String, Object>> list2 = goodsMapper.selectAllGoodsWithPage(Page.of(1, 5));
+            Assert.assertEquals(list2.size(), 5);
+        }
+    }
+
 
 }
