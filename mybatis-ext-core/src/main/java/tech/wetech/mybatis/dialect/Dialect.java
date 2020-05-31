@@ -8,10 +8,10 @@ public interface Dialect {
     /**
      * 将sql转换为分页sql
      *
-     * @param sql
-     * @param offset
-     * @param limit
-     * @return
+     * @param sql    sql语句
+     * @param offset 偏移量
+     * @param limit  分页数
+     * @return 分页的sql
      */
     String getLimitString(String sql, int offset, int limit);
 

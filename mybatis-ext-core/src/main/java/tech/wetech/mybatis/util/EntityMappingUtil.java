@@ -15,6 +15,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
+ * 实体类映射工具类
+ *
  * @author cjbi
  */
 public class EntityMappingUtil {
@@ -22,9 +24,9 @@ public class EntityMappingUtil {
     /**
      * 通过注解查找实体属性
      *
-     * @param entityMapping
-     * @param clazz
-     * @return
+     * @param entityMapping 实体类映射
+     * @param clazz 实体类类型
+     * @return 查找到的实体属性
      */
     public static List<EntityMapping.ColumnProperty> findAnnotationColumnProperty(EntityMapping entityMapping, Class<? extends Annotation> clazz) {
         return entityMapping.getColumnProperties()
@@ -36,9 +38,9 @@ public class EntityMappingUtil {
     /**
      * 通过注解查找一个实体属性
      *
-     * @param entityMapping
-     * @param clazz
-     * @return
+     * @param entityMapping 实体类映射
+     * @param clazz         实体类类型
+     * @return 查找到的一个实体属性
      */
     public static EntityMapping.ColumnProperty findAnnotationColumnPropertyOne(EntityMapping entityMapping, Class<? extends Annotation> clazz) {
         return entityMapping.getColumnProperties()
@@ -48,6 +50,13 @@ public class EntityMappingUtil {
                 .orElse(null);
     }
 
+    /**
+     * 获取表字段名
+     *
+     * @param className 实体类名
+     * @param property  实体类属性
+     * @return 表字段名
+     */
     public static String getColumnName(String className, String property) {
         EntityMapping entityMapping = EntityMapperBuilder.TABLE_ENTITY_CACHE.get(className);
         Map<String, EntityMapping.ColumnProperty> columnPropertyMap = entityMapping.getColumnPropertyMap();
@@ -58,10 +67,24 @@ public class EntityMappingUtil {
         return columnProperty.getColumnName();
     }
 
+    /**
+     * 获取表字段名
+     *
+     * @param className 实体类名
+     * @param fn        函数参数
+     * @param <FN>      函数名
+     * @return 表字段名
+     */
     public static <FN extends Function> String getColumnName(String className, FN fn) {
         return getColumnName(className, getFunctionName(fn));
     }
 
+    /**
+     * 提取实体Mapper的类类型
+     *
+     * @param mapperClass 实体Mapper
+     * @return 实体类类型
+     */
     public static Class<?> extractEntityClass(Class<?> mapperClass) {
         Type[] types = mapperClass.getGenericInterfaces();
         ParameterizedType target = null;
@@ -84,6 +107,13 @@ public class EntityMappingUtil {
         return target == null ? null : (Class<?>) target.getActualTypeArguments()[0];
     }
 
+    /**
+     * 获取属性名
+     *
+     * @param fn   函数参数
+     * @param <FN> 函数名
+     * @return 表字段名
+     */
     public static <FN extends Function> String getFunctionName(FN fn) {
         try {
             Method declaredMethod = fn.getClass().getDeclaredMethod("writeReplace");
@@ -102,6 +132,12 @@ public class EntityMappingUtil {
         }
     }
 
+    /**
+     * 获取字符串形式属性列表
+     *
+     * @param properties 属性列表
+     * @return 字符串形式属性列表
+     */
     public static String[] getStringProperties(Property<?, ?>... properties) {
         String[] stringProperties = new String[properties.length];
         for (int i = 0; i < properties.length; i++) {

@@ -6,12 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>
- * 对请求进行排序
- * <p/>
- * <p>
- * 用法：
- * </p>
+ * <p>对请求进行排序</p>
+ * <p>用法：</p>
+ *
  * <code><pre>
  * Sort sort = Sort.by("name").and("age", Direction.Descending);
  * Sort sort2 = Sort.by("id","name").desc();
