@@ -17,6 +17,7 @@ import java.util.List;
  * Sort sort2 = Sort.by("id","name").desc();
  * Sort sort3 = Sort.asc("name", "age");
  * Sort sort4 = Sort.desc("name", "age");
+ * Sort sort5 = Sort.by(Goods::getName, Sort.Direction.DESC).and(Goods::getId);
  * </pre></code>
  *
  * @author cjbi
