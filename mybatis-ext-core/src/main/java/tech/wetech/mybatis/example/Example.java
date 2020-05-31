@@ -1,6 +1,7 @@
 package tech.wetech.mybatis.example;
 
 import tech.wetech.mybatis.domain.Property;
+import tech.wetech.mybatis.domain.Sort;
 import tech.wetech.mybatis.util.EntityMappingUtil;
 
 import java.io.Serializable;
@@ -107,6 +108,17 @@ public class Example<T> implements Serializable {
     }
 
     public Example<T> setSort(Sort sort) {
+        if (sort.getOrders() != null && sort.getOrders().size() > 0) {
+            List<Sort.Order> orders = sort.getOrders();
+            this.orderByClause = orders.stream()
+                    .map(order -> EntityMappingUtil.getColumnName(entityClass.getName(), order.getProperty()).concat(" ").concat(order.getDirection().toString()))
+                    .collect(Collectors.joining(","));
+        }
+        return this;
+    }
+
+    @Deprecated
+    public Example<T> setSort(tech.wetech.mybatis.example.Sort sort) {
         if (sort.getOrders() != null && sort.getOrders().size() > 0) {
             this.orderByClause = sort.getOrders().stream()
                     .map(order -> EntityMappingUtil.getColumnName(entityClass.getName(), order.getProperty()).concat(" ").concat(order.getDirection().toString()))

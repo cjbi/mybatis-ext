@@ -3,6 +3,7 @@ package tech.wetech.mybatis.util;
 import org.apache.ibatis.binding.BindingException;
 import tech.wetech.mybatis.builder.EntityMapperBuilder;
 import tech.wetech.mybatis.builder.EntityMapping;
+import tech.wetech.mybatis.domain.Property;
 
 import java.beans.Introspector;
 import java.lang.annotation.Annotation;
@@ -99,6 +100,14 @@ public class EntityMappingUtil {
         } catch (ReflectiveOperationException var6) {
             throw new RuntimeException(var6);
         }
+    }
+
+    public static String[] getStringProperties(Property<?, ?>... properties) {
+        String[] stringProperties = new String[properties.length];
+        for (int i = 0; i < properties.length; i++) {
+            stringProperties[i] = properties[i].getPropertyName();
+        }
+        return stringProperties;
     }
 
 }

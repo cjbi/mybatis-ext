@@ -9,7 +9,6 @@ import tech.wetech.mybatis.example.Example;
 import tech.wetech.mybatis.example.MapperCriteria;
 import tech.wetech.mybatis.example.MapperExample;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,17 +22,6 @@ public interface BaseMapper<T> extends Mapper<T> {
 
     @InsertEntityProvider(type = BaseEntitySqlBuilder.class, method = "insert")
     <S extends T> int insert(S record);
-
-    /**
-     * 批量插入将会在以后版本中删除
-     *
-     * @param record
-     * @param <S>
-     * @return
-     */
-    @InsertEntityProvider(type = BaseEntitySqlBuilder.class, method = "insertAll")
-    @Deprecated
-    <S extends T> int insertAll(Collection<S> record);
 
     @InsertEntityProvider(type = BaseEntitySqlBuilder.class, method = "insertSelective")
     <S extends T> int insertSelective(S record);

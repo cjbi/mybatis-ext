@@ -6,8 +6,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 此类已经过时，请使用tech.wetech.mybatis.domain.Sort替代
+ *
  * @author cjbi
+ * @see tech.wetech.mybatis.domain.Sort
  */
+@Deprecated
 public class Sort implements Serializable {
 
     public static final Sort.Direction DEFAULT_DIRECTION;

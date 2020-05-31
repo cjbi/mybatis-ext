@@ -14,6 +14,7 @@ import org.junit.Test;
 import tech.wetech.mybatis.BaseDataTest;
 import tech.wetech.mybatis.ExtConfiguration;
 import tech.wetech.mybatis.domain.Page;
+import tech.wetech.mybatis.domain.Sort;
 import tech.wetech.mybatis.entity.Goods;
 import tech.wetech.mybatis.example.Criteria;
 import tech.wetech.mybatis.example.Example;
@@ -212,7 +213,40 @@ public class GoodsMapperTest {
             Assert.assertEquals("轻奢纯棉刺绣水洗四件套", users.get(0).getName());
             Assert.assertEquals("埃及进口长绒棉毛巾", users.get(1).getName());
         }
+    }
 
+    @Test
+    public void testSelectSort() {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            GoodsMapper goodsMapper = session.getMapper(GoodsMapper.class);
+            Example<Goods> example = Example.of(Goods.class);
+            example.setSort(Sort.by("id").desc());
+            List<Goods> goods = goodsMapper.selectByExample(example);
+            Assert.assertEquals(goods.get(0).getId(), Long.valueOf(10099));
+            example.setSort(Sort.by("name", Sort.Direction.DESC).and("id"));
+            List<Goods> goods2 = goodsMapper.selectByExample(example);
+            Assert.assertEquals(goods2.get(0).getId(), Long.valueOf(10041));
+            example.setSort(Sort.by("name", Sort.Direction.DESC).and("id", Sort.Direction.DESC));
+            List<Goods> goods3 = goodsMapper.selectByExample(example);
+            Assert.assertEquals(goods3.get(0).getId(), Long.valueOf(10041));
+        }
+    }
+
+    @Test
+    public void testSelectSortWithLambda() {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            GoodsMapper goodsMapper = session.getMapper(GoodsMapper.class);
+            Example<Goods> example = Example.of(Goods.class);
+            example.setSort(Sort.by(Goods::getId).desc());
+            List<Goods> goods = goodsMapper.selectByExample(example);
+            Assert.assertEquals(goods.get(0).getId(), Long.valueOf(10099));
+            example.setSort(Sort.by(Goods::getName, Sort.Direction.DESC).and(Goods::getId));
+            List<Goods> goods2 = goodsMapper.selectByExample(example);
+            Assert.assertEquals(goods2.get(0).getId(), Long.valueOf(10041));
+            example.setSort(Sort.by(Goods::getName, Sort.Direction.DESC).and(Goods::getId, Sort.Direction.DESC));
+            List<Goods> goods3 = goodsMapper.selectByExample(example);
+            Assert.assertEquals(goods3.get(0).getId(), Long.valueOf(10041));
+        }
     }
 
 

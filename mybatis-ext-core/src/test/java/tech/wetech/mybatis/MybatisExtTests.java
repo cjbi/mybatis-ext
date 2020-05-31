@@ -215,40 +215,6 @@ public class MybatisExtTests {
     }
 
     @Test
-    public void testInsertAll() {
-        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-
-        User user = new User();
-        user.setUsername("张三111333");
-        user.setPassword("aagewrwer");
-        user.setNickname("zhangsan");
-        user.setUserLevelId((byte) 22);
-        user.setMobile("180xxxxxxxx");
-        user.setRegisterTime(new Date());
-        user.setLastLoginTime(new Date());
-        user.setLastLoginIp("127.0.0.1");
-        user.setRegisterIp("127.0.0.1");
-        user.setAvatar("aaaa");
-        user.setWechatOpenId("222");
-
-        User user2 = new User();
-        user2.setUsername("张三222333");
-        user2.setPassword("aagewrwer");
-        user2.setNickname("zhangsan");
-        user2.setUserLevelId((byte) 22);
-        user2.setMobile("180xxxxxxxx");
-        user2.setRegisterTime(new Date());
-        user2.setLastLoginTime(new Date());
-        user2.setLastLoginIp("127.0.0.1");
-        user2.setRegisterIp("127.0.0.1");
-        user2.setAvatar("aaaa");
-        user2.setWechatOpenId("222");
-
-        int rows = mapper.insertAll(Arrays.asList(user, user2));
-        log.info("insertAll result: {}", rows);
-    }
-
-    @Test
     public void testCount() {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
         User user = new User();

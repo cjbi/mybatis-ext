@@ -252,23 +252,6 @@ public class BaseEntitySqlBuilder {
         return builder.toString();
     }
 
-
-    public String insertAll(EntityMapping entityMapping) {
-        StringBuilder builder = new StringBuilder("<script>");
-        StringBuilder columnsBuilder = new StringBuilder("(");
-        columnsBuilder.append(entityMapping.getColumnProperties().stream().map(c -> String.format("%s", c.getColumnName())).collect(Collectors.joining(", ")));
-        columnsBuilder.append(")");
-        StringBuilder valueBuilder = new StringBuilder("<foreach collection='list' item='item' index='index' separator=','>");
-        valueBuilder.append("(");
-        valueBuilder.append(entityMapping.getColumnProperties().stream().map(c -> String.format("#{item.%s}", c.getPropertyName())).collect(Collectors.joining(", ")));
-        valueBuilder.append(")");
-        valueBuilder.append("</foreach>");
-        builder.append(String.format("INSERT INTO %s %s VALUES%s", entityMapping.getTableName(), columnsBuilder, valueBuilder));
-        builder.append("</script>");
-        return builder.toString();
-    }
-
-
     public String insert(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
         StringBuilder columnsBuilder = new StringBuilder("<trim prefix='(' suffix=')' suffixOverrides=','>");
