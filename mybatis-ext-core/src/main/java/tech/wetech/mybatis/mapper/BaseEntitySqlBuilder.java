@@ -313,12 +313,12 @@ public class BaseEntitySqlBuilder {
         builder.append("</when>");
         builder.append("</choose>");
         builder.append("</foreach>");
-        if (logicDeleteProperty != null) {
-            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
-        }
         builder.append("</trim>");
         builder.append("</if>");
         builder.append("</foreach>");
+        if (logicDeleteProperty != null) {
+            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
+        }
         builder.append("</where>");
         return builder.toString();
     }

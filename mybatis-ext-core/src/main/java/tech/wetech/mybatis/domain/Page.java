@@ -27,7 +27,7 @@ public class Page<E> extends ArrayList<E> {
     }
 
     public static Page of(int pageNumber, int pageSize) {
-        return new Page(pageNumber, pageSize, false);
+        return new Page(pageNumber, pageSize, true);
     }
 
     public static Page of(int pageNumber, int pageSize, boolean countable) {

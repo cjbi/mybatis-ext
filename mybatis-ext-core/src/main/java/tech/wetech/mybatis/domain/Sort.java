@@ -10,11 +10,11 @@ import java.util.List;
  * <p>用法：</p>
  *
  * <pre>
- * Sort sort = Sort.by("name").and("age", Direction.Descending);
+ * Sort sort = Sort.by("name").and("age", Direction.DESC);
  * Sort sort2 = Sort.by("id","name").desc();
  * Sort sort3 = Sort.asc("name", "age");
  * Sort sort4 = Sort.desc("name", "age");
- * Sort sort5 = Sort.by(Goods::getName, Sort.Direction.DESC).and(Goods::getId);
+ * Sort sort5 = Sort.by(Goods::getName, Direction.DESC).and(Goods::getId);
  * </pre>
  *
  * @author cjbi
