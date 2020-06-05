@@ -19,7 +19,7 @@ public class BaseEntitySqlBuilder {
         if (logicDeleteProperty != null) {
             return new SQL() {{
                 UPDATE(entityMapping.getTableName());
-                SET(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
+                SET(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
                 WHERE(String.format("%s = #{%s}", entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
             }}.toString();
         }
@@ -36,7 +36,7 @@ public class BaseEntitySqlBuilder {
             FROM(entityMapping.getTableName());
             WHERE(String.format("%s = #{%s}", entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
             if (logicDeleteProperty != null) {
-                WHERE(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
+                WHERE(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
             }
         }}.toString();
     }
@@ -85,7 +85,7 @@ public class BaseEntitySqlBuilder {
         StringBuilder builder = new StringBuilder("<script>");
         if (logicDeleteProperty != null) {
             builder.append(String.format("UPDATE %s", entityMapping.getTableName()));
-            builder.append(String.format(" SET %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
+            builder.append(String.format(" SET %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
         } else {
             builder.append(String.format("DELETE FROM %s", entityMapping.getTableName()));
         }
@@ -156,7 +156,7 @@ public class BaseEntitySqlBuilder {
             SELECT(buildAllColumns(entityMapping));
             FROM(entityMapping.getTableName());
             if (logicDeleteProperty != null) {
-                WHERE(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
+                WHERE(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
             }
         }}.toString();
     }
@@ -177,7 +177,7 @@ public class BaseEntitySqlBuilder {
         setBuilder.append("</set>");
         builder.append(String.format("UPDATE %s %s WHERE %s = #{%s}", entityMapping.getTableName(), setBuilder, entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
         if (logicDeleteProperty != null) {
-            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
+            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
         }
         if (logicDeleteProperty != null) {
             builder.append(String.format("<if test='%s != null'> and %s = #{%s}</if>", logicDeleteProperty.getPropertyName(), logicDeleteProperty.getColumnName(), logicDeleteProperty.getPropertyName()));
@@ -202,7 +202,7 @@ public class BaseEntitySqlBuilder {
         setBuilder.append("</set>");
         builder.append(String.format("UPDATE %s %s WHERE %s = #{%s}", entityMapping.getTableName(), setBuilder, entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
         if (logicDeleteProperty != null) {
-            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
+            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
         }
         if (versionProperty != null) {
             builder.append(String.format("<if test='%s != null'> and %s = #{%s}</if>", versionProperty.getPropertyName(), versionProperty.getColumnName(), versionProperty.getPropertyName()));
@@ -219,7 +219,7 @@ public class BaseEntitySqlBuilder {
             FROM(entityMapping.getTableName());
             WHERE(String.format("%s = #{%s}", entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
             if (logicDeleteProperty != null) {
-                WHERE(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
+                WHERE(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
             }
         }}.toString();
     }
@@ -232,7 +232,7 @@ public class BaseEntitySqlBuilder {
             FROM(entityMapping.getTableName());
             WHERE(String.format("%s = #{%s}", entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
             if (logicDeleteProperty != null) {
-                WHERE(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
+                WHERE(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
             }
         }}.toString();
     }
@@ -317,7 +317,7 @@ public class BaseEntitySqlBuilder {
         builder.append("</if>");
         builder.append("</foreach>");
         if (logicDeleteProperty != null) {
-            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
+            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
         }
         builder.append("</where>");
         return builder.toString();
@@ -331,7 +331,7 @@ public class BaseEntitySqlBuilder {
             builder.append(String.format("<if test='%s != null'> AND %s = #{%s}</if>", columnProperty.getPropertyName(), columnProperty.getColumnName(), columnProperty.getPropertyName()));
         }
         if (logicDeleteProperty != null) {
-            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
+            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
         }
         builder.append("</where>");
         return builder.toString();

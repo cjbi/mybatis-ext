@@ -43,7 +43,7 @@ public class Goods {
     private Integer isLimited;
     private Integer isHot;
     private String primaryPicUrl;
-    @LogicDelete(deletedValue = "0")
+    @LogicDelete
     private Integer isDelete;
     @Version
     private Integer version;
