@@ -17,7 +17,7 @@ public class Page<E> extends ArrayList<E> {
     private static final ThreadLocal<Page> PAGE = new ThreadLocal<>();
 
     public Page(int pageNumber, int pageSize) {
-        this(pageNumber, pageSize, false);
+        this(pageNumber, pageSize, true);
     }
 
     public Page(int pageNumber, int pageSize, boolean countable) {
