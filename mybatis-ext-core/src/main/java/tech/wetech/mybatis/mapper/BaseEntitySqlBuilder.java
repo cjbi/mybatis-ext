@@ -19,7 +19,7 @@ public class BaseEntitySqlBuilder {
         if (logicDeleteProperty != null) {
             return new SQL() {{
                 UPDATE(entityMapping.getTableName());
-                SET(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
+                SET(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
                 WHERE(String.format("%s = #{%s}", entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
             }}.toString();
         }
@@ -85,7 +85,7 @@ public class BaseEntitySqlBuilder {
         StringBuilder builder = new StringBuilder("<script>");
         if (logicDeleteProperty != null) {
             builder.append(String.format("UPDATE %s", entityMapping.getTableName()));
-            builder.append(String.format(" SET %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
+            builder.append(String.format(" SET %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
         } else {
             builder.append(String.format("DELETE FROM %s", entityMapping.getTableName()));
         }
