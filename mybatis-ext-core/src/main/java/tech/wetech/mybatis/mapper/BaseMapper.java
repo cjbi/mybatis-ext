@@ -135,8 +135,9 @@ public interface BaseMapper<T> extends Mapper<T> {
 
     /**
      * 通过{@link tech.wetech.mybatis.example.Example}查询记录
-     * @param example 实体类映射
-     * @param <S> 实体类
+     *
+     * @param example 条件查询
+     * @param <S>     实体类
      * @return 返回的记录
      */
     @SelectEntityProvider(type = BaseEntitySqlBuilder.class, method = "selectByExample")
@@ -144,26 +145,62 @@ public interface BaseMapper<T> extends Mapper<T> {
 
     /**
      * 通过{@link tech.wetech.mybatis.example.Example}统计记录
-     * @param example
-     * @param <S> 实体类
+     *
+     * @param example 条件查询
+     * @param <S>     实体类
      * @return 记录数
      */
     @SelectEntityProvider(type = BaseEntitySqlBuilder.class, method = "countByExample")
     <S extends T> int countByExample(Example<S> example);
 
+    /**
+     * 通过{@link tech.wetech.mybatis.example.Example}删除记录
+     *
+     * @param example 条件查询
+     * @param <S>     实体类
+     * @return 受影响的行数
+     */
     @DeleteEntityProvider(type = BaseEntitySqlBuilder.class, method = "deleteByExample")
     <S extends T> int deleteByExample(Example<S> example);
 
+    /**
+     * 通过{@link tech.wetech.mybatis.example.Example}更新记录
+     *
+     * @param record  记录
+     * @param example 条件
+     * @param <S>     实体类
+     * @return 受影响的行数
+     */
     @UpdateEntityProvider(type = BaseEntitySqlBuilder.class, method = "updateByExample")
     <S extends T> int updateByExample(@Param("record") S record, @Param("example") Example<S> example);
 
+    /**
+     * 通过{@link tech.wetech.mybatis.example.Example}更新非null的记录
+     *
+     * @param record  记录
+     * @param example 条件
+     * @param <S>     实体类
+     * @return 受影响的行数
+     */
     @UpdateEntityProvider(type = BaseEntitySqlBuilder.class, method = "updateByExampleSelective")
     <S extends T> int updateByExampleSelective(@Param("record") S record, @Param("example") Example<S> example);
 
+    /**
+     * 创建Criteria条件
+     *
+     * @param <S> 实体类
+     * @return Criteria条件
+     */
     default <S extends T> MapperCriteria<S> createCriteria() {
         return new MapperCriteria(this);
     }
 
+    /**
+     * 创建Example条件
+     *
+     * @param <S>
+     * @return Example条件
+     */
     default <S extends T> MapperExample<S> createExample() {
         return new MapperExample(this);
     }
