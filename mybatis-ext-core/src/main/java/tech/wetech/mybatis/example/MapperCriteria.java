@@ -12,6 +12,8 @@ import java.util.Optional;
  *
  * @author cjbi
  * @see Criteria
+ * @see Example
+ * @see MapperExample
  */
 public class MapperCriteria<T> extends Criteria<T> {
 

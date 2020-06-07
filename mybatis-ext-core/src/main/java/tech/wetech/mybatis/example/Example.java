@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * <p>Example条件查询，灵感由MyBatis Generator而来<p/>
  * <b>使用示例:<b/>
  * <pre>
- *  //一、简单的条件查询：
+ *  // 一、简单的条件查询：
  *  Example&lt;User&gt; example = Example.of(User.class);
  *  example.createCriteria()
  *            .andEqualTo(User::getId, 1)
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  * // from weshop_user
  * // WHERE (id = ? and username = ? or avatar not like ? or birthday is null or register_time between ? and ? or mobile in (?, ?, ?))
  *
- * //二、多个Criteria语句
+ * // 二、多个Criteria语句
  * Example&lt;User&gt; example = Example.of(User.class);
  * example.or()
  *             .orEqualTo(User::getUsername, "bbb")
@@ -44,12 +44,12 @@ import java.util.stream.Collectors;
  * Criteria&lt;User&gt; criteria = new Criteria<>();
  * criteria.andIsNull("mobile").andLessThan(User::getNickname,"测试");
  * example.and(criteria);
- * //排序
+ * // 排序
  * example.setSort(Sort.by("name").and("age", Direction.DESC));
- * //可以和Page对象一起使用
+ * // 可以和Page对象一起使用
  * List&lt;User&gt; users = Page.of(1,3).list(()-> mapper.selectByExample(example));
  *
- * //SQL语句：
+ * // SQL语句：
  * // select  id, username, birthday, register_time, avatar
  * // from weshop_user
  * // WHERE  (username = ? and id = ?)
@@ -57,6 +57,7 @@ import java.util.stream.Collectors;
  * //      and   (id <= ? and id >= ?)
  * //      and   ( mobile is null and nickname < ? )
  * <pre/>
+ *
  * @author cjbi
  */
 public class Example<T> implements Serializable {

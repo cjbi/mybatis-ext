@@ -10,6 +10,7 @@ import java.util.List;
  * 条件
  *
  * @author cjbi
+ * @see Example
  */
 public class Criteria<T> implements Serializable {
 

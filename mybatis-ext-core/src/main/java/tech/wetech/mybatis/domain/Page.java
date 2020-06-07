@@ -6,30 +6,29 @@ import java.util.function.Supplier;
 
 /**
  * <p>对请求进行分页</p>
- * <p>用法一：Mapper拦截方式</p>
+ * <b>使用示例:<b/>
  * <pre>
- * //查询分页，支持任何列表查询方法拦截
+ * // 用法一：Mapper拦截方式
+ * // 查询分页，支持任何列表查询方法拦截
  * Page page = Page.of(1, 10).list(()-> userMapper.selectAll());
- * //总数
+ * // 总数
  * int total = page.getTotal();
  * Assert.assertEquals(page.size(),10);
- * </pre>
- * <p>用法二：参数方式</p>
- * <pre>
- * //作为入参
+ *
+ * // 用法二：作为入参方式
  * public interface UserMapper {
  *     List&lt;User&gt; selectByNameLike(String nameLike,Page page);
  * }
- * //使用Page
+ * // 使用Page
  * Page page = new Page();
- * //第几页
+ * // 第几页
  * page.setPageNum(1);
- * //分页数
+ * // 分页数
  * page.setPageSize(10);
- * //开启总数查询，默认为true
+ * // 开启总数查询，默认为true
  * page.setCountable(false);
  * List list = userMapper.selectByNameLike("zh",page);
- * Assert.assertEquals(list.size(),10);
+ * Assert.assertEquals(list.size(), 10);
  * <pre/>
  *  @param <E> 实体类
  * @author cjbi
