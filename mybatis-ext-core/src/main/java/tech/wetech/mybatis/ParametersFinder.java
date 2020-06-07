@@ -26,7 +26,7 @@ public class ParametersFinder {
      * @param parameterObject MyBatis入参
      * @param clazz           要查找的类类型
      * @param <T>             要查找的类型返回
-     * @return
+     * @return 实体类型参数
      */
     public <T> T findParameter(Object parameterObject, Class<T> clazz) {
         return findParameterFromObject(parameterObject, clazz);

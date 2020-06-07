@@ -5,7 +5,7 @@ import tech.wetech.mybatis.mapper.BaseMapper;
 import tech.wetech.mybatis.util.EntityMappingUtil;
 
 /**
- * <p>Example条件查询，灵感由MyBatis Generator而来<p/>
+ * <p>Example条件查询，灵感由MyBatis Generator而来</p>
  *
  * @author cjbi
  * @see Example

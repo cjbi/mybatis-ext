@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * 指定提供用于删除记录的SQL的实体类映射方法
  * <br>
  * <br>
- * <b>怎样使用:<b/>
+ * <b>怎样使用:</b>
  * <pre>
  * public interface MyMapper&lt;T&gt; {
  *     &#064;SelectEntityProvider(type = MyEntitySqlBuilder.class, method = "selectById")

@@ -6,11 +6,11 @@ import java.util.function.Supplier;
 
 /**
  * <p>对请求进行分页</p>
- * <b>使用示例:<b/>
+ * <b>使用示例:</b>
  * <pre>
  * // 用法一：Mapper拦截方式
  * // 查询分页，支持任何列表查询方法拦截
- * Page page = Page.of(1, 10).list(()-> userMapper.selectAll());
+ * Page page = Page.of(1, 10).list(()-&gt; userMapper.selectAll());
  * // 总数
  * int total = page.getTotal();
  * Assert.assertEquals(page.size(),10);
@@ -29,8 +29,9 @@ import java.util.function.Supplier;
  * page.setCountable(false);
  * List list = userMapper.selectByNameLike("zh",page);
  * Assert.assertEquals(list.size(), 10);
- * <pre/>
- *  @param <E> 实体类
+ * </pre>
+ *
+ * @param <E> 实体类
  * @author cjbi
  */
 public class Page<E> extends ArrayList<E> {

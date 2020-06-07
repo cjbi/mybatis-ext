@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * 指定提供用于删除记录的SQL的实体类映射方法
  * <br>
  * <br>
- * <b>怎样使用:<b/>
+ * <b>怎样使用:</b>
  * <pre>
  * public interface MyMapper&lt;T&gt; {
  *     &#064;SelectEntityProvider(type = MyEntitySqlBuilder.class, method = "updateByPrimaryKey")
@@ -20,7 +20,7 @@ import java.lang.annotation.*;
  *         StringBuilder builder = new StringBuilder("&lt;script&gt;");
  *         StringBuilder setBuilder = new StringBuilder("&lt;set&gt;");
  *         for (EntityMapping.ColumnProperty columnProperty : entityMapping.getColumnProperties()) {
- *             if (versionProperty != null && versionProperty.getPropertyName().equals(columnProperty.getPropertyName())) {
+ *             if (versionProperty != null &amp;&amp; versionProperty.getPropertyName().equals(columnProperty.getPropertyName())) {
  *                 setBuilder.append(String.format("%s = %s + 1,", columnProperty.getColumnName(), columnProperty.getColumnName()));
  *                 continue;
  *             }

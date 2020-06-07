@@ -198,7 +198,7 @@ public interface BaseMapper<T> extends Mapper<T> {
     /**
      * 创建Example条件
      *
-     * @param <S>
+     * @param <S> 实体类
      * @return Example条件
      */
     default <S extends T> MapperExample<S> createExample() {
