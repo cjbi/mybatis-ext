@@ -1,7 +1,7 @@
 package tech.wetech.mybatis.dialect;
 
 /**
- * 数据库类型
+ * 方言种类
  *
  * @author cjbi
  */

@@ -11,6 +11,8 @@ import java.io.Reader;
 import java.util.Properties;
 
 /**
+ * 增强SqlSessionFactoryBuilder
+ *
  * @author cjbi
  */
 public class ExtSqlSessionFactoryBuilder extends SqlSessionFactoryBuilder {

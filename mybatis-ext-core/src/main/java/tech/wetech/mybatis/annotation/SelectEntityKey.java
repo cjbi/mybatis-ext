@@ -5,9 +5,10 @@ import org.apache.ibatis.mapping.StatementType;
 import java.lang.annotation.*;
 
 /**
- * 指定返回查询的主键
+ * 指定实体类字段返回查询的主键
  *
  * @author cjbi
+ * @see org.apache.ibatis.annotations.SelectKey
  */
 @Documented
 @Target({ElementType.METHOD, ElementType.FIELD})

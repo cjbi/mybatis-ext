@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 实体类Mapper注册类
+ *
  * @author cjbi
  */
 public class EntityMapperRegistry extends MapperRegistry {

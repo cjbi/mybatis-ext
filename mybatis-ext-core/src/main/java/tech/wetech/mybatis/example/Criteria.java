@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 条件
+ *
  * @author cjbi
  */
 public class Criteria<T> implements Serializable {

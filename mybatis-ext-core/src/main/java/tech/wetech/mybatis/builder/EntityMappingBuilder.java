@@ -12,6 +12,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * 实体类映射Builder
+ *
  * @author cjbi
  */
 public class EntityMappingBuilder {
@@ -139,6 +141,12 @@ public class EntityMappingBuilder {
         return null;
     }
 
+    /**
+     * 驼峰转下划线
+     *
+     * @param str
+     * @return
+     */
     private String camelhumpToUnderline(String str) {
         final int size;
         final char[] chars;

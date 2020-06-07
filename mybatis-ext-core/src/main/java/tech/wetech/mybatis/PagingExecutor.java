@@ -24,6 +24,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
+ * 分页执行器
+ *
  * @author cjbi
  */
 public class PagingExecutor implements Executor {

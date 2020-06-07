@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 方言转换查找
+ *
  * @author cjbi
  */
 public class DialectClient {

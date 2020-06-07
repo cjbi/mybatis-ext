@@ -11,6 +11,52 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * <p>Example条件查询，灵感由MyBatis Generator而来<p/>
+ * <b>使用示例:<b/>
+ * <pre>
+ *  //一、简单的条件查询：
+ *  Example&lt;User&gt; example = Example.of(User.class);
+ *  example.createCriteria()
+ *            .andEqualTo(User::getId, 1)
+ *            .orEqualTo(User::getUsername, "张三")
+ *            .orNotLike("avatar", "aaa")
+ *            .orIsNull(User::getBirthday)
+ *            .orBetween(User::getRegisterTime, new Date(), new Date())
+ *            .orIn("mobile", Arrays.asList(111, "aaa", 222));
+ *  example.setDistinct(true);
+ *  mapper.selectByExample(example)
+ *
+ * // SQL语句：
+ * // select distinct id, username, birthday, register_time, avatar
+ * // from weshop_user
+ * // WHERE (id = ? and username = ? or avatar not like ? or birthday is null or register_time between ? and ? or mobile in (?, ?, ?))
+ *
+ * //二、多个Criteria语句
+ * Example&lt;User&gt; example = Example.of(User.class);
+ * example.or()
+ *             .orEqualTo(User::getUsername, "bbb")
+ *             .andEqualTo(User::getId, 2);
+ * example.or()
+ *            .andEqualTo(User::getUsername, "aaa");
+ * example.and()
+ *           .andLessThanOrEqualTo(User::getId, 1000)
+ *           .andGreaterThanOrEqualTo(User::getId, 1);
+ * Criteria&lt;User&gt; criteria = new Criteria<>();
+ * criteria.andIsNull("mobile").andLessThan(User::getNickname,"测试");
+ * example.and(criteria);
+ * //排序
+ * example.setSort(Sort.by("name").and("age", Direction.DESC));
+ * //可以和Page对象一起使用
+ * List&lt;User&gt; users = Page.of(1,3).list(()-> mapper.selectByExample(example));
+ *
+ * //SQL语句：
+ * // select  id, username, birthday, register_time, avatar
+ * // from weshop_user
+ * // WHERE  (username = ? and id = ?)
+ * //       or   (username = ?)
+ * //      and   (id <= ? and id >= ?)
+ * //      and   ( mobile is null and nickname < ? )
+ * <pre/>
  * @author cjbi
  */
 public class Example<T> implements Serializable {

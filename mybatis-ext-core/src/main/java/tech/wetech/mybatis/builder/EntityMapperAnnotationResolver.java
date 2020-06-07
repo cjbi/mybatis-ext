@@ -4,8 +4,8 @@ import org.apache.ibatis.builder.BuilderException;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.mapping.SqlCommandType;
-import tech.wetech.mybatis.annotation.*;
 import tech.wetech.mybatis.ExtConfiguration;
+import tech.wetech.mybatis.annotation.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -16,7 +16,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
+ * 实体类映射注解解析器
+ *
  * @author cjbi
+ * @see SelectEntityProvider
+ * @see InsertEntityProvider
+ * @see UpdateEntityProvider
+ * @see DeleteEntityProvider
  */
 public class EntityMapperAnnotationResolver {
 

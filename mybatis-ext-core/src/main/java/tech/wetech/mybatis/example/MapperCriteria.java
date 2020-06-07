@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * 条件
+ *
  * @author cjbi
+ * @see Criteria
  */
 public class MapperCriteria<T> extends Criteria<T> {
 

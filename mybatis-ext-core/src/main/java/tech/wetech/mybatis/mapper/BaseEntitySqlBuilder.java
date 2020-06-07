@@ -9,11 +9,17 @@ import javax.persistence.Version;
 import java.util.stream.Collectors;
 
 /**
+ * 内置的实体类SQL提供类
+ *
  * @author cjbi
  */
 public class BaseEntitySqlBuilder {
 
-
+    /**
+     * 通过主键id删除一条记录
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String deleteByPrimaryKey(EntityMapping entityMapping) {
         EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         if (logicDeleteProperty != null) {
@@ -29,6 +35,11 @@ public class BaseEntitySqlBuilder {
         }}.toString();
     }
 
+    /**
+     * 通过主键判断记录是否存在
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String existsByPrimaryKey(EntityMapping entityMapping) {
         EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         return new SQL() {{
@@ -41,7 +52,11 @@ public class BaseEntitySqlBuilder {
         }}.toString();
     }
 
-
+    /**
+     * 通过{@link tech.wetech.mybatis.example.Example}更新非null的记录
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String updateByExampleSelective(EntityMapping entityMapping) {
         EntityMapping.ColumnProperty versionProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, Version.class);
         StringBuilder builder = new StringBuilder("<script>");
@@ -60,7 +75,12 @@ public class BaseEntitySqlBuilder {
         return builder.toString();
     }
 
-
+    /**
+     * 通过{@link tech.wetech.mybatis.example.Example}更新一条记录
+     * @see tech.wetech.mybatis.example.Example
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String updateByExample(EntityMapping entityMapping) {
         EntityMapping.ColumnProperty versionProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, Version.class);
         StringBuilder builder = new StringBuilder("<script>");
@@ -79,7 +99,11 @@ public class BaseEntitySqlBuilder {
         return builder.toString();
     }
 
-
+    /**
+     * 通过{@link tech.wetech.mybatis.example.Example}删除一条记录
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String deleteByExample(EntityMapping entityMapping) {
         EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         StringBuilder builder = new StringBuilder("<script>");
@@ -94,7 +118,11 @@ public class BaseEntitySqlBuilder {
         return builder.toString();
     }
 
-
+    /**
+     * 通过{@link tech.wetech.mybatis.example.Example}统计记录
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String countByExample(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
         builder.append(String.format("SELECT COUNT(*) FROM %s", entityMapping.getTableName()));
@@ -103,7 +131,11 @@ public class BaseEntitySqlBuilder {
         return builder.toString();
     }
 
-
+    /**
+     * 通过{@link tech.wetech.mybatis.example.Example}查询记录
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String selectByExample(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
         builder.append(String.format("select %s from %s", buildExampleColumnsXML(entityMapping), entityMapping.getTableName()));
@@ -113,7 +145,11 @@ public class BaseEntitySqlBuilder {
         return builder.toString();
     }
 
-
+    /**
+     * 统计记录
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String count(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
         builder.append(String.format("SELECT COUNT(*) FROM %s ", entityMapping.getTableName()));
@@ -122,7 +158,11 @@ public class BaseEntitySqlBuilder {
         return builder.toString();
     }
 
-
+    /**
+     * 查询一条记录通过{@link java.util.Optional}包裹
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String selectOneWithOptional(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
         builder.append(String.format("SELECT %s FROM %s ", buildAllColumns(entityMapping), entityMapping.getTableName()));
@@ -131,7 +171,11 @@ public class BaseEntitySqlBuilder {
         return builder.toString();
     }
 
-
+    /**
+     * 查询一条记录
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String selectOne(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
         builder.append(String.format("SELECT %s FROM %s ", buildAllColumns(entityMapping), entityMapping.getTableName()));
@@ -140,7 +184,11 @@ public class BaseEntitySqlBuilder {
         return builder.toString();
     }
 
-
+    /**
+     * 查询多条记录
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String selectList(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
         builder.append(String.format("SELECT %s FROM %s ", buildAllColumns(entityMapping), entityMapping.getTableName()));
@@ -149,7 +197,11 @@ public class BaseEntitySqlBuilder {
         return builder.toString();
     }
 
-
+    /**
+     * 查询所有记录
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String selectAll(EntityMapping entityMapping) {
         EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         return new SQL() {{
@@ -161,7 +213,11 @@ public class BaseEntitySqlBuilder {
         }}.toString();
     }
 
-
+    /**
+     * 通过主键更新非null的记录
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String updateByPrimaryKeySelective(EntityMapping entityMapping) {
         EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         EntityMapping.ColumnProperty versionProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, Version.class);
@@ -186,7 +242,12 @@ public class BaseEntitySqlBuilder {
         return builder.toString();
     }
 
-
+    /**
+     * 通过主键更新记录
+     *
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String updateByPrimaryKey(EntityMapping entityMapping) {
         EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         EntityMapping.ColumnProperty versionProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, Version.class);
@@ -211,7 +272,12 @@ public class BaseEntitySqlBuilder {
         return builder.toString();
     }
 
-
+    /**
+     * 通过主键查询返回{@link java.util.Optional}包裹的记录
+     *
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String selectByPrimaryKeyWithOptional(EntityMapping entityMapping) {
         EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         return new SQL() {{
@@ -224,7 +290,12 @@ public class BaseEntitySqlBuilder {
         }}.toString();
     }
 
-
+    /**
+     * 通过主键查询记录
+     *
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String selectByPrimaryKey(EntityMapping entityMapping) {
         EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         return new SQL() {{
@@ -237,6 +308,12 @@ public class BaseEntitySqlBuilder {
         }}.toString();
     }
 
+    /**
+     * 插入非null的记录
+     *
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String insertSelective(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
         StringBuilder columnsBuilder = new StringBuilder("<trim prefix='(' suffix=')' suffixOverrides=','>");
@@ -252,6 +329,12 @@ public class BaseEntitySqlBuilder {
         return builder.toString();
     }
 
+    /**
+     * 插入记录
+     *
+     * @param entityMapping 实体类映射
+     * @return SQL语句
+     */
     public String insert(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
         StringBuilder columnsBuilder = new StringBuilder("<trim prefix='(' suffix=')' suffixOverrides=','>");
@@ -267,12 +350,24 @@ public class BaseEntitySqlBuilder {
         return builder.toString();
     }
 
+    /**
+     * 构建所有字段
+     *
+     * @param entityMapping 实体类映射
+     * @return SQL片段
+     */
     protected String buildAllColumns(EntityMapping entityMapping) {
         return entityMapping.getColumnProperties().stream()
                 .map(EntityMapping.ColumnProperty::getColumnName)
                 .collect(Collectors.joining(", "));
     }
 
+    /**
+     * 构建{@link tech.wetech.mybatis.example.Example}的SQL查询字段的XML
+     *
+     * @param entityMapping 实体类映射
+     * @return SQL片段
+     */
     protected String buildExampleColumnsXML(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder();
         builder.append("<if test='distinct'> distinct </if> ");
@@ -287,6 +382,12 @@ public class BaseEntitySqlBuilder {
         return builder.toString();
     }
 
+    /**
+     * 构建{@link tech.wetech.mybatis.example.Example}的SQL语句XML
+     *
+     * @param entityMapping 实体类映射
+     * @return SQL片段
+     */
     protected String buildExampleXML(EntityMapping entityMapping) {
         EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         String className = entityMapping.getEntityClass().getName();
@@ -323,6 +424,12 @@ public class BaseEntitySqlBuilder {
         return builder.toString();
     }
 
+    /**
+     * 构建WHERE条件不能为null的SQL语句XML片段
+     *
+     * @param entityMapping 实体类映射
+     * @return SQL片段
+     */
     protected String buildWhereNotNullXML(EntityMapping entityMapping) {
         EntityMapping.ColumnProperty logicDeleteProperty = EntityMappingUtil.findAnnotationColumnPropertyOne(entityMapping, LogicDelete.class);
         StringBuilder builder = new StringBuilder();

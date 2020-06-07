@@ -24,7 +24,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 /**
- * 自定义的单表Crud查询Builder类
+ * 自定义的查询Builder类
  *
  * @author cjbi
  */

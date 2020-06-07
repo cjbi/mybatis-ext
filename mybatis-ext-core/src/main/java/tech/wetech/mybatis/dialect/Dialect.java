@@ -1,6 +1,8 @@
 package tech.wetech.mybatis.dialect;
 
 /**
+ * 方言接口
+ *
  * @author cjbi
  */
 public interface Dialect {

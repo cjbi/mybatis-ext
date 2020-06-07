@@ -5,14 +5,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 表实体映射
+ * 实体类映射
  *
  * @author cjbi
  */
 public class EntityMapping {
-
+    /**
+     * 实体类类型
+     */
     private Class<?> entityClass;
+    /**
+     * 表名称
+     */
     private String tableName;
+    /**
+     * 字段属性列表
+     */
     private List<ColumnProperty> columnProperties;
     /**
      * 主键对应实体属性
@@ -26,7 +34,13 @@ public class EntityMapping {
      * 主键返回类型
      */
     private Class<?> keyResultType;
+    /**
+     * 字段属性映射Map
+     */
     private Map<String, ColumnProperty> columnPropertyMap;
+    /**
+     * 注解映射Map
+     */
     private Map<Class<? extends Annotation>, ? extends Annotation> annotationMap;
 
     public Class<?> getEntityClass() {
@@ -101,12 +115,29 @@ public class EntityMapping {
         return (T) this.annotationMap.get(clazz);
     }
 
+    /**
+     * 字段属性
+     */
     public static class ColumnProperty {
-
+        /**
+         * 字段名称
+         */
         private String columnName;
+        /**
+         * 属性名称
+         */
         private String propertyName;
+        /**
+         * 主键字段
+         */
         private boolean identity;
+        /**
+         * 对应Java类型
+         */
         private Class<?> javaType;
+        /**
+         * 注解映射Map
+         */
         private Map<Class<? extends Annotation>, ? extends Annotation> annotationMap;
 
         public String getColumnName() {
