@@ -5,12 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>tech.wetech.mybatis</groupId>
-    <artifactId>mybatis-ext-parent</artifactId>
-    <version>1.6.3</version>
-    <description>Mybatis Extensions.</description>
+    <artifactId>mybatis-ext</artifactId>
+    <version>1.6.4-SNAPSHOT</version>
     <name>mybatis-ext</name>
+    <description>Mybatis Extensions.</description>
     <url>https://github.com/cjbi/mybatis-ext</url>
     <modules>
+        <module>mybatis-ext-parent</module>
         <module>mybatis-ext-core</module>
         <module>mybatis-ext-spring</module>
         <module>mybatis-ext-spring-boot-autoconfigure</module>
@@ -18,130 +19,8 @@
         <module>mybatis-ext-simple</module>
     </modules>
     <packaging>pom</packaging>
-
     <properties>
-        <java.version>1.8</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!-- Maven properties -->
-        <maven.test.skip>true</maven.test.skip>
-        <!-- Compiler settings properties -->
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>tech.wetech.mybatis</groupId>
-                <artifactId>mybatis-ext-core</artifactId>
-                <version>1.6.3</version>
-            </dependency>
-            <dependency>
-                <groupId>tech.wetech.mybatis</groupId>
-                <artifactId>mybatis-ext-spring</artifactId>
-                <version>1.6.3</version>
-            </dependency>
-            <dependency>
-                <groupId>tech.wetech.mybatis</groupId>
-                <artifactId>mybatis-ext-spring-boot-autoconfigure</artifactId>
-                <version>1.6.3</version>
-            </dependency>
-            <dependency>
-                <groupId>tech.wetech.mybatis</groupId>
-                <artifactId>mybatis-ext-spring-boot-starter</artifactId>
-                <version>1.6.3</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <build>
-        <testResources>
-            <testResource>
-                <directory>src/test/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </testResource>
-        </testResources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <charset>UTF-8</charset>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-    <developers>
-        <developer>
-            <name>cjbi</name>
-            <email>cjbi@outlook.com</email>
-            <url>https://github.com/cjbi</url>
-        </developer>
-    </developers>
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
-    <scm>
-        <connection>scm:git:https://github.com/cjbi/mybatis-ext.git</connection>
-        <developerConnection>scm:git:https://github.com/cjbi/mybatis-ext.git</developerConnection>
-        <url>scm:git:https://github.com/cjbi</url>
-    </scm>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>snapshot</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>release</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-        </repository>
-    </distributionManagement>
-
 
 </project>

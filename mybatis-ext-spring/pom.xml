@@ -5,11 +5,12 @@
     <parent>
         <artifactId>mybatis-ext-parent</artifactId>
         <groupId>tech.wetech.mybatis</groupId>
-        <version>1.6.3</version>
+        <version>1.6.4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>mybatis-ext-spring</artifactId>
+    <version>1.6.4-SNAPSHOT</version>
 
     <properties>
         <spring.version>5.1.8.RELEASE</spring.version>
@@ -20,6 +21,7 @@
         <dependency>
             <groupId>tech.wetech.mybatis</groupId>
             <artifactId>mybatis-ext-core</artifactId>
+            <version>1.6.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.mybatis</groupId>

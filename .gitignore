@@ -24,6 +24,6 @@
 /build/
 
 # These are needed if running in IDE without properties set
-/ibderby
+**/ibderby
 derby.log
 /bin/

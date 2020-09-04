@@ -19,6 +19,7 @@ import tech.wetech.mybatis.annotation.SelectEntityKey;
 import tech.wetech.mybatis.mapper.Mapper;
 import tech.wetech.mybatis.util.EntityMappingUtil;
 
+import javax.persistence.GeneratedValue;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Stream;
@@ -75,7 +76,7 @@ public class EntityMapperBuilder {
 
         assistant.addMappedStatement(id, sqlSource, statementType, sqlCommandType, fetchSize, timeout, parameterMap, parameterTypeClass, resultMap, resultTypeClass, resultSetTypeEnum,
                 flushCache, useCache, false,
-                keyGenerator, keyProperty, keyColumn, null, languageDriver, null);
+            keyGenerator, keyProperty, keyColumn, null, languageDriver, null);
 
         id = assistant.applyCurrentNamespace(id, false);
 
@@ -83,6 +84,11 @@ public class EntityMapperBuilder {
         SelectKeyGenerator answer = new SelectKeyGenerator(keyStatement, executeBefore);
         configuration.addKeyGenerator(id, answer);
         return answer;
+    }
+
+    private KeyGenerator handleGeneratorValueAnnotation(EntityMapping entityMapping, GeneratedValue generatedValue, String baseStatementId, Class<?> parameterTypeClass, LanguageDriver languageDriver) {
+        //feature 自定义主键
+        return Jdbc3KeyGenerator.INSTANCE;
     }
 
     private SqlSource buildSqlSourceFromStrings(String[] strings, Class<?> parameterTypeClass, LanguageDriver languageDriver) {
@@ -121,15 +127,16 @@ public class EntityMapperBuilder {
         boolean isSelect = sqlCommandType == SqlCommandType.SELECT;
         boolean flushCache = !isSelect;
         boolean useCache = isSelect;
-        KeyGenerator keyGenerator;
+        KeyGenerator keyGenerator = NoKeyGenerator.INSTANCE;
         String keyProperty = entityMapping.getKeyProperty();
         if (sqlCommandType == SqlCommandType.INSERT && keyProperty != null) {
             EntityMapping.ColumnProperty keyColumnProperty = entityMapping.getColumnPropertyMap().get(keyProperty);
             SelectEntityKey selectEntityKeyAnnotation = keyColumnProperty.getAnnotation(SelectEntityKey.class);
+            GeneratedValue generatedValue = keyColumnProperty.getAnnotation(GeneratedValue.class);
             if (selectEntityKeyAnnotation != null) {
                 keyGenerator = handleSelectEntityKeyAnnotation(entityMapping, selectEntityKeyAnnotation, mappedStatementId, entityClass, languageDriver);
-            } else {
-                keyGenerator = Jdbc3KeyGenerator.INSTANCE;
+            } else if (generatedValue != null) {
+                keyGenerator = handleGeneratorValueAnnotation(entityMapping, generatedValue, mappedStatementId, entityClass, languageDriver);
             }
             if (method.getParameterCount() > 1) {
                 ParamNameResolver paramNameResolver = new ParamNameResolver(configuration, method);

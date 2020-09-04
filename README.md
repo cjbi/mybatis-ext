@@ -44,6 +44,7 @@ MyBatis-Ext是MyBatis的增强扩展，简化了MyBatis对单表增删改查的�
 @Table(name = "weshop_user")//指定表名，必须
 public class User {
     @Id//指定Primary Key，必须
+    @GeneratedValue // 指定返回主键
     private Integer id;
     private String username;
     private String password;
@@ -523,25 +524,24 @@ public class MybatisExtTests {
 
 ## 目前BaseMapper\<T\>内置的通用方法有：
 
-- int deleteByPrimaryKey(PK id);
+- int deleteByPrimaryKey(Object id);
 - \<S extends T\> int insert(S record);
-- \<S extends T\> int insertAll(Iterable\<S\> record);
 - \<S extends T\> int insertSelective(S record);
-- \<S extends T\> S selectByPrimaryKey(PK id);
-- \<S extends T\> Optional\<S\> selectByPrimaryKeyWithOptional(ID id);
+- \<S extends T\> S selectByPrimaryKey(Object id);
+- \<S extends T\> Optional\<S\> selectByPrimaryKeyWithOptional(Object id);
 - \<S extends T\> int updateByPrimaryKey(S record);
 - \<S extends T\> int updateByPrimaryKeySelective(S record);
 - \<S extends T\> List\<S\> selectAll();
 - \<S extends T\> List\<S\> selectList(S record);
 - \<S extends T\> S selectOne(S record);
 - \<S extends T\> S selectOneWithOptional(S record);
-- boolean existsByPrimaryKey(PK id);
+- boolean existsByPrimaryKey(Object id);
 - \<S extends T\> int count(S record);
-- \<S extends T\> List\<S\> selectByExample(Example\<S, Object\> example);
-- \<S extends T\> int countByExample(Example\<S, Object\> example);
-- \<S extends T\> int deleteByExample(Example\<S, Object\> example);
-- \<S extends T\> int updateByExample(@Param("record") S record, @Param("example") Example\<S, Object\> example);
-- \<S extends T\> int updateByExampleSelective(@Param("record") S record, @Param("example") Example\<S, Object\> example);
+- \<S extends T\> List\<S\> selectByExample(Example\<S\> example);
+- \<S extends T\> int countByExample(Example\<S\> example);
+- \<S extends T\> int deleteByExample(Example\<S\> example);
+- \<S extends T\> int updateByExample(@Param("record") S record, @Param("example") Example\<S\> example);
+- \<S extends T\> int updateByExampleSelective(@Param("record") S record, @Param("example") Example\<S\> example);
 
 如果以上不能满足业务开发需求Mybatis-ext是提供了接口支持自定义更多通用方法的：
 

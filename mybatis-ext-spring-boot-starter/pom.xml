@@ -5,10 +5,12 @@
     <parent>
         <artifactId>mybatis-ext-parent</artifactId>
         <groupId>tech.wetech.mybatis</groupId>
-        <version>1.6.3</version>
+        <version>1.6.4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+
     <artifactId>mybatis-ext-spring-boot-starter</artifactId>
+    <version>1.6.4-SNAPSHOT</version>
 
     <properties>
         <spring-boot.version>2.1.7.RELEASE</spring-boot.version>
@@ -26,14 +28,17 @@
         <dependency>
             <groupId>tech.wetech.mybatis</groupId>
             <artifactId>mybatis-ext-spring</artifactId>
+            <version>1.6.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>tech.wetech.mybatis</groupId>
             <artifactId>mybatis-ext-core</artifactId>
+            <version>1.6.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>tech.wetech.mybatis</groupId>
             <artifactId>mybatis-ext-spring-boot-autoconfigure</artifactId>
+            <version>1.6.4-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
