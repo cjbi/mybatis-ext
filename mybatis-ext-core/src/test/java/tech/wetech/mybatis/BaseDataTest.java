@@ -13,9 +13,9 @@ import java.util.Properties;
 
 public abstract class BaseDataTest {
 
-    public static final String DERBY_PROPERTIES = "derby.properties";
-    public static final String SCHEMA_SQL = "schema.sql";
-    public static final String DATA_SQL = "data.sql";
+    public static final String DERBY_PROPERTIES = "tech/wetech/mybatis/databases/goods/goods-derby.properties";
+    public static final String SCHEMA_SQL = "tech/wetech/mybatis/databases/goods/goods-derby-schema.sql";
+    public static final String DATA_SQL = "tech/wetech/mybatis/databases/goods/goods-derby-dataload.sql";
 
     public static void runScript(DataSource ds, String resource) throws IOException, SQLException {
         try (Connection connection = ds.getConnection()) {
