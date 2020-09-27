@@ -35,7 +35,7 @@
         <dependency>
             <groupId>tech.wetech.mybatis</groupId>
             <artifactId>mybatis-ext-core</artifactId>
-            <version>1.6.4-SNAPSHOT</version>
+            <version>1.6.4</version>
         </dependency>
         <!-- Optional dependencies -->
         <dependency>
