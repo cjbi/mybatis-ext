@@ -12,7 +12,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * 默认"0"为正常状态，"1"为删除状态
  *
  * @author cjbi
+ * @deprecated 请使用@Where注解实现
  */
+@Deprecated
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)
 public @interface LogicDelete {

@@ -1,7 +1,7 @@
 package tech.wetech.mybatis.entity;
 
-import tech.wetech.mybatis.annotation.LogicDelete;
 import tech.wetech.mybatis.annotation.SelectEntityKey;
+import tech.wetech.mybatis.annotation.Where;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -10,6 +10,7 @@ import javax.persistence.Version;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Where(clause = "is_delete = 0")
 @Table(name = "t_goods")
 public class Goods {
     @Id
@@ -43,7 +44,7 @@ public class Goods {
     private Integer isLimited;
     private Integer isHot;
     private String primaryPicUrl;
-    @LogicDelete
+    //    @LogicDelete
     private Integer isDelete;
     @Version
     private Integer version;

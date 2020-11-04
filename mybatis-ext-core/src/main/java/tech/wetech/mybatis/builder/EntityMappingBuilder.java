@@ -1,5 +1,6 @@
 package tech.wetech.mybatis.builder;
 
+import tech.wetech.mybatis.annotation.Where;
 import tech.wetech.mybatis.builder.EntityMapping.ColumnProperty;
 
 import javax.persistence.Column;
@@ -37,6 +38,7 @@ public class EntityMappingBuilder {
         entityMapping.setKeyResultType(buildKeyResultType(columnProperties));
         entityMapping.setColumnPropertyMap(buildColumnPropertiesMap(columnProperties));
         entityMapping.setAnnotationMap(Arrays.stream(entityClass.getAnnotations()).collect(Collectors.toMap(Annotation::annotationType, annotation -> annotation, (a1, a2) -> a2)));
+        entityMapping.setWhereClause(getWhereClause());
         return entityMapping;
     }
 
@@ -46,6 +48,14 @@ public class EntityMappingBuilder {
             columnPropertyMap.put(columnProperty.getPropertyName(), columnProperty);
         }
         return columnPropertyMap;
+    }
+
+    private String getWhereClause() {
+        if (entityClass.isAnnotationPresent(Where.class)) {
+            Where where = getRequiredAnnotation(Where.class);
+            return where.clause();
+        }
+        return null;
     }
 
     private String getTableName() {
@@ -71,7 +81,7 @@ public class EntityMappingBuilder {
 
     private List<Field> getAllFields() {
         List<Field> fields = new ArrayList<>();
-        Class tempClass = entityClass;
+        Class<?> tempClass = entityClass;
         while (tempClass != null && !tempClass.equals(Object.class)) {
             fields.addAll(Arrays.asList(tempClass.getDeclaredFields()));
             tempClass = tempClass.getSuperclass();
@@ -144,8 +154,8 @@ public class EntityMappingBuilder {
     /**
      * 驼峰转下划线
      *
-     * @param str
-     * @return
+     * @param str 字符串
+     * @return 驼峰转下划线
      */
     private String camelhumpToUnderline(String str) {
         final int size;

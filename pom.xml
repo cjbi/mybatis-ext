@@ -6,7 +6,7 @@
 
     <groupId>tech.wetech.mybatis</groupId>
     <artifactId>mybatis-ext</artifactId>
-    <version>1.6.5</version>
+    <version>1.6.6-SNAPSHOT</version>
     <name>mybatis-ext</name>
     <description>Mybatis Extensions.</description>
     <url>https://github.com/cjbi/mybatis-ext</url>

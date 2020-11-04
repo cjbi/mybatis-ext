@@ -81,14 +81,14 @@ public class Example<T> implements Serializable {
 
     public Criteria<T> and() {
         Criteria<T> criteria = createCriteriaInternal();
-        criteria.andOr("and");
+        criteria.andOr("AND");
         oredCriteria.add(criteria);
         return criteria;
     }
 
     public Criteria<T> and(Criteria<T> criteria) {
         oredCriteria.add(criteria);
-        criteria.andOr("and");
+        criteria.andOr("AND");
         return criteria;
     }
 
@@ -120,17 +120,34 @@ public class Example<T> implements Serializable {
         distinct = false;
     }
 
+    @Deprecated
     public List<String> getColumns() {
         return columns;
     }
 
+    /**
+     * 为了保证数据完整性，不推荐自定义查询字段
+     *
+     * @param properties
+     * @return
+     * @since 1.6.6
+     */
+    @Deprecated
     public Example<T> setSelects(Property<T, ?>... properties) {
         this.columns = Arrays.stream(properties)
-                .map(p -> p.getColumnName(entityClass.getName()))
-                .collect(Collectors.toList());
+            .map(p -> p.getColumnName(entityClass.getName()))
+            .collect(Collectors.toList());
         return this;
     }
 
+    /**
+     * 为了保证数据完整性，不推荐自定义查询字段
+     *
+     * @param properties
+     * @return
+     * @since 1.6.6
+     */
+    @Deprecated
     public Example<T> setSelects(String... properties) {
         this.columns = Arrays.asList(properties);
         return this;
