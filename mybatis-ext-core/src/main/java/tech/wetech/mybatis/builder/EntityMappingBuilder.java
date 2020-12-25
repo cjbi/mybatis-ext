@@ -71,10 +71,10 @@ public class EntityMappingBuilder {
             if (!table.name().isEmpty()) {
                 builder.append(table.name());
             } else {
-                builder.append(camelhumpToUnderline(entityClass.getName()));
+                builder.append(camelhumpToUnderline(entityClass.getSimpleName()));
             }
         } else {
-            builder.append(camelhumpToUnderline(entityClass.getName()));
+            builder.append(camelhumpToUnderline(entityClass.getSimpleName()));
         }
         return builder.toString();
     }
