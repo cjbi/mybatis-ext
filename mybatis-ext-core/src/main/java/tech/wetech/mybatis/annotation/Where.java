@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * 给实体类查询增加where条件
  * 常见用法如用来做来软删除
  * <p>
- * 示例：@Where(clause="del_Flag = 0 ")
+ * 示例：@Where(clause="del_flag = 0 ")
  *
  * @author cjbi
  */
