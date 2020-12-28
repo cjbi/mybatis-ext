@@ -261,5 +261,20 @@ public class GoodsMapperTest {
         }
     }
 
+    @Test
+    public void testSelectWithPageWhile() {
+        try (SqlSession session = sqlSessionFactory.openSession()) {
+            GoodsMapper goodsMapper = session.getMapper(GoodsMapper.class);
+            int pageNumber = 1;
+            while (true) {
+                Page list = Page.of(pageNumber, 3, true).list(() -> goodsMapper.selectAllGoods());
+                if (list.isEmpty()) {
+                    break;
+                }
+                pageNumber++;
+            }
+            Assert.assertEquals(35, pageNumber);
+        }
+    }
 
 }

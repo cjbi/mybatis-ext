@@ -111,11 +111,17 @@ public class PagingExecutor implements Executor {
             String sql = boundSql.getSql();
             String limitSql = dialect.getLimitString(sql, page.getOffset(), page.getPageSize());
             BoundSql newBoundSql = copyFromBoundSql(ms, boundSql, limitSql);
+            updateCacheKey(cacheKey, page);
             List<E> list = delegate.query(ms, parameter, rowBounds, resultHandler, cacheKey, newBoundSql);
             page.addAll(list);
             return page;
         }
         return delegate.query(ms, parameter, rowBounds, resultHandler, cacheKey, boundSql);
+    }
+
+    private void updateCacheKey(CacheKey cacheKey, Page page) {
+        cacheKey.update(page.getPageNumber());
+        cacheKey.update(page.getPageSize());
     }
 
     @Override

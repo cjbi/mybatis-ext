@@ -2,9 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="tech.wetech.mybatis.mapper.GoodsMapper">
     <select id="selectAllGoods" resultType="java.util.Map">
-        select * from t_goods
+        SELECT *
+        FROM t_goods
     </select>
     <select id="selectAllGoodsWithPage" resultType="java.util.Map">
-        select * from t_goods
+        SELECT *
+        FROM t_goods
     </select>
 </mapper>

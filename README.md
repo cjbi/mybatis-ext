@@ -42,6 +42,7 @@ MyBatis-Ext是MyBatis的增强扩展，简化了MyBatis对单表增删改查的�
 ```java
 //Mybatis-ext使用了Jpa的注解，目前实现了@Table、@Id、@Column、@Transient、@Version，未来考虑支持更多Jpa特性
 @Table(name = "weshop_user")//指定表名，必须
+@Where(clause = "del_flag = 0 ")//删除条件
 public class User {
     @Id//指定Primary Key，必须
     @GeneratedValue // 指定返回主键
@@ -70,7 +71,6 @@ public class User {
     private String pageSize;
     @Transient
     private String pageNumber;
-    @LogicDelete//逻辑删除
     private Integer delFlag;
     //此处省略getter，setter
 }

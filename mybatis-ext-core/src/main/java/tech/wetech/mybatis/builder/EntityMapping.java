@@ -42,6 +42,10 @@ public class EntityMapping {
      * 注解映射Map
      */
     private Map<Class<? extends Annotation>, ? extends Annotation> annotationMap;
+    /**
+     * 查询条件
+     */
+    private String whereClause;
 
     public Class<?> getEntityClass() {
         return entityClass;
@@ -113,6 +117,14 @@ public class EntityMapping {
 
     public <T extends Annotation> T getAnnotation(Class<T> clazz) {
         return (T) this.annotationMap.get(clazz);
+    }
+
+    public String getWhereClause() {
+        return whereClause;
+    }
+
+    public void setWhereClause(String whereClause) {
+        this.whereClause = whereClause;
     }
 
     /**

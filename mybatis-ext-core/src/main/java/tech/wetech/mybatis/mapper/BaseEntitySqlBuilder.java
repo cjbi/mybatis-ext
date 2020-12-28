@@ -27,11 +27,18 @@ public class BaseEntitySqlBuilder {
                 UPDATE(entityMapping.getTableName());
                 SET(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).deletedValue()));
                 WHERE(String.format("%s = #{%s}", entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
+                if (entityMapping.getWhereClause() != null) {
+                    WHERE(entityMapping.getWhereClause());
+                }
             }}.toString();
         }
         return new SQL() {{
             DELETE_FROM(entityMapping.getTableName());
             WHERE(String.format("%s = #{%s}", entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
+            if (entityMapping.getWhereClause() != null) {
+                WHERE(entityMapping.getWhereClause());
+            }
+
         }}.toString();
     }
 
@@ -48,6 +55,9 @@ public class BaseEntitySqlBuilder {
             WHERE(String.format("%s = #{%s}", entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
             if (logicDeleteProperty != null) {
                 WHERE(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
+            }
+            if (entityMapping.getWhereClause() != null) {
+                WHERE(entityMapping.getWhereClause());
             }
         }}.toString();
     }
@@ -138,9 +148,9 @@ public class BaseEntitySqlBuilder {
      */
     public String selectByExample(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder("<script>");
-        builder.append(String.format("select %s from %s", buildExampleColumnsXML(entityMapping), entityMapping.getTableName()));
+        builder.append(String.format("SELECT %s FROM %s", buildExampleColumnsXML(entityMapping), entityMapping.getTableName()));
         builder.append(buildExampleXML(entityMapping));
-        builder.append(String.format("<if test='orderByClause != null'> order by ${orderByClause}</if>"));
+        builder.append(String.format("<if test='orderByClause != null'> ORDER BY ${orderByClause}</if>"));
         builder.append("</script>");
         return builder.toString();
     }
@@ -210,6 +220,9 @@ public class BaseEntitySqlBuilder {
             if (logicDeleteProperty != null) {
                 WHERE(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
             }
+            if (entityMapping.getWhereClause() != null) {
+                WHERE(entityMapping.getWhereClause());
+            }
         }}.toString();
     }
 
@@ -233,10 +246,13 @@ public class BaseEntitySqlBuilder {
         setBuilder.append("</set>");
         builder.append(String.format("UPDATE %s %s WHERE %s = #{%s}", entityMapping.getTableName(), setBuilder, entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
         if (logicDeleteProperty != null) {
-            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
+            builder.append(String.format(" AND %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
         }
         if (logicDeleteProperty != null) {
-            builder.append(String.format("<if test='%s != null'> and %s = #{%s}</if>", logicDeleteProperty.getPropertyName(), logicDeleteProperty.getColumnName(), logicDeleteProperty.getPropertyName()));
+            builder.append(String.format("<if test='%s != null'> AND %s = #{%s}</if>", logicDeleteProperty.getPropertyName(), logicDeleteProperty.getColumnName(), logicDeleteProperty.getPropertyName()));
+        }
+        if (entityMapping.getWhereClause() != null) {
+            builder.append(" AND (").append(entityMapping.getWhereClause()).append(")");
         }
         builder.append("</script>");
         return builder.toString();
@@ -263,10 +279,13 @@ public class BaseEntitySqlBuilder {
         setBuilder.append("</set>");
         builder.append(String.format("UPDATE %s %s WHERE %s = #{%s}", entityMapping.getTableName(), setBuilder, entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
         if (logicDeleteProperty != null) {
-            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
+            builder.append(String.format(" AND %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
         }
         if (versionProperty != null) {
-            builder.append(String.format("<if test='%s != null'> and %s = #{%s}</if>", versionProperty.getPropertyName(), versionProperty.getColumnName(), versionProperty.getPropertyName()));
+            builder.append(String.format("<if test='%s != null'> AND %s = #{%s}</if>", versionProperty.getPropertyName(), versionProperty.getColumnName(), versionProperty.getPropertyName()));
+        }
+        if (entityMapping.getWhereClause() != null) {
+            builder.append(" AND (").append(entityMapping.getWhereClause()).append(")");
         }
         builder.append("</script>");
         return builder.toString();
@@ -287,6 +306,9 @@ public class BaseEntitySqlBuilder {
             if (logicDeleteProperty != null) {
                 WHERE(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
             }
+            if (entityMapping.getWhereClause() != null) {
+                WHERE(entityMapping.getWhereClause());
+            }
         }}.toString();
     }
 
@@ -304,6 +326,9 @@ public class BaseEntitySqlBuilder {
             WHERE(String.format("%s = #{%s}", entityMapping.getKeyColumn(), entityMapping.getKeyProperty()));
             if (logicDeleteProperty != null) {
                 WHERE(String.format("%s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
+            }
+            if (entityMapping.getWhereClause() != null) {
+                WHERE(entityMapping.getWhereClause());
             }
         }}.toString();
     }
@@ -370,7 +395,7 @@ public class BaseEntitySqlBuilder {
      */
     protected String buildExampleColumnsXML(EntityMapping entityMapping) {
         StringBuilder builder = new StringBuilder();
-        builder.append("<if test='distinct'> distinct </if> ");
+        builder.append("<if test='distinct'> DISTINCT </if> ");
         builder.append("<choose>");
         builder.append("<when test='columns != null'>");
         builder.append(String.format("<foreach collection='columns' separator=', ' item='item'>${item}</foreach>", entityMapping.getEntityClass().getName()));
@@ -396,7 +421,7 @@ public class BaseEntitySqlBuilder {
         builder.append("<foreach collection='oredCriteria' item='criteria'>");
         builder.append("<if test='criteria.valid'>");
         builder.append(" ${criteria.andOr} ");
-        builder.append("<trim prefix='(' prefixOverrides='and|or' suffix=')'>");
+        builder.append("<trim prefix='(' prefixOverrides='AND|OR' suffix=')'>");
         builder.append("<foreach collection='criteria.criteria' item='criterion'>");
         builder.append("<choose>");
         builder.append("<when test='criterion.noValue'>");
@@ -406,7 +431,7 @@ public class BaseEntitySqlBuilder {
         builder.append(String.format(" ${criterion.andOr} ${@tech.wetech.mybatis.util.EntityMappingUtil@getColumnName('%s',criterion.property)} ${criterion.condition} #{criterion.value}", className));
         builder.append("</when>");
         builder.append("<when test='criterion.betweenValue'>");
-        builder.append(String.format(" ${criterion.andOr} ${@tech.wetech.mybatis.util.EntityMappingUtil@getColumnName('%s',criterion.property)} ${criterion.condition} #{criterion.value} and #{criterion.secondValue}", className));
+        builder.append(String.format(" ${criterion.andOr} ${@tech.wetech.mybatis.util.EntityMappingUtil@getColumnName('%s',criterion.property)} ${criterion.condition} #{criterion.value} AND #{criterion.secondValue}", className));
         builder.append("</when>");
         builder.append("<when test='criterion.listValue'>");
         builder.append(String.format(" ${criterion.andOr} ${@tech.wetech.mybatis.util.EntityMappingUtil@getColumnName('%s',criterion.property)} ${criterion.condition} ", className));
@@ -418,7 +443,10 @@ public class BaseEntitySqlBuilder {
         builder.append("</if>");
         builder.append("</foreach>");
         if (logicDeleteProperty != null) {
-            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
+            builder.append(String.format(" AND %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
+        }
+        if (entityMapping.getWhereClause() != null) {
+            builder.append(" AND (").append(entityMapping.getWhereClause()).append(")");
         }
         builder.append("</where>");
         return builder.toString();
@@ -438,7 +466,10 @@ public class BaseEntitySqlBuilder {
             builder.append(String.format("<if test='%s != null'> AND %s = #{%s}</if>", columnProperty.getPropertyName(), columnProperty.getColumnName(), columnProperty.getPropertyName()));
         }
         if (logicDeleteProperty != null) {
-            builder.append(String.format(" and %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
+            builder.append(String.format(" AND %s = %s", logicDeleteProperty.getColumnName(), logicDeleteProperty.getAnnotation(LogicDelete.class).normalValue()));
+        }
+        if (entityMapping.getWhereClause() != null) {
+            builder.append(" AND (").append(entityMapping.getWhereClause()).append(")");
         }
         builder.append("</where>");
         return builder.toString();
