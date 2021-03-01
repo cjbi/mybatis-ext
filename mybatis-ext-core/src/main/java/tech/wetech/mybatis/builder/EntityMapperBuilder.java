@@ -14,6 +14,7 @@ import org.apache.ibatis.reflection.ParamNameResolver;
 import org.apache.ibatis.reflection.TypeParameterResolver;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.scripting.xmltags.XMLLanguageDriver;
+import org.apache.ibatis.type.TypeHandler;
 import tech.wetech.mybatis.ExtConfiguration;
 import tech.wetech.mybatis.annotation.SelectEntityKey;
 import tech.wetech.mybatis.mapper.Mapper;
@@ -75,7 +76,7 @@ public class EntityMapperBuilder {
         SqlCommandType sqlCommandType = SqlCommandType.SELECT;
 
         assistant.addMappedStatement(id, sqlSource, statementType, sqlCommandType, fetchSize, timeout, parameterMap, parameterTypeClass, resultMap, resultTypeClass, resultSetTypeEnum,
-                flushCache, useCache, false,
+            flushCache, useCache, false,
             keyGenerator, keyProperty, keyColumn, null, languageDriver, null);
 
         id = assistant.applyCurrentNamespace(id, false);
@@ -169,7 +170,11 @@ public class EntityMapperBuilder {
         if (resultType == resolver.getEntityMapping().getEntityClass()) {
             resultType = entityMapping.getEntityClass();
             for (EntityMapping.ColumnProperty columnProperty : entityMapping.getColumnProperties()) {
-                ResultMapping.Builder builder = new ResultMapping.Builder(configuration, columnProperty.getPropertyName(), columnProperty.getColumnName().replace("`", ""), columnProperty.getJavaType());
+                TypeHandler<?> typeHandler = configuration.getTypeHandlerRegistry().getTypeHandler(columnProperty.getJavaType());
+                if (typeHandler == null) {
+                    typeHandler = configuration.getTypeHandlerRegistry().getUnknownTypeHandler();
+                }
+                ResultMapping.Builder builder = new ResultMapping.Builder(configuration, columnProperty.getPropertyName(), columnProperty.getColumnName().replace("`", ""), typeHandler);
                 resultMappings.add(builder.build());
             }
         }
