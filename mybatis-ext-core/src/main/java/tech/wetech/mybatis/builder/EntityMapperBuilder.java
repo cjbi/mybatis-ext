@@ -14,7 +14,6 @@ import org.apache.ibatis.reflection.ParamNameResolver;
 import org.apache.ibatis.reflection.TypeParameterResolver;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.scripting.xmltags.XMLLanguageDriver;
-import org.apache.ibatis.type.TypeHandler;
 import tech.wetech.mybatis.ExtConfiguration;
 import tech.wetech.mybatis.annotation.SelectEntityKey;
 import tech.wetech.mybatis.mapper.Mapper;
@@ -108,7 +107,7 @@ public class EntityMapperBuilder {
         }
         EntityMapping entityMapping = TABLE_ENTITY_CACHE.get(entityClass.getName());
         if (entityMapping == null) {
-            entityMapping = new EntityMappingBuilder(entityClass).build();
+            entityMapping = new EntityMappingBuilder(entityClass, configuration).build();
             TABLE_ENTITY_CACHE.put(entityClass.getName(), entityMapping);
         }
         EntityMapperAnnotationResolver annotationResolver = new EntityMapperAnnotationResolver(method, configuration, entityMapping);
@@ -153,9 +152,9 @@ public class EntityMapperBuilder {
             keyGenerator = NoKeyGenerator.INSTANCE;
         }
         assistant.addMappedStatement(mappedStatementId, sqlSource, StatementType.PREPARED, sqlCommandType,
-                null, null, null, entityClass, resultMapId, entityClass,
-                resultSetType, flushCache, useCache, false, keyGenerator, keyProperty, entityMapping.getKeyColumn(),
-                configuration.getDatabaseId(), languageDriver, null);
+            null, null, null, entityClass, resultMapId, entityClass,
+            resultSetType, flushCache, useCache, false, keyGenerator, keyProperty, entityMapping.getKeyColumn(),
+            configuration.getDatabaseId(), languageDriver, null);
     }
 
     private void loadAnnotationResource() {
@@ -170,11 +169,7 @@ public class EntityMapperBuilder {
         if (resultType == resolver.getEntityMapping().getEntityClass()) {
             resultType = entityMapping.getEntityClass();
             for (EntityMapping.ColumnProperty columnProperty : entityMapping.getColumnProperties()) {
-                TypeHandler<?> typeHandler = configuration.getTypeHandlerRegistry().getTypeHandler(columnProperty.getJavaType());
-                if (typeHandler == null) {
-                    typeHandler = configuration.getTypeHandlerRegistry().getUnknownTypeHandler();
-                }
-                ResultMapping.Builder builder = new ResultMapping.Builder(configuration, columnProperty.getPropertyName(), columnProperty.getColumnName().replace("`", ""), typeHandler);
+                ResultMapping.Builder builder = new ResultMapping.Builder(configuration, columnProperty.getPropertyName(), columnProperty.getColumnName().replace("`", ""), columnProperty.getJavaType());
                 resultMappings.add(builder.build());
             }
         }

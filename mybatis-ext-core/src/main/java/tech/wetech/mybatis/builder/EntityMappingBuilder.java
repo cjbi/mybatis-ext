@@ -1,5 +1,6 @@
 package tech.wetech.mybatis.builder;
 
+import org.apache.ibatis.session.Configuration;
 import tech.wetech.mybatis.annotation.Where;
 import tech.wetech.mybatis.builder.EntityMapping.ColumnProperty;
 
@@ -21,10 +22,13 @@ public class EntityMappingBuilder {
 
     private final Class<?> entityClass;
 
+    private final Configuration configuration;
+
     private final EntityMapping entityMapping;
 
-    public EntityMappingBuilder(Class<?> entityClass) {
+    public EntityMappingBuilder(Class<?> entityClass, Configuration configuration) {
         this.entityClass = entityClass;
+        this.configuration = configuration;
         entityMapping = new EntityMapping();
     }
 
@@ -96,6 +100,9 @@ public class EntityMappingBuilder {
             if (field.isAnnotationPresent(Transient.class)) {
                 continue;
             }
+            if (configuration.getTypeHandlerRegistry().hasTypeHandler(field.getType())) {
+                continue;
+            }
             ColumnProperty columnProperty = new ColumnProperty();
             columnProperty.setPropertyName(field.getName());
             columnProperty.setJavaType(field.getType());
@@ -161,7 +168,7 @@ public class EntityMappingBuilder {
         final int size;
         final char[] chars;
         final StringBuilder sb = new StringBuilder(
-                (size = (chars = str.toCharArray()).length) * 3 / 2 + 1);
+            (size = (chars = str.toCharArray()).length) * 3 / 2 + 1);
         char c;
         for (int i = 0; i < size; i++) {
             c = chars[i];
