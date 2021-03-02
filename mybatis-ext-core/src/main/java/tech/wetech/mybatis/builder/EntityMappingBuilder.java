@@ -100,7 +100,7 @@ public class EntityMappingBuilder {
             if (field.isAnnotationPresent(Transient.class)) {
                 continue;
             }
-            if (configuration.getTypeHandlerRegistry().hasTypeHandler(field.getType())) {
+            if (!configuration.getTypeHandlerRegistry().hasTypeHandler(field.getType())) {
                 continue;
             }
             ColumnProperty columnProperty = new ColumnProperty();
@@ -128,7 +128,7 @@ public class EntityMappingBuilder {
             return annotation;
         }
         throw new IllegalStateException(
-                String.format("Required annotation %s not found for %s!", annotationType, annotationType.getName()));
+            String.format("Required annotation %s not found for %s!", annotationType, annotationType.getName()));
     }
 
     private String buildKeyProperty(List<ColumnProperty> columnProperties) {
