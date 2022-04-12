@@ -14,7 +14,7 @@
     <version>1.6.7</version>
 
     <properties>
-        <mybatis.version>3.5.5</mybatis.version>
+        <mybatis.version>3.5.6</mybatis.version>
         <javax.persistence-api.version>2.2</javax.persistence-api.version>
     </properties>
 
@@ -51,7 +51,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
