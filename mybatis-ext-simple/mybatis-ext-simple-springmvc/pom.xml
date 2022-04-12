@@ -59,7 +59,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.10.1</version>
+            <version>2.12.6.1</version>
         </dependency>
         <!-- 日志相关依赖 -->
         <!-- 使用slf4j-api来处理日志 -->
