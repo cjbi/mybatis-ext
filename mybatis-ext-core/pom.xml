@@ -5,16 +5,16 @@
     <parent>
         <artifactId>mybatis-ext-parent</artifactId>
         <groupId>tech.wetech.mybatis</groupId>
-        <version>1.6.7</version>
+        <version>1.6.8</version>
         <relativePath>../mybatis-ext-parent</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>mybatis-ext-core</artifactId>
-    <version>1.6.7</version>
+    <version>1.6.8</version>
 
     <properties>
-        <mybatis.version>3.5.6</mybatis.version>
+        <mybatis.version>3.5.9</mybatis.version>
         <javax.persistence-api.version>2.2</javax.persistence-api.version>
     </properties>
 

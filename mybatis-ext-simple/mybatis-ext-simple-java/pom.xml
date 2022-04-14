@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>tech.wetech.mybatis.simple</groupId>
     <artifactId>mybatis-ext-simple-java</artifactId>
-    <version>1.6.7</version>
+    <version>1.6.8</version>
 
     <properties>
         <java.version>1.8</java.version>
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>tech.wetech.mybatis</groupId>
             <artifactId>mybatis-ext-core</artifactId>
-            <version>1.6.7</version>
+            <version>1.6.8</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
