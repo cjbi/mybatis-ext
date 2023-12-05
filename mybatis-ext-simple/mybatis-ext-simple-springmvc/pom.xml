@@ -72,7 +72,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
+            <version>1.2.13</version>
         </dependency>
 
         <!-- 把JCL(Apache Commons Logging)的日志输出桥接到 SLF4J -->
