@@ -124,11 +124,15 @@ public class Page<E> extends ArrayList<E> {
     }
 
     public boolean hasNext() {
-        return this.pageNumber + 1 < total;
+        return this.pageNumber < getTotalPages();
+    }
+
+    public int getTotalPages() {
+        return this.pageSize == 0 ? 1 : (int) Math.ceil((double) this.total / (double) this.pageSize);
     }
 
     public boolean hasPrevious() {
-        return this.pageNumber > 0;
+        return this.pageNumber > 1;
     }
 
     public long getTotal() {
@@ -142,12 +146,12 @@ public class Page<E> extends ArrayList<E> {
     @Override
     public String toString() {
         return "Page{" +
-                "pageNumber=" + pageNumber +
-                ", pageSize=" + pageSize +
-                ", countable=" + countable +
-                ", total=" + total +
-                ", list=" + super.toString() +
-                '}';
+            "pageNumber=" + pageNumber +
+            ", pageSize=" + pageSize +
+            ", countable=" + countable +
+            ", total=" + total +
+            ", list=" + super.toString() +
+            '}';
     }
 
     public static Page getThreadPage() {
