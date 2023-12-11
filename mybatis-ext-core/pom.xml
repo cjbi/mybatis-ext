@@ -45,7 +45,7 @@
         <dependency> <!-- 10.15+ need Java 9+ -->
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
-            <version>10.14.2.0</version>
+            <version>10.17.1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
